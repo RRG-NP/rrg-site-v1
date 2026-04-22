@@ -65,7 +65,7 @@ const Hero = () => {
     <section 
       id="main" 
       ref={containerRef}
-      className="relative bg-black overflow-hidden z-[2]"
+      className="relative bg-black overflow-hidden"
     >
       <div className="relative flex h-screen w-full flex-col items-center justify-center overflow-hidden">
         {/* Background layers */}

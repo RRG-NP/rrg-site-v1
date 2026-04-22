@@ -14,6 +14,7 @@ const Index: FC<Props> = () => {
   };
 
   return (
+    <section id="cta" className="relative z-[2]">
     <SectionOpacity classes="flex flex-col justify-center h-screen">
 
       <div className=" mx-auto flex w-full max-w-[60vw] md:max-w-[90%] flex-1 flex-col items-center justify-center text-center">
@@ -71,6 +72,7 @@ const Index: FC<Props> = () => {
         </ul>
       </footer>
     </SectionOpacity>
+    </section>
   );
 };
 export default Index;
