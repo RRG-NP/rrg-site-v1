@@ -19,6 +19,7 @@
     "lenis": "^1.1.13",
     "lucide-react": "^0.376.0",
     "next": "14.2.35",
+    "nodemailer": "^8.0.5",
     "plaiceholder": "^3.0.0",
     "prettier-plugin-tailwindcss": "^0.5.13",
     "react": "^18",
@@ -31,6 +32,7 @@
   },
   "devDependencies": {
     "@types/node": "^20",
+    "@types/nodemailer": "^8.0.0",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.4.19",

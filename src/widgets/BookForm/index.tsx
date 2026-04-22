@@ -4,20 +4,54 @@ import { FC, FormEvent, useState } from 'react';
 
 import { BOOK_FORM_DEFAULT_STATE, INPUT_FIELDS, RADIO_FIELDS } from '@/data';
 
-//components
 import Button from '@/components/ui/Button';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/RadioGroup';
 
-interface Props {}
+interface Props { }
 
 const Index: FC<Props> = () => {
   const [form, setForm] = useState(BOOK_FORM_DEFAULT_STATE);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const { push } = useRouter();
 
-  const handleSubmit = (e: any) => {
-    e.preventDefault()
-    console.log(form)
-  }
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus(null);
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(form),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        // Reset form after successful submission
+        setForm(BOOK_FORM_DEFAULT_STATE);
+        // Redirect to success page
+        push('/book/success');
+      } else {
+        setSubmitStatus({
+          type: 'error',
+          message: data.error || 'Something went wrong. Please try again.',
+        });
+      }
+    } catch (error) {
+      console.error('Form submission error:', error);
+      setSubmitStatus({
+        type: 'error',
+        message: 'Failed to submit the form. Please check your connection and try again.',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div className="mx-auto max-w-[70vw] md:max-w-[85vw] px-[4vw] ">
@@ -88,11 +122,20 @@ const Index: FC<Props> = () => {
             </div>
           </div>
 
+          {/* Error Message */}
+          {submitStatus && submitStatus.type === 'error' && (
+            <div className="mb-[2vw] w-full rounded-[0.5vw] p-[1.5vw] text-center text-[1.2vw] md:text-[1.5vw] bg-red-500/20 text-red-300 border border-red-500/50">
+              {submitStatus.message}
+            </div>
+          )}
+
           <Button
-            title="Submit"
+            title={isSubmitting ? 'Submitting...' : 'Submit'}
             type="submit"
-            classes="py-[1.2vw] px-[5vw] md:py-[1.6vw] md:px-[8vw] text-[1.1vw] md:text-[1.5vw] bg-bg-1/90 hover:bg-bg-1/80"
+            classes={`py-[1.2vw] px-[5vw] md:py-[1.6vw] md:px-[8vw] text-[1.1vw] md:text-[1.5vw] ${isSubmitting ? 'bg-bg-1/50 cursor-not-allowed' : 'bg-bg-1/90 hover:bg-bg-1/80'
+              }`}
             btnClasses="p-[0.2vw] md:p-[0.25vw] capitalize self-start mt-[2.5vw]"
+            disabled={isSubmitting}
           />
         </div>
       </form>

@@ -90,7 +90,7 @@ export const APPROACH_CARDS = [
 
 export const RADIO_FIELDS = [
   {
-    title: 'What type of services you want?',
+    title: 'What type of services you want?*',
     classes: 'mr-[2.25vw]',
     radioArray: [
       { name: 'Design/Branding', value: 'design/branding' },
@@ -102,18 +102,19 @@ export const RADIO_FIELDS = [
     formKey: '_service',
   },
   {
-    title: 'What is your budget category?',
+    title: 'What is your budget category?*',
     classes: '',
     radioArray: [
+      { name: '< $1000', value: '<1' },
       { name: '$2000 - $4000', value: '2-4' },
       { name: '$4000 - $8000', value: '4-8' },
       { name: '$8000 - $10000', value: '8-10' },
-      { name: '$10000', value: '10+' },
+      { name: '> $10000', value: '10+' },
     ],
     formKey: '_budget',
   },
   {
-    title: 'Approximately how many pages will your project have?',
+    title: 'Approximately how many pages will your project have?*',
     classes: 'mr-[2.25vw]',
     radioArray: [
       { name: 'Less than 5', value: '<5' },
@@ -124,7 +125,7 @@ export const RADIO_FIELDS = [
     formKey: '_pages',
   },
   {
-    title: 'How quickly do you need the project?',
+    title: 'How quickly do you need the project?*',
     classes: '',
     radioArray: [
       { name: 'As fast as possible', value: 'max-fast' },
@@ -137,10 +138,10 @@ export const RADIO_FIELDS = [
 ];
 
 export const INPUT_FIELDS = [
-  { label: 'Your name', name: 'first', classes: 'inline-block !w-[calc(50%-2vw)] mr-[4vw]', required: true },
-  { label: 'Phone', name: 'phone', classes: 'inline-block !w-[calc(50%-2vw)]', type: 'number', required: true },
-  { label: 'Email', name: 'email', classes: '', type: 'email' },
-  { label: 'Company name', name: 'company', classes: '', required: true },
+  { label: 'Your name*', name: 'first', classes: 'inline-block !w-[calc(50%-2vw)] mr-[4vw]', required: true },
+  { label: 'Phone*', name: 'phone', classes: 'inline-block !w-[calc(50%-2vw)]', type: 'number', required: true },
+  { label: 'Email*', name: 'email', classes: '', type: 'email' },
+  { label: 'Company name*', name: 'company', classes: '', required: true },
   { label: 'Company website', name: 'websiteUrl', classes: '' },
 ];
 
