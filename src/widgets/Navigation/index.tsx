@@ -27,11 +27,17 @@ const Index: FC<Props> = () => {
         <button
           type="button"
           onClick={() => setIsActive(!isActive)}
+          aria-label={isActive ? "Close navigation menu" : "Open navigation menu"}
+          aria-expanded={isActive}
           className="flex h-[4.5vw] w-[4.5vw] cursor-pointer items-center justify-center rounded-full bg-stone-400">
           <div className={`burger ${isActive && 'burgerActive'}`}></div>
         </button>
       </div>
-      <button title="rrg tech" className="p-[2vw] fixed z-[100] top-0 left-0 group">
+      <button 
+        title="rrg tech" 
+        aria-label="RRG Tech - Go to homepage"
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        className="p-[2vw] fixed z-[100] top-0 left-0 group">
         <LogoIcon className="w-[5vw] h-[5vw] group-hover:text-white/80 transition duration-300" />
       </button>
       <AnimatePresence mode="wait">{isActive && (

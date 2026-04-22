@@ -38,19 +38,19 @@ const Hero = () => {
         >
           CREATING UNIQUENESS
         </motion.h1>
-        <motion.h2 ref={heading2} className="z-20 text-[1.7vw] md:text-[3vw] font-medium text-text-1/7 5" style={{ opacity }} >
+        <motion.p ref={heading2} className="z-20 text-[1.7vw] md:text-[3vw] font-medium text-text-1/75" style={{ opacity }} >
           Creative digital agency from Kathmandu
-        </motion.h2>
+        </motion.p>
         <div ref={ref1} className={`absolute left-0 top-0 z-10 h-full w-full`}>
-          <Image src={main_1} fill={true} alt="" className='' objectFit="cover" />
+          <Image src={main_1} fill={true} alt="Creative design showcase" className='' style={{ objectFit: 'cover' }} priority />
         </div>
 
         <div ref={ref2} className={`absolute left-0 top-0 h-full w-full `}>
-          <Image src={main_2} fill={true} alt="" objectFit="cover" />
+          <Image src={main_2} fill={true} alt="Digital innovation" style={{ objectFit: 'cover' }} priority />
         </div>
 
         <div ref={ref3} className={`absolute left-0 top-0 h-full w-full `}>
-          <Image src={main_3} fill={true} alt="" objectFit="cover" />
+          <Image src={main_3} fill={true} alt="Technology solutions" style={{ objectFit: 'cover' }} priority />
         </div>
       </div>
     </section>

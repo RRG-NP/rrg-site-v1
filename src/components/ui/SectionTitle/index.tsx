@@ -7,9 +7,9 @@ interface Props extends DetailedHTMLProps<HTMLAttributes<HTMLHeadingElement>, HT
 
 const Index: FC<Props> = ({ title, classes, ...props }) => {
   return (
-    <h3 className={`text-[7.5vw] font-extrabold leading-[100%] md:text-[9vw] md:text-center ${classes}`} {...props}>
+    <h2 className={`text-[7.5vw] font-extrabold leading-[100%] md:text-[9vw] md:text-center ${classes}`} {...props}>
       {title}
-    </h3>
+    </h2>
   );
 };
 export default Index;

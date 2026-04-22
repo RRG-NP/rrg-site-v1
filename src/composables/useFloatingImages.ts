@@ -12,8 +12,6 @@ const useFloatingImages = (ref1: any, ref2: any, ref3: any) => {
     xForce = movementX * speed;
     yForce = movementY * speed;
 
-    // console.log("manageMouseMove");
-
     if (requestAnimationFrameId == null) {
       requestAnimationFrameId = requestAnimationFrame(animate);
     }

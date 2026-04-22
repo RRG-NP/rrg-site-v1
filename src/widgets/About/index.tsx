@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import Image from 'next/image';
 
 import SectionTitle from '@/components/ui/SectionTitle';
 import SectionOpacity from '@/components/ui/SectionOpacity';
@@ -17,7 +18,14 @@ const Index: FC<Props> = () => {
             </p>
 
             <div className="relative h-[20vw] w-[30vw] md:h-[40vw] md:max-w-[90%] md:text-center grow-[3] md:w-full basis-0 md:basis-[initial]  bg-bg-2">
-              <img src="/images/hands_v2.jpg" alt="hands image" className="inline-block md:object-cover rounded-[0.125vw] md:rounded-[0.25vw] hover:brightness-110 transition absolute inset-0 w-full h-full" />;
+              <Image 
+                src="/images/hands_v2.webp" 
+                alt="Team collaboration - hands working together" 
+                fill
+                sizes="(max-width: 768px) 90vw, 30vw"
+                className="object-cover rounded-[0.125vw] md:rounded-[0.25vw] hover:brightness-110 transition"
+                priority={false}
+              />
             </div>
           </div>
         </div>

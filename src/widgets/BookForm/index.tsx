@@ -59,6 +59,8 @@ const Index: FC<Props> = () => {
         <button
           className=" group absolute left-0 top-[25%] z-10 box-content rounded-full bg-stone-800 p-[0.5vw] hover:bg-stone-800"
           onClick={() => push('/')}
+          aria-label="Go back to homepage"
+          type="button"
         >
           <svg
             focusable="false"
