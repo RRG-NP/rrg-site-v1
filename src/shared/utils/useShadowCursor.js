@@ -952,7 +952,20 @@ const initCursor = () => {
     return radius;
   }
 
+  function isOverDisabledSection(clientY) {
+    const sectionIds = ['about', 'approach'];
+    for (const id of sectionIds) {
+      const el = document.getElementById(id);
+      if (el) {
+        const rect = el.getBoundingClientRect();
+        if (clientY >= rect.top && clientY <= rect.bottom) return true;
+      }
+    }
+    return false;
+  }
+
   window.addEventListener('mousedown', (e) => {
+    if (isOverDisabledSection(e.clientY)) return;
     let pointer = pointers[0];
     let posX = scaleByPixelRatio(e.clientX);
     let posY = scaleByPixelRatio(e.clientY);
@@ -961,6 +974,7 @@ const initCursor = () => {
   });
 
   document.body.addEventListener('mousemove', function handleFirstMouseMove(e) {
+    if (isOverDisabledSection(e.clientY)) return;
     let pointer = pointers[0];
     let posX = scaleByPixelRatio(e.clientX);
     let posY = scaleByPixelRatio(e.clientY);
@@ -974,6 +988,7 @@ const initCursor = () => {
   });
 
   window.addEventListener('mousemove', (e) => {
+    if (isOverDisabledSection(e.clientY)) return;
     let pointer = pointers[0];
     let posX = scaleByPixelRatio(e.clientX);
     let posY = scaleByPixelRatio(e.clientY);
@@ -987,6 +1002,7 @@ const initCursor = () => {
     let pointer = pointers[0];
 
     for (let i = 0; i < touches.length; i++) {
+      if (isOverDisabledSection(touches[i].clientY)) continue;
       let posX = scaleByPixelRatio(touches[i].clientX);
       let posY = scaleByPixelRatio(touches[i].clientY);
 
@@ -1002,6 +1018,7 @@ const initCursor = () => {
     const touches = e.targetTouches;
     let pointer = pointers[0];
     for (let i = 0; i < touches.length; i++) {
+      if (isOverDisabledSection(touches[i].clientY)) continue;
       let posX = scaleByPixelRatio(touches[i].clientX);
       let posY = scaleByPixelRatio(touches[i].clientY);
       updatePointerDownData(pointer, touches[i].identifier, posX, posY);
@@ -1014,6 +1031,7 @@ const initCursor = () => {
       const touches = e.targetTouches;
       let pointer = pointers[0];
       for (let i = 0; i < touches.length; i++) {
+        if (isOverDisabledSection(touches[i].clientY)) continue;
         let posX = scaleByPixelRatio(touches[i].clientX);
         let posY = scaleByPixelRatio(touches[i].clientY);
         updatePointerMoveData(pointer, posX, posY, pointer.color);
