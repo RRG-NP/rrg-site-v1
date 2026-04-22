@@ -21,6 +21,27 @@ const Index: FC<Props> = () => {
         <p className="mt-[0.6vw] text-[1.7vw] md:text-[3.2vw] font-normal text-gray-300 md:leading-[1.3]">
           Ready to bring your vision to life? Let&apos;s discuss your project and create something extraordinary together.
         </p>
+        
+        <a 
+          href="mailto:hi@rrg.com.np" 
+          className="mt-[1.2vw] md:mt-[2vw] inline-flex items-center gap-[0.5vw] text-[1.5vw] md:text-[2.8vw] font-medium text-primary hover:text-primary/80 transition-colors duration-300"
+        >
+          <svg
+            className="h-[1.5vw] w-[1.5vw] md:h-[2.8vw] md:w-[2.8vw]"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+            />
+          </svg>
+          hi@rrg.com.np
+        </a>
+
         <Button
           onClick={handleFormToggle}
           title="SUBMIT A REQUEST"
