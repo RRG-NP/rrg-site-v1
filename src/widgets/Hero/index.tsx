@@ -57,11 +57,15 @@ const Hero = () => {
   const rotateX = useTransform(mouseY, [-1, 1], isMobile ? [0, 0] : [8, -8]);
   const rotateY = useTransform(mouseX, [-1, 1], isMobile ? [0, 0] : [-8, 8]);
 
+  // Mouse-following gradient transforms (always declared, only rendered on desktop)
+  const gradientX = useTransform(mouseX, [-1, 1], [-100, 100]);
+  const gradientY = useTransform(mouseY, [-1, 1], [-100, 100]);
+
   return (
     <section 
       id="main" 
       ref={containerRef}
-      className="relative bg-black overflow-hidden"
+      className="relative bg-black overflow-hidden z-[2]"
     >
       <div className="relative flex h-screen w-full flex-col items-center justify-center overflow-hidden">
         {/* Background layers */}
@@ -72,8 +76,8 @@ const Hero = () => {
         {!isMobile && (
           <motion.div
             style={{
-              x: useTransform(mouseX, [-1, 1], [-100, 100]),
-              y: useTransform(mouseY, [-1, 1], [-100, 100]),
+              x: gradientX,
+              y: gradientY,
             }}
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] pointer-events-none z-[5]"
           >
