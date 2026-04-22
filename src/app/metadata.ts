@@ -1,8 +1,8 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'RRG Tech - Creative Digital Agency in Kathmandu, Nepal',
-  description: 'RRG Tech is a leading creative digital agency in Kathmandu, Nepal, specializing in web development, mobile app development, UI/UX design, and branding. Transform your digital presence with our expert team.',
+  title: 'RRG Tech - Creative Digital Agency in Kathmandu',
+  description: 'RRG Tech is a leading creative digital agency in Kathmandu, specializing in web development, mobile app development, UI/UX design, and branding. Transform your digital presence with our expert team.',
   keywords: [
     'RRG',
     'RRG Tech',
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     canonical: '/',
   },
   openGraph: {
-    title: 'RRG Tech - Creative Digital Agency in Kathmandu, Nepal',
+    title: 'RRG Tech - Creative Digital Agency in Kathmandu',
     description: 'Leading creative digital agency in Kathmandu specializing in web development, mobile apps, and design. Transform your digital presence with RRG Tech.',
     url: 'https://rrg.com.np',
     siteName: 'RRG Tech',
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'RRG Tech - Creative Digital Agency in Kathmandu, Nepal',
+    title: 'RRG Tech - Creative Digital Agency in Kathmandu',
     description: 'Leading creative digital agency in Kathmandu specializing in web development, mobile apps, and design.',
     images: ['/images/og-image.jpg'],
   },

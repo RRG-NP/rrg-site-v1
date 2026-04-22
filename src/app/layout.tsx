@@ -40,11 +40,12 @@ export default function RootLayout({
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#000000" />
+        <meta name="msvalidate.01" content="FC160AC750D5E6D051F295C8ACD13670" />
         
         {/* Primary Meta Tags */}
-        <title>RRG Tech - Creative Digital Agency in Kathmandu, Nepal</title>
-        <meta name="title" content="RRG Tech - Creative Digital Agency in Kathmandu, Nepal" />
-        <meta name="description" content="RRG Tech is a leading creative digital agency in Kathmandu, Nepal, specializing in web development, mobile app development, UI/UX design, and branding. Transform your digital presence with our expert team." />
+        <title>RRG Tech - Creative Digital Agency in Kathmandu</title>
+        <meta name="title" content="RRG Tech - Creative Digital Agency in Kathmandu" />
+        <meta name="description" content="RRG Tech is a leading creative digital agency in Kathmandu, specializing in web development, mobile app development, UI/UX design, and branding. Transform your digital presence with our expert team." />
         <meta name="keywords" content="RRG, RRG Tech, RRG Kathmandu, RRG Nepal, digital agency Nepal, web development Kathmandu, mobile app development Nepal, UI/UX design Kathmandu, branding agency Nepal, creative agency Kathmandu, software development Nepal, fullstack development, React development Nepal, Next.js development" />
         <meta name="author" content="RRG Tech" />
         <meta name="robots" content="index, follow" />
@@ -53,7 +54,7 @@ export default function RootLayout({
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://rrg.com.np" />
-        <meta property="og:title" content="RRG Tech - Creative Digital Agency in Kathmandu, Nepal" />
+        <meta property="og:title" content="RRG Tech - Creative Digital Agency in Kathmandu" />
         <meta property="og:description" content="Leading creative digital agency in Kathmandu specializing in web development, mobile apps, and design. Transform your digital presence with RRG Tech." />
         <meta property="og:image" content="https://rrg.com.np/images/og-image.jpg" />
         <meta property="og:site_name" content="RRG Tech" />
@@ -62,7 +63,7 @@ export default function RootLayout({
         {/* Twitter */}
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:url" content="https://rrg.com.np" />
-        <meta property="twitter:title" content="RRG Tech - Creative Digital Agency in Kathmandu, Nepal" />
+        <meta property="twitter:title" content="RRG Tech - Creative Digital Agency in Kathmandu" />
         <meta property="twitter:description" content="Leading creative digital agency in Kathmandu specializing in web development, mobile apps, and design." />
         <meta property="twitter:image" content="https://rrg.com.np/images/og-image.jpg" />
         
@@ -81,7 +82,7 @@ export default function RootLayout({
               name: 'RRG Tech',
               url: 'https://rrg.com.np',
               logo: 'https://rrg.com.np/images/logo.png',
-              description: 'Creative digital agency in Kathmandu, Nepal specializing in web development, mobile app development, and design.',
+              description: 'Creative digital agency in Kathmandu specializing in web development, mobile app development, and design.',
               address: {
                 '@type': 'PostalAddress',
                 addressLocality: 'Kathmandu',
