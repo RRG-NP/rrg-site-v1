@@ -8,7 +8,7 @@ interface Props {}
 
 const Index: FC<Props> = () => {
   return (
-    <section id="about" className="border-t border-gray-1 bg-gradient-to-b py-[6vw] md:py-[4vw] z-0">
+    <section id="about" className="relative bg-bg-1 py-[6vw] md:py-[4vw] z-0">
       <SectionOpacity classes='z-2'>
         <SectionTitle title="ABOUT." classes="px-[6vw] md:px-[3vw] pt-[3vw] z-10" />
         <div className="relative self-start px-[6vw] md:px-[3vw] pb-[5vw] pt-[3vw]">

@@ -25,6 +25,7 @@ module.exports = {
         aurora: 'aurora 60s linear infinite',
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+        'pulse-slow': 'pulse-slow 4s ease-in-out infinite',
       },
 
       keyframes: {
@@ -44,6 +45,14 @@ module.exports = {
             backgroundPosition: '350% 50%, 350% 50%',
           },
         },
+        'pulse-slow': {
+          '0%, 100%': { opacity: '0.6' },
+          '50%': { opacity: '0.8' },
+        },
+      },
+
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
       },
     },
   },
