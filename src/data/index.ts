@@ -27,7 +27,7 @@ export const CARDS = [
   {
     title: 'Design',
     description:
-      'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ipsam alias placeat temporibus mollitia doloribus. Consequatur aperiam facilis culpa fuga quia! Labore, sequi! Optio officiis obcaecati tempora voluptates consequuntur, placeat ad.',
+      'We craft stunning visual identities and user experiences that captivate your audience. From modern web interfaces to memorable brand identities, our design team brings your vision to life with creativity and precision.',
     services: [
       ['Web app', 'Branding'],
       ['Mobile app', 'Logo'],
@@ -38,7 +38,7 @@ export const CARDS = [
   {
     title: 'Fullstack development',
     description:
-      'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ipsam alias placeat temporibus mollitia doloribus. Consequatur aperiam facilis culpa fuga quia! Labore, sequi! Optio officiis obcaecati tempora voluptates consequuntur, placeat ad.',
+      'Build powerful, scalable web applications with our expert full-stack development services. We deliver robust solutions from frontend to backend, including e-commerce platforms, custom CMS, and seamless API integrations.',
     services: [
       ['Online shop', 'Web application'],
       ['CMS', 'API Development'],
@@ -49,7 +49,7 @@ export const CARDS = [
   {
     title: 'Mobile development',
     description:
-      'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ipsam alias placeat temporibus mollitia doloribus. Consequatur aperiam facilis culpa fuga quia! Labore, sequi! Optio officiis obcaecati tempora voluptates consequuntur, placeat ad.',
+      'Transform your ideas into powerful mobile applications. We develop native and cross-platform mobile solutions for both Android and iOS, delivering exceptional user experiences that engage and retain your customers.',
     services: [['Android', 'IOS']],
     number: '03.',
     classes: 'border-t border-gray-1/50',
@@ -84,7 +84,7 @@ export const APPROACH_CARDS = [
     icon: Fifth,
     title: 'Final result',
     description:
-      'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptates laboriosam ad eius, culpa soluta ab. Beatae optio quas adipisci aliquam quia velit soluta iste dicta, modi tenetur magnam, aut laborum placeat est. Unde minima amet illo eveniet qui sunt omnis laudantium laboriosam, officia dignissimos molestias tempore velit. Provident, explicabo. Dolor.',
+      'We deliver a polished, production-ready product that exceeds expectations. Along with comprehensive documentation and training, we ensure a smooth handover and provide ongoing support to help your project thrive.',
   },
 ];
 

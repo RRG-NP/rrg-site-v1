@@ -19,7 +19,7 @@ const Index: FC<Props> = () => {
       <div className=" mx-auto flex w-full max-w-[60vw] md:max-w-[90%] flex-1 flex-col items-center justify-center text-center">
         <h3 className="text-[4vw] md:text-[8vw] font-medium">LET&apos;S CONNECT</h3>
         <p className="mt-[0.6vw] text-[1.7vw] md:text-[3.2vw] font-normal text-gray-300 md:leading-[1.3]">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident consequatur ullam veniam omnis dolores cum.
+          Ready to bring your vision to life? Let&apos;s discuss your project and create something extraordinary together.
         </p>
         <Button
           onClick={handleFormToggle}
@@ -30,11 +30,23 @@ const Index: FC<Props> = () => {
       </div>
 
       <footer className="flex justify-between border-t border-t-gray-800 px-[5vw] py-[1.8vw] text-[1.6vw] md:text-[2vw] md:py-[2.4vw] md:px-[2vw] ">
-        <div>© 2026. <a href="https://rrg.com.np/" target='_blank' rel="norelopener">RRG Tech</a></div>
+        <div>© 2026. <a href="https://rrg.com.np/" target='_blank' rel="noreferrer">RRG Tech</a></div>
         <ul className="flex space-x-[3vw] ">
-          <li>Lorem, ipsum.</li>
-          <li>Lorem, ipsum.</li>
-          <li>Lorem, ipsum.</li>
+          <li>
+            <a href="https://www.facebook.com/rrg.com.np" target="_blank" rel="noreferrer" className="hover:text-gray-400 transition">
+              Facebook
+            </a>
+          </li>
+          <li>
+            <a href="https://www.linkedin.com/company/rrgnepal/" target="_blank" rel="noreferrer" className="hover:text-gray-400 transition">
+              LinkedIn
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/orgs/RRG-NP/dashboard" target="_blank" rel="noreferrer" className="hover:text-gray-400 transition">
+              GitHub
+            </a>
+          </li>
         </ul>
       </footer>
     </SectionOpacity>
