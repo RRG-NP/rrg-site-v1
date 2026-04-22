@@ -1,6 +1,7 @@
 'use client';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
+import { LogoIcon } from '@/icons/ApproachIcons/LogoIcon';
 
 export default function Logo3D() {
   const containerRef = useRef(null);
@@ -10,51 +11,35 @@ export default function Logo3D() {
     offset: ['start start', 'end start'],
   });
 
-  // Transform values for 3D effect
+  // Transform values for 3D effect with parallax
   const y = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
-  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [1, 1.1, 0.8]);
-  const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [0.15, 0.2, 0]);
+  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [1, 1.15, 0.85]);
+  const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0.1, 0.15, 0.12, 0]);
+  const rotate = useTransform(scrollYProgress, [0, 1], [0, 15]);
 
   return (
-    <div ref={containerRef} className="absolute inset-0 overflow-hidden">
+    <div ref={containerRef} className="absolute inset-0 overflow-hidden pointer-events-none">
       <motion.div
-        style={{ y, scale, opacity }}
-        className="absolute left-0 top-[10%] w-full h-full flex items-start justify-center"
+        style={{ y, scale, opacity, rotate }}
+        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full flex items-center justify-center"
       >
-        {/* Large R Logo with 3D effect */}
-        <svg
-          viewBox="0 0 400 600"
-          className="w-[120vw] md:w-[180vw] h-auto text-white/10"
-          style={{
-            filter: 'drop-shadow(0 0 80px rgba(255, 255, 255, 0.1))',
-          }}
-        >
-          {/* Main R shape - bold and modern */}
-          <path
-            d="M 80 50 L 80 550 L 140 550 L 140 340 L 200 340 C 280 340 320 300 320 220 C 320 140 280 50 200 50 Z M 140 110 L 200 110 C 240 110 260 140 260 220 C 260 260 240 280 200 280 L 140 280 Z"
-            fill="currentColor"
-            className="animate-pulse-slow"
+        {/* Large RRG Logo with subtle glow */}
+        <div className="relative w-[150vw] md:w-[120vw] lg:w-[100vw] h-auto">
+          <LogoIcon 
+            className="w-full h-auto text-white/10"
+            style={{
+              filter: 'drop-shadow(0 0 100px rgba(255, 255, 255, 0.08)) drop-shadow(0 0 50px rgba(255, 255, 255, 0.05))',
+            }}
           />
           
-          {/* Diagonal leg of R */}
-          <path
-            d="M 200 340 L 320 550 L 390 550 L 240 310 Z"
-            fill="currentColor"
-            className="animate-pulse-slow"
+          {/* Duplicate for enhanced glow effect */}
+          <LogoIcon 
+            className="absolute inset-0 w-full h-auto text-white/5 animate-pulse-slow"
+            style={{
+              filter: 'blur(40px)',
+            }}
           />
-          
-          {/* Curved extension that flows into next section */}
-          <motion.path
-            d="M 200 340 Q 280 380 320 450 Q 360 520 380 600"
-            stroke="currentColor"
-            strokeWidth="50"
-            fill="none"
-            strokeLinecap="round"
-            initial={{ pathLength: 0, opacity: 0 }}
-            animate={{ pathLength: 1, opacity: 0.5 }}
-            transition={{ duration: 2, delay: 0.5, ease: 'easeInOut' }}
-          />
-        </svg>
+        </div>
       </motion.div>
     </div>
   );

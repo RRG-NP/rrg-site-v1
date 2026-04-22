@@ -2,12 +2,10 @@
 import { useRef, useEffect, useState } from 'react';
 import { useScroll, useTransform, motion, useSpring } from 'framer-motion';
 import GridPattern from '@/components/ui/GridPattern';
-import Logo3D from '@/components/ui/Logo3D';
 import FloatingParticles from '@/components/ui/FloatingParticles';
 
 const Hero = () => {
   const containerRef = useRef(null);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isMobile, setIsMobile] = useState(false);
 
   const { scrollYProgress } = useScroll({
@@ -44,7 +42,6 @@ const Hero = () => {
       
       mouseX.set(x);
       mouseY.set(y);
-      setMousePosition({ x, y });
     };
 
     window.addEventListener('mousemove', handleMouseMove);
@@ -56,9 +53,9 @@ const Hero = () => {
   const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
   const y = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
 
-  // 3D tilt effect based on mouse position (disabled on mobile)
-  const rotateX = useTransform(mouseY, [-1, 1], isMobile ? [0, 0] : [5, -5]);
-  const rotateY = useTransform(mouseX, [-1, 1], isMobile ? [0, 0] : [-5, 5]);
+  // 3D tilt effect based on mouse position (disabled on mobile) - increased intensity
+  const rotateX = useTransform(mouseY, [-1, 1], isMobile ? [0, 0] : [8, -8]);
+  const rotateY = useTransform(mouseX, [-1, 1], isMobile ? [0, 0] : [-8, 8]);
 
   return (
     <section 
@@ -69,8 +66,24 @@ const Hero = () => {
       <div className="relative flex h-screen w-full flex-col items-center justify-center overflow-hidden">
         {/* Background layers */}
         <GridPattern />
-        <Logo3D />
         <FloatingParticles />
+
+        {/* Mouse-following gradient background - desktop only */}
+        {!isMobile && (
+          <motion.div
+            style={{
+              x: useTransform(mouseX, [-1, 1], [-100, 100]),
+              y: useTransform(mouseY, [-1, 1], [-100, 100]),
+            }}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] pointer-events-none z-[5]"
+          >
+            <div className="absolute inset-0 bg-gradient-radial from-blue-500/20 via-purple-500/15 to-transparent rounded-full blur-[120px] mix-blend-screen" />
+            <div className="absolute inset-0 bg-gradient-radial from-pink-500/15 via-blue-500/10 to-transparent rounded-full blur-[100px] mix-blend-screen animate-pulse-slow" />
+          </motion.div>
+        )}
+
+        {/* Vignette effect */}
+        <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black/70 pointer-events-none z-10" />
 
         {/* Gradient overlays for depth */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black/80 pointer-events-none z-10" />
@@ -89,20 +102,6 @@ const Hero = () => {
           }}
           className="relative z-20 flex flex-col items-center justify-center px-4 md:px-6 max-w-7xl mx-auto"
         >
-          {/* Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="mb-6 md:mb-8"
-          >
-            <div className="px-4 py-2 md:px-6 md:py-2 rounded-full border border-white/20 bg-white/5 backdrop-blur-sm">
-              <span className="text-white/80 text-xs md:text-sm font-medium tracking-wider">
-                rrg.com.np
-              </span>
-            </div>
-          </motion.div>
-
           {/* Main heading */}
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
@@ -135,7 +134,7 @@ const Hero = () => {
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
             transition={{ duration: 1.2, delay: 0.8, ease: 'easeInOut' }}
-            className="mt-6 md:mt-8 h-[2px] w-24 md:w-32 lg:w-48 bg-gradient-to-r from-transparent via-white/60 to-transparent"
+            className='absolute -bottom-32 md:bottom-40  md:mt-8 h-[2px] w-24 md:w-32 lg:w-48 bg-gradient-to-r from-transparent via-white/60 to-transparent'
             style={{
               transform: isMobile ? 'none' : 'translateZ(20px)',
             }}
@@ -146,7 +145,7 @@ const Hero = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 1.2 }}
-            className="absolute bottom-8 md:bottom-12 left-1/2 -translate-x-1/2"
+            className="absolute -bottom-24 md:bottom-40 left-1/2 -translate-x-1/2"
           >
             <motion.div
               animate={{ y: [0, 10, 0] }}
