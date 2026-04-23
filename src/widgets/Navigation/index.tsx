@@ -74,22 +74,24 @@ const Index: FC<Props> = () => {
           </motion.div>
         </motion.button>
 
-        {/* Burger */}
-        <div className="p-[2vw]">
-          <button
-            type="button"
-            onClick={() => setIsActive(!isActive)}
-            aria-label={isActive ? 'Close navigation menu' : 'Open navigation menu'}
-            aria-expanded={isActive}
-            className="flex h-9 w-9 sm:h-11 sm:w-11 md:h-12 md:w-12 lg:h-16 lg:w-16 cursor-pointer items-center justify-center rounded-full bg-stone-400"
-          >
-            <div className={`burger ${isActive ? 'burgerActive' : ''}`}></div>
-          </button>
-        </div>
       </motion.header>
 
-      <AnimatePresence mode="wait">
-        {isActive && <SidebarMenu close={closeSidebar} isActive={isActive} toggle={() => setIsActive(!isActive)} />}
+      {/* Burger */}
+      <div className="fixed right-0 top-0 z-[4001] p-[2vw]">
+        <button
+          type="button"
+          onClick={() => setIsActive(!isActive)}
+          aria-label={isActive ? 'Close navigation menu' : 'Open navigation menu'}
+          aria-expanded={isActive}
+          className="flex h-9 w-9 sm:h-11 sm:w-11 md:h-12 md:w-12 lg:h-16 lg:w-16 cursor-pointer items-center justify-center rounded-full bg-stone-400"
+        >
+          <div className={`burger ${isActive ? 'burgerActive' : ''}`} />
+        </button>
+      </div>
+
+      <AnimatePresence mode="wait">{isActive && (
+        <SidebarMenu close={closeSidebar} />
+      )}
       </AnimatePresence>
     </>
   );

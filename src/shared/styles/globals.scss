@@ -66,12 +66,12 @@ a {
 .burgerActive {
   &::after {
     transform: rotate(45deg);
-    top: 1px;
+    top: -1.5px;
   }
 
   &::before {
     transform: rotate(-45deg);
-    top: -1px;
+    top: 0.55px;
   }
 }
 

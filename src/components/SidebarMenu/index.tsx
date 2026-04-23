@@ -58,19 +58,8 @@ const Index: FC<Props> = ({ close }) => {
         initial="initial"
         animate="enter"
         exit="exit"
-        className="fixed right-0 top-0 z-[4000] h-screen w-[85vw] sm:w-[60vw] md:w-[40vw] lg:w-[32vw] bg-gray-1 flex flex-col px-8 sm:px-10 md:px-[5vw] pt-20 pb-10 text-text-1"
+        className="fixed right-0 top-0 z-[4000] h-screen w-[85vw] sm:w-[60vw] md:w-[40vw] lg:w-[32vw] bg-gray-1 flex flex-col px-8 sm:px-10 md:px-[5vw] pt-24 pb-10 text-text-1"
       >
-        {/* Close button */}
-        <button
-          type="button"
-          onClick={close}
-          aria-label="Close navigation menu"
-          className="absolute top-5 right-5 flex items-center justify-center w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 transition text-white"
-        >
-          <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden="true">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
 
         {/* Nav label */}
         <div className="w-full border-b border-white/20 uppercase text-white/50 pb-2 mb-6">
@@ -78,7 +67,7 @@ const Index: FC<Props> = ({ close }) => {
         </div>
 
         {/* Nav links */}
-        <nav className="flex flex-col gap-1 flex-1" onMouseLeave={() => setSelectedIndicator(null)}>
+        <nav className="flex flex-col gap-4 flex-1" onMouseLeave={() => setSelectedIndicator(null)}>
           {NAV_ITEMS.map((item, index) => (
             <CustomLink
               handleClick={() => smoothScroll(item.href)}
