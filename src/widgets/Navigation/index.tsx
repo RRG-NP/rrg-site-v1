@@ -51,13 +51,16 @@ const Index: FC<Props> = () => {
             ? { duration: 0.7, ease: [0.4, 0, 0.2, 1] }   // slow, smooth hide
             : { duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] } // entry drop-in
         }
-        className="fixed top-0 left-0 right-0 z-[4000] flex items-center justify-between"
+        className="m-0 md:m-2 fixed top-0 left-0 right-0 z-[4000] flex items-center justify-between"
       >
         {/* Logo */}
         <motion.button
           title="rrg tech"
           aria-label="RRG Tech - Go to homepage"
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          onClick={() => {
+            const el = document.getElementById('main');
+            el ? el.scrollIntoView({ behavior: 'smooth' }) : window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
           className="p-[2vw] group cursor-pointer"
           whileHover={{ scale: 1.1, transition: { duration: 0.2 } }}
           whileTap={{ scale: 0.95 }}
@@ -78,7 +81,7 @@ const Index: FC<Props> = () => {
             onClick={() => setIsActive(!isActive)}
             aria-label={isActive ? 'Close navigation menu' : 'Open navigation menu'}
             aria-expanded={isActive}
-            className="flex h-14 w-14 md:h-16 md:w-16 cursor-pointer items-center justify-center rounded-full bg-stone-400"
+            className="flex h-9 w-9 sm:h-11 sm:w-11 md:h-12 md:w-12 lg:h-16 lg:w-16 cursor-pointer items-center justify-center rounded-full bg-stone-400"
           >
             <div className={`burger ${isActive ? 'burgerActive' : ''}`}></div>
           </button>
@@ -86,7 +89,7 @@ const Index: FC<Props> = () => {
       </motion.header>
 
       <AnimatePresence mode="wait">
-        {isActive && <SidebarMenu close={closeSidebar} />}
+        {isActive && <SidebarMenu close={closeSidebar} isActive={isActive} toggle={() => setIsActive(!isActive)} />}
       </AnimatePresence>
     </>
   );

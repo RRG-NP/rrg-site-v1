@@ -19,7 +19,7 @@ export const NAV_ITEMS = [
   },
   {
     title: 'Contact',
-    href: 'contact',
+    href: 'cta',
   },
 ];
 
