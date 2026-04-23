@@ -58,16 +58,16 @@ const Index: FC<Props> = ({ close }) => {
         initial="initial"
         animate="enter"
         exit="exit"
-        className="fixed right-0 top-0 z-[4000] h-screen w-[85vw] sm:w-[60vw] md:w-[40vw] lg:w-[32vw] bg-gray-1 flex flex-col px-8 sm:px-10 md:px-[5vw] pt-24 pb-10 text-text-1"
+        className="fixed right-0 top-0 z-[4000] h-screen w-[80vw] sm:w-[60vw] md:w-[88vw] lg:w-[32vw] bg-gray-1 flex flex-col px-8 sm:px-10 md:px-7 pt-24 md:pt-20 pb-10 text-text-1"
       >
 
         {/* Nav label */}
-        <div className="w-full border-b border-white/20 uppercase text-white/50 pb-2 mb-6">
-          <h3 className="text-xs tracking-widest">Navigation</h3>
+        <div className="w-full border-b border-white/20 uppercase text-white/50 pb-2 mb-6 md:mb-5">
+          <h3 className="text-xs md:text-[3vw] tracking-widest">Navigation</h3>
         </div>
 
         {/* Nav links */}
-        <nav className="flex flex-col gap-4 flex-1" onMouseLeave={() => setSelectedIndicator(null)}>
+        <nav className="flex flex-col gap-4 md:gap-5 flex-1" onMouseLeave={() => setSelectedIndicator(null)}>
           {NAV_ITEMS.map((item, index) => (
             <CustomLink
               handleClick={() => smoothScroll(item.href)}
@@ -80,11 +80,11 @@ const Index: FC<Props> = ({ close }) => {
         </nav>
 
         {/* Connect section */}
-        <div className="flex flex-col gap-3 mt-8">
+        <div className="flex flex-col gap-3 mt-8 md:mt-6">
           <div className="w-full border-b border-white/20 uppercase text-white/50 pb-2 mb-1">
-            <h3 className="text-xs tracking-widest">Connect</h3>
+            <h3 className="text-xs md:text-[3vw] tracking-widest">Connect</h3>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 md:gap-4">
             {SOCIAL_LINKS.map(({ label, href, icon }) => (
               <Link
                 key={label}
@@ -92,9 +92,9 @@ const Index: FC<Props> = ({ close }) => {
                 target="_blank"
                 rel="noreferrer"
                 aria-label={label}
-                className="flex items-center justify-center w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 active:bg-white/30 transition text-white"
+                className="flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/10 hover:bg-white/20 active:bg-white/30 transition text-white"
               >
-                {icon}
+                <span className="md:[&>svg]:w-6 md:[&>svg]:h-6">{icon}</span>
               </Link>
             ))}
           </div>

@@ -31,7 +31,7 @@ const Index: FC<Props> = ({ data, isActive, setSelectedIndicator, handleClick })
       ></motion.div>
       <div
         tabIndex={0}
-        className="cursor-pointer pl-5 text-5xl sm:text-5xl md:text-[3vw] lg:text-[2.6vw] font-semibold tracking-tight leading-[1.15] transition-transform duration-300 ease-[cubic-bezier(.16,1,.3,1)] hover:translate-x-4"
+        className="cursor-pointer pl-5 text-5xl sm:text-5xl md:text-[9vw] lg:text-[2.6vw] font-semibold tracking-tight leading-[1.15] transition-transform duration-300 ease-[cubic-bezier(.16,1,.3,1)] hover:translate-x-4 active:translate-x-2"
       >
         {title}
       </div>

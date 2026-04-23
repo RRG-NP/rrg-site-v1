@@ -111,7 +111,7 @@ const Hero = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.4 }}
-            className="relative text-center text-[15vw] md:text-[18vw] lg:text-[10vw] font-black text-white leading-[0.9] mb-4 md:mb-6"
+            className="relative text-center text-[15vw] md:text-[22vw] lg:text-[10vw] font-black text-white leading-[0.9] mb-4 md:mb-5"
             style={{
               textShadow: '0 0 80px rgba(255, 255, 255, 0.3), 0 0 40px rgba(255, 255, 255, 0.2)',
               transform: isMobile ? 'none' : 'translateZ(50px)',
@@ -125,7 +125,7 @@ const Hero = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.6 }}
-            className="text-center text-[4.5vw] md:text-[5.5vw] lg:text-[2.5vw] font-medium text-white/70 max-w-4xl px-4 leading-relaxed"
+            className="text-center text-[4.5vw] md:text-[7vw] lg:text-[2.5vw] font-medium text-white/70 max-w-4xl px-6 leading-relaxed"
             style={{
               transform: isMobile ? 'none' : 'translateZ(30px)',
             }}

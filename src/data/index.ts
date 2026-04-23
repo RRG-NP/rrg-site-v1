@@ -139,8 +139,8 @@ export const RADIO_FIELDS = [
 ];
 
 export const INPUT_FIELDS = [
-  { label: 'Your name*', name: 'first', classes: 'inline-block !w-[calc(50%-2vw)] mr-[4vw]', required: true },
-  { label: 'Phone*', name: 'phone', classes: 'inline-block !w-[calc(50%-2vw)]', type: 'number', required: true },
+  { label: 'Your name*', name: 'first', classes: 'inline-block !w-[calc(50%-2vw)] mr-[4vw] md:!w-full md:!mr-0', required: true },
+  { label: 'Phone*', name: 'phone', classes: 'inline-block !w-[calc(50%-2vw)] md:!w-full', type: 'number', required: true },
   { label: 'Email*', name: 'email', classes: '', type: 'email' },
   { label: 'Company name*', name: 'company', classes: '', required: true },
   { label: 'Company website', name: 'websiteUrl', classes: '' },
