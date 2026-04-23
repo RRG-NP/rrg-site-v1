@@ -77,7 +77,16 @@ const Index: FC<Props> = () => {
       </motion.header>
 
       {/* Burger */}
-      <div className="fixed right-0 top-0 z-[4001] p-[2vw]">
+      <motion.div
+        className="fixed right-0 top-0 z-[4001] p-[2vw]"
+        initial={{ y: '-100%', opacity: 0 }}
+        animate={{ y: headerHidden ? '-100%' : '0%', opacity: 1 }}
+        transition={
+          headerHidden
+            ? { duration: 0.7, ease: [0.4, 0, 0.2, 1] }
+            : { duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }
+        }
+      >
         <button
           type="button"
           onClick={() => setIsActive(!isActive)}
@@ -87,7 +96,7 @@ const Index: FC<Props> = () => {
         >
           <div className={`burger ${isActive ? 'burgerActive' : ''}`} />
         </button>
-      </div>
+      </motion.div>
 
       <AnimatePresence mode="wait">{isActive && (
         <SidebarMenu close={closeSidebar} />
