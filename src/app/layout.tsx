@@ -1,6 +1,8 @@
 'use client';
 
 import Lenis from 'lenis';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import { Montserrat } from 'next/font/google';
 import { useEffect, useState } from 'react';
@@ -17,22 +19,42 @@ export default function RootLayout({
   const [dimension, setDimension] = useState<any>(null);
 
   useEffect(() => {
-    const lenis = new Lenis();
+    gsap.registerPlugin(ScrollTrigger);
 
-    const raf = (time: number) => {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    };
+    // Disable Lenis on mobile — native momentum scroll is smoother
+    // and avoids ScrollTrigger conflicts on iOS/Android
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
+    let rafId: number;
+
+    if (!isMobile) {
+      const lenis = new Lenis();
+
+      // Connect Lenis to ScrollTrigger so they share the same scroll position
+      lenis.on('scroll', ScrollTrigger.update);
+
+      const raf = (time: number) => {
+        lenis.raf(time);
+        rafId = requestAnimationFrame(raf);
+      };
+
+      rafId = requestAnimationFrame(raf);
+
+      return () => {
+        lenis.destroy();
+        cancelAnimationFrame(rafId);
+      };
+    }
+    // On mobile: just let native scroll drive ScrollTrigger directly
+  }, []);
+
+  useEffect(() => {
     const resize = () => {
       setDimension({ width: window.innerWidth, height: window.innerHeight });
     };
-
     window.addEventListener('resize', resize);
-    requestAnimationFrame(raf);
     resize();
-
-    requestAnimationFrame(raf);
+    return () => window.removeEventListener('resize', resize);
   }, []);
   return (
     <html lang="en">

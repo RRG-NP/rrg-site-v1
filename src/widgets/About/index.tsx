@@ -102,17 +102,27 @@ const Index: FC<Props> = () => {
 
     gsap.registerPlugin(ScrollTrigger);
 
+    const isMobile = window.innerWidth < 768;
+
+    // On mobile: normalizeScroll prevents the browser address bar resize
+    // from causing position jumps and glitches on reverse scroll
+    if (isMobile) {
+      ScrollTrigger.normalizeScroll(true);
+    }
+
     const ctx = gsap.context(() => {
       const lineEls = sectionRef.current!.querySelectorAll<HTMLDivElement>('.bright-line');
       if (!lineEls.length) return;
 
-      // Each line gets a dedicated scroll window, stacked sequentially
-      const windowSize = 18; // vh each line takes to fully reveal
-      const gap = 4;         // vh gap between lines starting
-
       lineEls.forEach((el, i) => {
-        const startVh = 78 - i * (windowSize + gap);
-        const endVh = startVh - windowSize;
+        // Desktop: start later (lower %) so text reveals further down the page
+        // Mobile: start earlier since viewport is taller relative to content
+        const startVh = isMobile
+          ? 85 - i * 18   // mobile: line0: 85%, line1: 67%, line2: 49%
+          : 65 - i * 15;  // desktop: line0: 65%, line1: 50%, line2: 35%
+
+        const rangeVh = isMobile ? 20 : 18;
+        const endVh = startVh - rangeVh;
 
         gsap.fromTo(
           el,
@@ -124,14 +134,18 @@ const Index: FC<Props> = () => {
               trigger: sectionRef.current,
               start: `top ${startVh}%`,
               end: `top ${endVh}%`,
-              scrub: 1,
+              scrub: isMobile ? true : 2,
+              invalidateOnRefresh: true,
             },
           },
         );
       });
     }, sectionRef);
 
-    return () => ctx.revert();
+    return () => {
+      ctx.revert();
+      if (isMobile) ScrollTrigger.normalizeScroll(false);
+    };
   }, [lines]);
 
   const pClasses =
