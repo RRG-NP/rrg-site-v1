@@ -8,13 +8,13 @@ const initCursor = () => {
     DYE_RESOLUTION: 1440,
     CAPTURE_RESOLUTION: 512,
 
-    DENSITY_DISSIPATION: 3.5,
-    VELOCITY_DISSIPATION: 1.5,
+    DENSITY_DISSIPATION: 2.2,
+    VELOCITY_DISSIPATION: 1.8,
     PRESSURE: 0.1,
     PRESSURE_ITERATIONS: 20,
-    CURL: 3,
-    SPLAT_RADIUS: 0.6,
-    SPLAT_FORCE: 6500,
+    CURL: 8,
+    SPLAT_RADIUS: 0.35,
+    SPLAT_FORCE: 5000,
     SHADING: true,
     // COLOR_UPDATE_SPEED: 1000,
     COLOR_UPDATE_SPEED: 10,
@@ -1092,9 +1092,9 @@ const initCursor = () => {
 
   function generateColor() {
     let c = HSVtoRGB(Math.random(), 1.0, 1.0);
-    c.r *= 0.15;
-    c.g *= 0.15;
-    c.b *= 0.15;
+    c.r *= 0.28;
+    c.g *= 0.28;
+    c.b *= 0.28;
     return c;
   }
 
