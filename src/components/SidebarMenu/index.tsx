@@ -58,7 +58,7 @@ const Index: FC<Props> = ({ close }) => {
         initial="initial"
         animate="enter"
         exit="exit"
-        className="fixed right-0 top-0 z-[4000] h-screen w-[80vw] sm:w-[60vw] md:w-[88vw] lg:w-[32vw] bg-gray-1 flex flex-col px-8 sm:px-10 md:px-7 pt-24 md:pt-20 pb-10 text-text-1"
+        className="fixed right-0 top-0 z-[4000] h-[100svh] w-[80vw] sm:w-[60vw] md:w-[88vw] lg:w-[32vw] bg-gray-1 flex flex-col px-8 sm:px-10 md:px-7 pt-24 md:pt-20 pb-[max(2.5rem,env(safe-area-inset-bottom,0px)+1.5rem)] text-text-1"
       >
 
         {/* Nav label */}
@@ -80,7 +80,7 @@ const Index: FC<Props> = ({ close }) => {
         </nav>
 
         {/* Connect section */}
-        <div className="flex flex-col gap-3 mt-8 md:mt-6">
+        <div className="flex flex-col gap-3 mt-auto md:mt-6">
           <div className="w-full border-b border-white/20 uppercase text-white/50 pb-2 mb-1">
             <h3 className="text-xs md:text-[3vw] tracking-widest">Connect</h3>
           </div>
