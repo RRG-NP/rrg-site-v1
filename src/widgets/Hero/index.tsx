@@ -133,23 +133,15 @@ const Hero = () => {
             Creative Digital Agency in Kathmandu, Nepal
           </motion.p>
 
-          {/* Animated underline */}
-          <motion.div
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ duration: 1.2, delay: 0.8, ease: 'easeInOut' }}
-            className='absolute -bottom-32 md:bottom-40  md:mt-8 h-[2px] w-24 md:w-32 lg:w-48 bg-gradient-to-r from-transparent via-white/60 to-transparent'
-            style={{
-              transform: isMobile ? 'none' : 'translateZ(20px)',
-            }}
-          />
+        </motion.div>
 
+        {/* Scroll indicator + Underline — always together, anchored above the curve */}
+        <div className="absolute bottom-28 md:bottom-36 lg:bottom-50 left-1/2 -translate-x-1/2 z-40 flex flex-col items-center gap-4">
           {/* Scroll indicator */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 1.2 }}
-            className="absolute -bottom-24 md:bottom-40 left-1/2 -translate-x-1/2"
           >
             <motion.div
               animate={{ y: [0, 10, 0] }}
@@ -164,7 +156,7 @@ const Hero = () => {
                 height="20"
                 viewBox="0 0 24 24"
                 fill="none"
-                className="text-white/50 md:w-5 md:h-5"
+                className="text-white/50"
               >
                 <path
                   d="M12 5v14m0 0l-7-7m7 7l7-7"
@@ -176,7 +168,15 @@ const Hero = () => {
               </svg>
             </motion.div>
           </motion.div>
-        </motion.div>
+
+          {/* Animated underline */}
+          <motion.div
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ duration: 1.2, delay: 0.8, ease: 'easeInOut' }}
+            className="mt-2 h-[2px] w-24 md:w-32 lg:w-48 bg-gradient-to-r from-transparent via-white/60 to-transparent"
+          />
+        </div>
 
         {/* Ambient light effects - reduced on mobile */}
         <div className="absolute top-1/4 left-1/4 w-64 h-64 md:w-96 md:h-96 bg-blue-500/10 rounded-full blur-[100px] md:blur-[120px] pointer-events-none" />
@@ -184,7 +184,7 @@ const Hero = () => {
       </div>
 
       {/* Curved transition to next section */}
-      <div className="absolute bottom-0 left-0 right-0 h-24 md:h-32 lg:h-48 z-30">
+      <div className="absolute -bottom-2 left-0 right-0 h-24 md:h-32 lg:h-48 z-30">
         <svg
           viewBox="0 0 1440 120"
           fill="none"
