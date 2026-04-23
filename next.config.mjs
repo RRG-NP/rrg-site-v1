@@ -71,6 +71,20 @@ const nextConfig = {
           }
         ],
       },
+      {
+        // Override Content-Type for webmanifest — must come after /:path* so it wins
+        source: '/site.webmanifest',
+        headers: [
+          {
+            key: 'Content-Type',
+            value: 'application/manifest+json; charset=utf-8',
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+        ],
+      },
     ];
   },
 };

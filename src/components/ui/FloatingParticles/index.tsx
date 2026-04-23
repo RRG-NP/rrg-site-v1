@@ -1,22 +1,35 @@
 'use client';
 import { motion } from 'framer-motion';
-import { useMemo } from 'react';
+import { useState, useEffect } from 'react';
+
+interface Particle {
+  id: number;
+  x: number;
+  y: number;
+  size: number;
+  duration: number;
+  delay: number;
+  driftX: number;
+}
 
 export default function FloatingParticles() {
-  const particles = useMemo(() => {
-    const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
+  const [particles, setParticles] = useState<Particle[]>([]);
+
+  useEffect(() => {
+    const isMobile = window.innerWidth <= 768;
     const count = isMobile ? 15 : 30;
 
-    return Array.from({ length: count }, (_, i) => ({
-      id: i,
-      x: Math.random() * 100,
-      y: Math.random() * 100,
-      size: Math.random() * 4 + 2,
-      duration: Math.random() * 20 + 15,
-      delay: -(Math.random() * 20 + 5), // negative delay = start mid-cycle
-      driftX: Math.random() * 50 - 25,
-    }));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    setParticles(
+      Array.from({ length: count }, (_, i) => ({
+        id: i,
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        size: Math.random() * 4 + 2,
+        duration: Math.random() * 20 + 15,
+        delay: -(Math.random() * 20 + 5),
+        driftX: Math.random() * 50 - 25,
+      })),
+    );
   }, []);
 
   return (

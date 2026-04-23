@@ -212,7 +212,7 @@ const Index: FC<Props> = () => {
                 fill
                 sizes="(max-width: 600px) 92vw, 30vw"
                 className="object-cover rounded-[0.125vw] md:rounded-sm hover:brightness-110 transition"
-                priority={false}
+                priority
               />
             </div>
           </div>

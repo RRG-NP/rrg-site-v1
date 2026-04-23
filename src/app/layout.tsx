@@ -5,7 +5,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import { Montserrat } from 'next/font/google';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 const montserrat = Montserrat({ subsets: ['latin'] });
 
@@ -16,8 +16,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [dimension, setDimension] = useState<any>(null);
-
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
 
@@ -28,7 +26,10 @@ export default function RootLayout({
     let rafId: number;
 
     if (!isMobile) {
-      const lenis = new Lenis();
+      const lenis = new Lenis({
+        wrapper: window,
+        content: document.documentElement,
+      });
 
       // Connect Lenis to ScrollTrigger so they share the same scroll position
       lenis.on('scroll', ScrollTrigger.update);
@@ -48,14 +49,6 @@ export default function RootLayout({
     // On mobile: just let native scroll drive ScrollTrigger directly
   }, []);
 
-  useEffect(() => {
-    const resize = () => {
-      setDimension({ width: window.innerWidth, height: window.innerHeight });
-    };
-    window.addEventListener('resize', resize);
-    resize();
-    return () => window.removeEventListener('resize', resize);
-  }, []);
   return (
     <html lang="en">
       <head>
@@ -158,8 +151,8 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={montserrat.className}>
-        <main>
+      <body className={montserrat.className} suppressHydrationWarning>
+        <main className="relative">
           {children}
         </main>
       </body>
