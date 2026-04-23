@@ -19,8 +19,8 @@ const AuroraBackground = ({ className, children, showRadialGradient = true, ...p
             pointer-events-none
             absolute
             -inset-[10px]
-            opacity-20
-            blur-[10px]
+            opacity-30
+            blur-[8px]
             invert
             filter
             will-change-transform [--aurora:repeating-linear-gradient(-100deg,var(--blue-500)_10%,var(--indigo-300)_15%,var(--blue-300)_20%,#4A4458_25%,var(--blue-400)_30%)] [--dark-gradient:repeating-linear-gradient(-100deg,var(--black)_0%,var(--black)_7%,var(--transparent)_10%,var(--transparent)_12%,var(--black)_16%)] [--white-gradient:repeating-linear-gradient(-100deg,var(--white)_0%,var(--white)_7%,var(--transparent)_10%,var(--transparent)_12%,var(--white)_16%)]

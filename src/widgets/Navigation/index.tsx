@@ -1,59 +1,50 @@
 'use client';
 import { FC, useEffect, useRef, useState } from 'react';
-
-import SidebarMenu from '@/components/SidebarMenu';
 import { AnimatePresence, motion } from 'framer-motion';
 import { LogoIcon } from '@/icons/ApproachIcons/LogoIcon';
+import SidebarMenu from '@/components/SidebarMenu';
 
-interface Props {}
+interface Props {
+  logoVisible?: boolean;
+  burgerVisible?: boolean;
+}
 
-const Index: FC<Props> = () => {
+const Navigation: FC<Props> = ({ logoVisible = true, burgerVisible = true }) => {
   const [isActive, setIsActive] = useState(false);
   const [hidden, setHidden] = useState(false);
   const lastScrollY = useRef(0);
-  const closeSidebar = () => setIsActive(false);
 
   useEffect(() => {
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setIsActive(false);
-    };
+    const handleEscape = (e: KeyboardEvent) => e.key === 'Escape' && setIsActive(false);
     document.addEventListener('keydown', handleEscape);
     return () => document.removeEventListener('keydown', handleEscape);
   }, []);
 
   useEffect(() => {
     const handleScroll = () => {
-      const currentY = window.scrollY;
-      // Only hide after scrolling past 80px so the header doesn't vanish immediately
-      if (currentY > 80 && currentY > lastScrollY.current) {
-        setHidden(true);
-      } else {
-        setHidden(false);
-      }
-      lastScrollY.current = currentY;
+      const y = window.scrollY;
+      setHidden(y > 80 && y > lastScrollY.current);
+      lastScrollY.current = y;
     };
-
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Keep header visible while sidebar is open
   const headerHidden = hidden && !isActive;
 
   return (
     <>
       <motion.header
         role="banner"
-        initial={{ y: '-100%', opacity: 0 }}
-        animate={{ y: headerHidden ? '-100%' : '0%', opacity: 1 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: headerHidden ? 0 : 1 }}
         transition={
           headerHidden
-            ? { duration: 0.7, ease: [0.4, 0, 0.2, 1] }   // slow, smooth hide
-            : { duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] } // entry drop-in
+            ? { duration: 0.4, ease: [0.4, 0, 0.2, 1] }
+            : { duration: 0.3, ease: 'easeOut' }
         }
         className="fixed top-0 left-0 right-0 z-[4000] flex items-center justify-between"
       >
-        {/* Logo */}
         <motion.button
           title="rrg tech"
           aria-label="RRG Tech - Go to homepage"
@@ -65,29 +56,29 @@ const Index: FC<Props> = () => {
           whileHover={{ scale: 1.1, transition: { duration: 0.2 } }}
           whileTap={{ scale: 0.95 }}
         >
-          <motion.div
-            initial={{ rotate: -10 }}
-            animate={{ rotate: 0 }}
-            transition={{ duration: 1.2, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <LogoIcon
-              className="text-white transition-all duration-300 group-hover:text-white/90 group-hover:drop-shadow-[0_0_20px_rgba(255,255,255,0.5)]"
-              style={{ width: 'clamp(32px, 5vw, 56px)', height: 'clamp(32px, 5vw, 56px)' }}
-            />
-          </motion.div>
+          <div data-nav-logo>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: logoVisible ? 1 : 0 }}
+              transition={{ duration: 0.4, ease: 'easeOut' }}
+            >
+              <LogoIcon
+                className="text-white transition-all duration-300 group-hover:text-white/90 group-hover:drop-shadow-[0_0_20px_rgba(255,255,255,0.5)]"
+                style={{ width: 'clamp(32px, 5vw, 56px)', height: 'clamp(32px, 5vw, 56px)' }}
+              />
+            </motion.div>
+          </div>
         </motion.button>
-
       </motion.header>
 
-      {/* Burger */}
       <motion.div
         className="fixed right-0 top-0 z-[4001] p-[4vw] lg:p-[2vw]"
-        initial={{ y: '-100%', opacity: 0 }}
-        animate={{ y: headerHidden ? '-100%' : '0%', opacity: 1 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: headerHidden || !burgerVisible ? 0 : 1 }}
         transition={
           headerHidden
-            ? { duration: 0.7, ease: [0.4, 0, 0.2, 1] }
-            : { duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }
+            ? { duration: 0.4, ease: [0.4, 0, 0.2, 1] }
+            : { duration: 0.4, delay: burgerVisible ? 0.1 : 0, ease: 'easeOut' }
         }
       >
         <button
@@ -95,18 +86,17 @@ const Index: FC<Props> = () => {
           onClick={() => setIsActive(!isActive)}
           aria-label={isActive ? 'Close navigation menu' : 'Open navigation menu'}
           aria-expanded={isActive}
-          className="flex h-9 w-9 sm:h-11 sm:w-11 md:h-10 md:w-10 lg:h-16 lg:w-16  cursor-pointer items-center justify-center rounded-full bg-stone-400"
+          className="flex h-9 w-9 sm:h-11 sm:w-11 md:h-10 md:w-10 lg:h-16 lg:w-16 cursor-pointer items-center justify-center rounded-full bg-stone-400"
         >
           <div className={`burger ${isActive ? 'burgerActive' : ''}`} />
         </button>
       </motion.div>
 
-      <AnimatePresence mode="wait">{isActive && (
-        <SidebarMenu close={closeSidebar} />
-      )}
+      <AnimatePresence mode="wait">
+        {isActive && <SidebarMenu close={() => setIsActive(false)} />}
       </AnimatePresence>
     </>
   );
 };
 
-export default Index;
+export default Navigation;
