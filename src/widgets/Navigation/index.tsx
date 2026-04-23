@@ -1,5 +1,5 @@
 'use client';
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 
 import SidebarMenu from '@/components/SidebarMenu';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -9,71 +9,87 @@ interface Props {}
 
 const Index: FC<Props> = () => {
   const [isActive, setIsActive] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const lastScrollY = useRef(0);
   const closeSidebar = () => setIsActive(false);
 
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setIsActive(false);
+      if (event.key === 'Escape') setIsActive(false);
+    };
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentY = window.scrollY;
+      // Only hide after scrolling past 80px so the header doesn't vanish immediately
+      if (currentY > 80 && currentY > lastScrollY.current) {
+        setHidden(true);
+      } else {
+        setHidden(false);
+      }
+      lastScrollY.current = currentY;
     };
 
-    document.addEventListener("keydown", handleEscape);
-    return () => {
-      document.removeEventListener("keydown", handleEscape);
-    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Keep header visible while sidebar is open
+  const headerHidden = hidden && !isActive;
+
   return (
-    <div >
-      <div className="fixed right-0 z-[4001] p-[2vw]">
-        <button
-          type="button"
-          onClick={() => setIsActive(!isActive)}
-          aria-label={isActive ? "Close navigation menu" : "Open navigation menu"}
-          aria-expanded={isActive}
-          className="flex h-14 w-14 md:h-16 md:w-16 cursor-pointer items-center justify-center rounded-full bg-stone-400">
-          <div className={`burger ${isActive && 'burgerActive'}`}></div>
-        </button>
-      </div>
-      <motion.button 
-        title="rrg tech" 
-        aria-label="RRG Tech - Go to homepage"
-        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        className="p-[2vw] fixed z-[100] top-0 left-0 group cursor-pointer"
-        initial={{ opacity: 0, y: -50, scale: 0.8 }}
-        animate={{ 
-          opacity: 1, 
-          y: 0, 
-          scale: 1,
-        }}
-        transition={{ 
-          duration: 1,
-          delay: 0.3,
-          ease: [0.16, 1, 0.3, 1], // Smooth professional easing
-        }}
-        whileHover={{ 
-          scale: 1.1,
-          transition: { duration: 0.2 }
-        }}
-        whileTap={{ scale: 0.95 }}
+    <>
+      <motion.header
+        role="banner"
+        initial={{ y: '-100%', opacity: 0 }}
+        animate={{ y: headerHidden ? '-100%' : '0%', opacity: 1 }}
+        transition={
+          headerHidden
+            ? { duration: 0.7, ease: [0.4, 0, 0.2, 1] }   // slow, smooth hide
+            : { duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] } // entry drop-in
+        }
+        className="fixed top-0 left-0 right-0 z-[4000] flex items-center justify-between"
       >
-        <motion.div
-          initial={{ rotate: -10 }}
-          animate={{ rotate: 0 }}
-          transition={{ 
-            duration: 1.2,
-            delay: 0.3,
-            ease: [0.16, 1, 0.3, 1]
-          }}
+        {/* Logo */}
+        <motion.button
+          title="rrg tech"
+          aria-label="RRG Tech - Go to homepage"
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="p-[2vw] group cursor-pointer"
+          whileHover={{ scale: 1.1, transition: { duration: 0.2 } }}
+          whileTap={{ scale: 0.95 }}
         >
-          <LogoIcon 
-            className="w-12 h-12 md:w-16 md:h-16 text-white transition-all duration-300 group-hover:text-white/90 group-hover:drop-shadow-[0_0_20px_rgba(255,255,255,0.5)]" 
-          />
-        </motion.div>
-      </motion.button>
-      <AnimatePresence mode="wait">{isActive && (
-        <SidebarMenu close={closeSidebar} />
-      )}
+          <motion.div
+            initial={{ rotate: -10 }}
+            animate={{ rotate: 0 }}
+            transition={{ duration: 1.2, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <LogoIcon className="w-12 h-12 md:w-16 md:h-16 text-white transition-all duration-300 group-hover:text-white/90 group-hover:drop-shadow-[0_0_20px_rgba(255,255,255,0.5)]" />
+          </motion.div>
+        </motion.button>
+
+        {/* Burger */}
+        <div className="p-[2vw]">
+          <button
+            type="button"
+            onClick={() => setIsActive(!isActive)}
+            aria-label={isActive ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-expanded={isActive}
+            className="flex h-14 w-14 md:h-16 md:w-16 cursor-pointer items-center justify-center rounded-full bg-stone-400"
+          >
+            <div className={`burger ${isActive ? 'burgerActive' : ''}`}></div>
+          </button>
+        </div>
+      </motion.header>
+
+      <AnimatePresence mode="wait">
+        {isActive && <SidebarMenu close={closeSidebar} />}
       </AnimatePresence>
-    </div>
+    </>
   );
 };
+
 export default Index;
