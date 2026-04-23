@@ -19,7 +19,7 @@ export const NAV_ITEMS = [
   },
   {
     title: 'Contact',
-    href: 'contact',
+    href: 'cta',
   },
 ];
 
@@ -27,7 +27,7 @@ export const CARDS = [
   {
     title: 'Design',
     description:
-      'We craft stunning visual identities and user experiences that captivate your audience. From modern web interfaces to memorable brand identities, our design team brings your vision to life with creativity and precision.',
+      'We create impactful visual identities and intuitive user experiences that elevate your brand and engage your audience.',
     services: [
       ['Web app', 'Branding'],
       ['Mobile app', 'Logo'],
@@ -38,7 +38,7 @@ export const CARDS = [
   {
     title: 'Fullstack development',
     description:
-      'Build powerful, scalable web applications with our expert full-stack development services. We deliver robust solutions from frontend to backend, including e-commerce platforms, custom CMS, and seamless API integrations.',
+      'We build scalable, high-performance web applications with seamless frontend and backend integration tailored to your needs.',
     services: [
       ['Online shop', 'Web application'],
       ['CMS', 'API Development'],
@@ -49,7 +49,7 @@ export const CARDS = [
   {
     title: 'Mobile development',
     description:
-      'Transform your ideas into powerful mobile applications. We develop native and cross-platform mobile solutions for both Android and iOS, delivering exceptional user experiences that engage and retain your customers.',
+      'We deliver reliable, high-quality mobile apps for Android and iOS that drive engagement and long-term user retention.',
     services: [['Android', 'IOS']],
     number: '03.',
     classes: 'border-t border-gray-1/50',
@@ -61,30 +61,31 @@ export const APPROACH_CARDS = [
     icon: First,
     title: 'Consultation',
     description:
-      "We listen carefully to the customer's wishes and ideas about the project. Then we share our vision and, based on this exchange, come to a common agreement.",
+      'We align on your vision through focused discussions, combining your goals with our expertise to define a clear direction.',
   },
   {
     icon: Second,
     title: 'Joint review',
     description:
-      'Then we start creating the design. After completion, we conduct a joint review, where the customer, if desired, can make changes.',
+      'We design with precision and review together, refining details to ensure the outcome meets your expectations.',
   },
   {
     icon: Third,
     title: 'Development',
-    description: 'After the design is approved, we proceed to the actual development of the product.',
+    description:
+      'We transform approved designs into robust, scalable products built with performance and reliability in mind.',
   },
   {
     icon: Fourth,
     title: 'Testing',
     description:
-      'Once the development is complete, we thoroughly test each component of the product. Then we invite the customer for user testing.',
+      'We rigorously test every component and validate with user feedback to ensure a seamless, high-quality experience.',
   },
   {
     icon: Fifth,
     title: 'Final result',
     description:
-      'We deliver a polished, production-ready product that exceeds expectations. Along with comprehensive documentation and training, we ensure a smooth handover and provide ongoing support to help your project thrive.',
+      'We deliver a polished, production-ready product with clear documentation, smooth handover, and ongoing support.',
   },
 ];
 
@@ -138,8 +139,8 @@ export const RADIO_FIELDS = [
 ];
 
 export const INPUT_FIELDS = [
-  { label: 'Your name*', name: 'first', classes: 'inline-block !w-[calc(50%-2vw)] mr-[4vw]', required: true },
-  { label: 'Phone*', name: 'phone', classes: 'inline-block !w-[calc(50%-2vw)]', type: 'number', required: true },
+  { label: 'Your name*', name: 'first', classes: 'inline-block !w-[calc(50%-2vw)] mr-[4vw] md:!w-full md:!mr-0', required: true },
+  { label: 'Phone*', name: 'phone', classes: 'inline-block !w-[calc(50%-2vw)] md:!w-full', type: 'number', required: true },
   { label: 'Email*', name: 'email', classes: '', type: 'email' },
   { label: 'Company name*', name: 'company', classes: '', required: true },
   { label: 'Company website', name: 'websiteUrl', classes: '' },

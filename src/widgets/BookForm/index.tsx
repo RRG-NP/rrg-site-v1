@@ -54,38 +54,38 @@ const Index: FC<Props> = () => {
   };
 
   return (
-    <div className="mx-auto max-w-[70vw] md:max-w-[85vw] px-[4vw] ">
+    <div className="mx-auto max-w-[70vw] md:max-w-[92vw] px-[4vw] md:px-4">
       <div className="relative">
         <button
-          className=" group absolute left-0 top-[25%] z-10 box-content rounded-full bg-stone-800 p-[0.5vw] hover:bg-stone-800"
+          className="group absolute left-0 top-[25%] z-10 box-content rounded-full bg-stone-800 p-[0.5vw] md:p-2 hover:bg-stone-800"
           onClick={() => push('/')}
           aria-label="Go back to homepage"
           type="button"
         >
           <svg
             focusable="false"
-            className="h-[1.5vw] w-[1.5vw] md:h-[2.25vw] md:w-[2.25vw] fill-stone-400 transition group-hover:fill-stone-300"
+            className="h-[1.5vw] w-[1.5vw] md:h-6 md:w-6 fill-stone-400 transition group-hover:fill-stone-300"
             viewBox="0 0 24 24"
           >
             <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20z"></path>
           </svg>
         </button>
-        <h1 className="mb-[1.75vw] md:text-[4.6vw] md:mb-[2.25vw] text-center text-[3.5vw] font-bold leading-[100%]">Request form</h1>
+        <h1 className="mb-[1.75vw] md:text-[7vw] md:mb-6 text-center text-[3.5vw] font-bold leading-[100%]">Request form</h1>
       </div>
       <form className="flex h-full flex-col items-center" onSubmit={handleSubmit}>
-        <div className="flex flex-wrap">
+        <div className="flex flex-wrap md:gap-y-6">
           {RADIO_FIELDS.map((item) => (
             <RadioGroup
               onValueChange={(value) => setForm((prev) => ({ ...prev, [item.formKey]: value }))}
               key={item.title}
-              className={`mb-[1.75vw] inline-block w-[calc(50%-1.75vw)] ${item.classes}`}
+              className={`mb-[1.75vw] md:mb-0 inline-block w-[calc(50%-1.75vw)] md:w-full ${item.classes} md:mr-0`}
               required={true}
             >
-              <h4 className="mb-[0.2vw] md:mb-[0.5vw] text-[1.3vw] md:text-[1.6vw] font-medium">{item.title}</h4>
+              <h4 className="mb-[0.2vw] md:mb-2 text-[1.3vw] md:text-[4vw] font-medium">{item.title}</h4>
               {item.radioArray.map((radio) => (
-                <div key={radio.value} className="flex items-center space-x-[0.65vw] md:space-x-[1vw] md:space-y-[0.3vw] font-[400]">
+                <div key={radio.value} className="flex items-center space-x-[0.65vw] md:space-x-3 md:space-y-1 font-[400]">
                   <RadioGroupItem value={radio.value} id={radio.name} required={true} />
-                  <label htmlFor={radio.name} className="text-[1vw] md:text-[1.25vw] leading-[1.75vw]">
+                  <label htmlFor={radio.name} className="text-[1vw] md:text-[3.5vw] leading-[1.75vw] md:leading-8">
                     {radio.name}
                   </label>
                 </div>
@@ -93,10 +93,10 @@ const Index: FC<Props> = () => {
             </RadioGroup>
           ))}
 
-          <div className="w-full space-y-[2vw] text-[1.1vw]">
+          <div className="w-full space-y-[2vw] md:space-y-5 text-[1.1vw] md:mt-2">
             {INPUT_FIELDS.map((item) => (
-              <div key={item.label} className={`w-full ${item.classes}`}>
-                <label htmlFor={item.label} className="leading-[1.5] mb-[0.4vw] text-[1.2vw] md:text-[1.5vw] inline-block">
+              <div key={item.label} className={`w-full ${item.classes} md:!w-full md:!mr-0`}>
+                <label htmlFor={item.label} className="leading-[1.5] mb-[0.4vw] md:mb-2 text-[1.2vw] md:text-[3.8vw] inline-block">
                   {item.label}
                 </label>
                 <input
@@ -104,13 +104,13 @@ const Index: FC<Props> = () => {
                   type={item.type || 'text'}
                   name={item.name}
                   id={item.label}
-                  className="h-[3vw] md:h-[4vw] w-full appearance-none rounded-[0.25vw] border-[0.125vw] border-primary/80 bg-transparent px-[1vw] py-[0.8vw]"
+                  className="h-[3vw] md:h-12 w-full appearance-none rounded-[0.25vw] md:rounded border-[0.125vw] border-primary/80 bg-transparent px-[1vw] md:px-4 py-[0.8vw] md:py-3 md:text-[3.5vw]"
                   required={item.required}
                 />
               </div>
             ))}
             <div className="w-full">
-              <label className="leading-[1.5] mb-[0.4vw] text-[1.2vw] md:text-[1.5vw] inline-block" htmlFor="message">
+              <label className="leading-[1.5] mb-[0.4vw] md:mb-2 text-[1.2vw] md:text-[3.8vw] inline-block" htmlFor="message">
                 Tell us about your project
               </label>
               <textarea
@@ -119,14 +119,14 @@ const Index: FC<Props> = () => {
                 onChange={({ target: { name, value } }) => setForm((prev) => ({ ...prev, [name]: value }))}
                 id="message"
                 name="message"
-                className="min-h-[10vw] w-full resize-none border-[0.125vw] rounded-[0.125vw] text-[1.2vw] md:text-[1.5vw] border-primary/80 bg-transparent px-[0.8vw] py-[0.6vw]"
+                className="min-h-[10vw] md:min-h-[32vw] w-full resize-none border-[0.125vw] rounded-[0.125vw] text-[1.2vw] md:text-[3.5vw] border-primary/80 bg-transparent px-[0.8vw] md:px-4 py-[0.6vw] md:py-3"
               />
             </div>
           </div>
 
           {/* Error Message */}
           {submitStatus && submitStatus.type === 'error' && (
-            <div className="mb-[2vw] w-full rounded-[0.5vw] p-[1.5vw] text-center text-[1.2vw] md:text-[1.5vw] bg-red-500/20 text-red-300 border border-red-500/50">
+            <div className="mb-[2vw] md:mb-5 w-full rounded-[0.5vw] md:rounded-lg p-[1.5vw] md:p-4 text-center text-[1.2vw] md:text-[3.5vw] bg-red-500/20 text-red-300 border border-red-500/50">
               {submitStatus.message}
             </div>
           )}
@@ -134,9 +134,9 @@ const Index: FC<Props> = () => {
           <Button
             title={isSubmitting ? 'Submitting...' : 'Submit'}
             type="submit"
-            classes={`py-[1.2vw] px-[5vw] md:py-[1.6vw] md:px-[8vw] text-[1.1vw] md:text-[1.5vw] ${isSubmitting ? 'bg-bg-1/50 cursor-not-allowed' : 'bg-bg-1/90 hover:bg-bg-1/80'
+            classes={`py-[1.2vw] md:py-4 px-[5vw] md:px-10 text-[1.1vw] md:text-[3.5vw] ${isSubmitting ? 'bg-bg-1/50 cursor-not-allowed' : 'bg-bg-1/90 hover:bg-bg-1/80'
               }`}
-            btnClasses="p-[0.2vw] md:p-[0.25vw] capitalize self-start mt-[2.5vw]"
+            btnClasses="p-[0.2vw] md:p-1 capitalize self-start mt-[2.5vw] md:mt-8"
             disabled={isSubmitting}
           />
         </div>

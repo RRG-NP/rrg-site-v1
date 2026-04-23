@@ -9,12 +9,12 @@ interface Props extends DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement
 const Index: FC<Props> = ({ title, classes, btnClasses, ...props }) => {
   return (
     <button
-      className={`relative inline-flex overflow-hidden rounded-full p-[0.2vw] text-[1.8vw] uppercase focus:outline-none focus:ring-1 focus:ring-primary focus:ring-offset-1 focus:ring-offset-stroke ${btnClasses}`}
+      className={`relative inline-flex overflow-hidden rounded-full p-[0.2vw] text-[1.8vw] md:text-[3.5vw] uppercase focus:outline-none focus:ring-1 focus:ring-primary focus:ring-offset-1 focus:ring-offset-stroke ${btnClasses}`}
       {...props}
     >
       <span className="absolute inset-[-1000%] animate-[spin_2.5s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#CCC2DC_0%,#4A4458_50%,#CCC2DC_100%)]" />
       <span
-        className={`inline-flex h-full min-h-[3vw] cursor-pointer  items-center justify-center rounded-full font-medium text-white backdrop-blur-3xl transition  duration-300 ${classes}`}
+        className={`inline-flex h-full min-h-[3vw] md:min-h-[12vw] cursor-pointer items-center justify-center rounded-full font-medium text-white backdrop-blur-3xl transition duration-300 ${classes}`}
       >
         {title}
       </span>

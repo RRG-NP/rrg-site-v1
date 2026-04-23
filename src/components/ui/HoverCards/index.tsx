@@ -17,7 +17,7 @@ const Index: FC<Props> = ({ cards, itemClasses, wrapperClasses }) => {
       {cards.map((card, idx) => (
         <div
           key={idx}
-          className={cn('relative flex flex-col px-[0.4vw] md:px-[0.6vw] md:py-[0.5vw] py-[0.3vw] last:col-span-2 md:col-span-2', itemClasses)}
+          className={cn('relative flex flex-col px-[0.4vw] md:px-0 md:py-1.5 py-[0.3vw] last:col-span-2 md:col-span-2', itemClasses)}
           onMouseEnter={() => setHoveredIdx(idx)}
           onMouseLeave={() => setHoveredIdx(null)}
         >
@@ -43,14 +43,14 @@ const Index: FC<Props> = ({ cards, itemClasses, wrapperClasses }) => {
           </AnimatePresence>
           <div
             className={cn(
-              'z-[1] h-full min-w-[18vw] space-y-[1.2vw] rounded-[1vw] border-[0.2vw] border-stroke px-[1.4vw] py-[1.6vw] md:min-w-full',
+              'z-[1] h-full min-w-[18vw] space-y-[1.2vw] md:space-y-3 rounded-[1vw] md:rounded-xl border-[0.2vw] border-stroke px-[1.4vw] md:px-5 py-[1.6vw] md:py-5 md:min-w-full',
             )}
           >
-            <div className="flex items-center space-x-[0.6vw]">
+            <div className="flex items-center space-x-[0.6vw] md:space-x-3">
               {<card.icon />}
-              <h6 className="text-[1.6vw] md:text-[3.5vw] md:tracking-tight">{card.title}</h6>
+              <h6 className="text-[1.6vw] md:text-[4.5vw] md:tracking-tight font-semibold">{card.title}</h6>
             </div>
-            <p className="text-[1vw] md:text-[2.25vw] font-light leading-[1.5] md:leading-[1.2] md:tracking-tight">{card.description}</p>
+            <p className="text-[1vw] md:text-[3.5vw] font-light leading-[1.5] md:leading-[1.5] md:tracking-tight">{card.description}</p>
           </div>
         </div>
       ))}

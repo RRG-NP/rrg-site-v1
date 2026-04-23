@@ -46,32 +46,32 @@ a {
   &::before {
     content: '';
     display: block;
-    height: 0.2vw;
+    height: 2px;
     width: 40%;
     margin: auto;
     background-color: #404040;
     position: relative;
-    transition: transform 0.3s;
+    transition: transform 0.3s, top 0.3s;
   }
 
   &::after {
-    top: -0.3vw;
+    top: -4px;
   }
 
   &::before {
-    top: 0.3vw;
+    top: 4px;
   }
 }
 
 .burgerActive {
   &::after {
     transform: rotate(45deg);
-    top: -0.1vw;
+    top: -1.5px;
   }
 
   &::before {
     transform: rotate(-45deg);
-    top: 0px;
+    top: 0.55px;
   }
 }
 

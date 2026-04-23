@@ -34,7 +34,7 @@ const SuccessPage: FC<Props> = () => {
 
   return (
     <SectionOpacity classes="flex flex-col justify-center min-h-screen bg-gradient-to-b from-bg-1 to-bg-2 my-10">
-      <div className="mx-auto flex w-full max-w-[70vw] md:max-w-[90%] flex-1 flex-col items-center justify-center text-center px-[4vw]">
+      <div className="mx-auto flex w-full max-w-[70vw] md:max-w-[92vw] flex-1 flex-col items-center justify-center text-center px-[4vw] md:px-5">
         {/* Success Icon Animation */}
         <motion.div
           initial={{ scale: 0, rotate: -180 }}
@@ -45,7 +45,7 @@ const SuccessPage: FC<Props> = () => {
             damping: 20,
             duration: 0.6,
           }}
-          className="mb-[3vw] md:mb-[5vw]"
+          className="mb-[3vw] md:mb-8"
         >
           <div className="relative">
             {/* Outer glow ring */}
@@ -57,12 +57,12 @@ const SuccessPage: FC<Props> = () => {
             />
             
             {/* Success checkmark circle */}
-            <div className="relative flex h-[12vw] w-[12vw] md:h-[20vw] md:w-[20vw] items-center justify-center rounded-full border-[0.4vw] border-primary bg-bg-2/50 backdrop-blur-sm">
+            <div className="relative flex h-[12vw] w-[12vw] md:h-24 md:w-24 items-center justify-center rounded-full border-[0.4vw] md:border-2 border-primary bg-bg-2/50 backdrop-blur-sm">
               <motion.svg
                 initial={{ pathLength: 0 }}
                 animate={{ pathLength: 1 }}
                 transition={{ delay: 0.5, duration: 0.6, ease: 'easeInOut' }}
-                className="h-[6vw] w-[6vw] md:h-[10vw] md:w-[10vw]"
+                className="h-[6vw] w-[6vw] md:h-12 md:w-12"
                 viewBox="0 0 24 24"
                 fill="none"
               >
@@ -84,10 +84,10 @@ const SuccessPage: FC<Props> = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8, duration: 0.5 }}
         >
-          <h1 className="mb-[1.5vw] md:mb-[3vw] text-[4.5vw] md:text-[7vw] font-bold text-primary">
+          <h1 className="mb-[1.5vw] md:mb-4 text-[4.5vw] md:text-[9vw] font-bold text-primary">
             Thank You!
           </h1>
-          <h2 className="mb-[1vw] md:mb-[2vw] text-[2.5vw] md:text-[4.5vw] font-medium text-text-1">
+          <h2 className="mb-[1vw] md:mb-3 text-[2.5vw] md:text-[5.5vw] font-medium text-text-1">
             Your Request Has Been Received
           </h2>
         </motion.div>
@@ -97,13 +97,13 @@ const SuccessPage: FC<Props> = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1, duration: 0.5 }}
-          className="mb-[3vw] md:mb-[5vw] max-w-[55vw] md:max-w-[85vw]"
+          className="mb-[3vw] md:mb-8 max-w-[55vw] md:max-w-full"
         >
-          <p className="mb-[1.5vw] md:mb-[2.5vw] text-[1.4vw] md:text-[2.8vw] leading-[1.6] text-text-1/90">
+          <p className="mb-[1.5vw] md:mb-4 text-[1.4vw] md:text-[3.8vw] leading-[1.6] text-text-1/90">
             We truly appreciate you taking the time to reach out to us. Your project details have been successfully
             submitted, and our team is excited to review them.
           </p>
-          <p className="text-[1.2vw] md:text-[2.4vw] leading-[1.6] text-text-1/70">
+          <p className="text-[1.2vw] md:text-[3.5vw] leading-[1.6] text-text-1/70">
             We&apos;ll get back to you within <span className="font-semibold text-primary">24-48 hours</span> to discuss
             your project in detail and explore how we can bring your vision to life.
           </p>
@@ -114,12 +114,12 @@ const SuccessPage: FC<Props> = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.2, duration: 0.5 }}
-          className="mb-[3vw] md:mb-[5vw] w-full max-w-[60vw] md:max-w-[85vw]"
+          className="mb-[3vw] md:mb-8 w-full max-w-[60vw] md:max-w-full"
         >
-          <h3 className="mb-[1.5vw] md:mb-[2.5vw] text-[1.8vw] md:text-[3.5vw] font-semibold text-primary">
+          <h3 className="mb-[1.5vw] md:mb-5 text-[1.8vw] md:text-[5vw] font-semibold text-primary">
             What Happens Next?
           </h3>
-          <div className="grid grid-cols-3 md:grid-cols-1 gap-[2vw] md:gap-[3vw]">
+          <div className="grid grid-cols-3 md:grid-cols-1 gap-[2vw] md:gap-4">
             {[
               {
                 step: '01',
@@ -142,15 +142,15 @@ const SuccessPage: FC<Props> = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 1.4 + index * 0.1, duration: 0.4 }}
-                className="rounded-[0.5vw] border border-stroke bg-bg-2/50 p-[1.5vw] md:p-[3vw] backdrop-blur-sm"
+                className="rounded-[0.5vw] md:rounded-xl border border-stroke bg-bg-2/50 p-[1.5vw] md:p-5 backdrop-blur-sm text-left md:text-left"
               >
-                <div className="mb-[0.5vw] md:mb-[1vw] text-[2vw] md:text-[4vw] font-bold text-primary/50">
+                <div className="mb-[0.5vw] md:mb-2 text-[2vw] md:text-[6vw] font-bold text-primary/50">
                   {item.step}
                 </div>
-                <h4 className="mb-[0.3vw] md:mb-[0.8vw] text-[1.2vw] md:text-[2.5vw] font-semibold text-text-1">
+                <h4 className="mb-[0.3vw] md:mb-1 text-[1.2vw] md:text-[4vw] font-semibold text-text-1">
                   {item.title}
                 </h4>
-                <p className="text-[0.9vw] md:text-[1.8vw] leading-[1.5] text-text-1/70">{item.description}</p>
+                <p className="text-[0.9vw] md:text-[3.2vw] leading-[1.5] text-text-1/70">{item.description}</p>
               </motion.div>
             ))}
           </div>
@@ -161,17 +161,17 @@ const SuccessPage: FC<Props> = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.7, duration: 0.5 }}
-          className="mb-[3vw] md:mb-[5vw] rounded-[0.5vw] border border-stroke bg-bg-2/30 p-[2vw] md:p-[4vw] backdrop-blur-sm"
+          className="mb-[3vw] md:mb-8 rounded-[0.5vw] md:rounded-xl border border-stroke bg-bg-2/30 p-[2vw] md:p-5 backdrop-blur-sm w-full max-w-[60vw] md:max-w-full"
         >
-          <p className="mb-[0.8vw] md:mb-[1.5vw] text-[1.1vw] md:text-[2.2vw] text-text-1/80">
+          <p className="mb-[0.8vw] md:mb-3 text-[1.1vw] md:text-[3.5vw] text-text-1/80">
             Need immediate assistance? Feel free to reach out directly:
           </p>
           <a
             href="mailto:hi@rrg.com.np"
-            className="inline-flex items-center gap-[0.5vw] text-[1.3vw] md:text-[2.5vw] font-medium text-primary hover:text-primary/80 transition"
+            className="inline-flex items-center gap-[0.5vw] md:gap-2 text-[1.3vw] md:text-[4vw] font-medium text-primary hover:text-primary/80 transition"
           >
             <svg
-              className="h-[1.5vw] w-[1.5vw] md:h-[3vw] md:w-[3vw]"
+              className="h-[1.5vw] w-[1.5vw] md:h-5 md:w-5"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -192,15 +192,15 @@ const SuccessPage: FC<Props> = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.8, duration: 0.5 }}
-          className="flex flex-col items-center gap-[1.5vw] md:gap-[3vw]"
+          className="flex flex-col items-center gap-[1.5vw] md:gap-5"
         >
           <Button
             onClick={handleGoHome}
             title="BACK TO HOME"
-            classes="px-[3vw] py-[1.2vw] md:px-[6vw] md:py-[2vw] min-h-[4vw] md:min-h-[7vw] text-[1.1vw] md:text-[2vw] bg-bg-1 hover:bg-bg-1/80"
+            classes="px-[3vw] md:px-10 py-[1.2vw] md:py-4 min-h-[4vw] md:min-h-[12vw] text-[1.1vw] md:text-[3.5vw] bg-bg-1 hover:bg-bg-1/80"
             btnClasses=""
           />
-          <p className="text-[1vw] md:text-[2vw] text-text-1/50 mb-2">
+          <p className="text-[1vw] md:text-[3.2vw] text-text-1/50 mb-2">
             Redirecting in <span className="font-semibold text-primary">{countdown}</span> seconds...
           </p>
         </motion.div>
@@ -211,7 +211,7 @@ const SuccessPage: FC<Props> = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2, duration: 0.5 }}
-        className="mt-auto flex justify-between border-t border-t-gray-800 px-[5vw] py-[1.8vw] text-[1.6vw] md:text-[2vw] md:py-[2.4vw] md:px-[2vw]"
+        className="mt-auto flex justify-between border-t border-t-gray-800 px-[5vw] md:px-6 py-[1.8vw] md:py-5 text-[1.6vw] md:text-[3.2vw] md:flex-col md:gap-3"
       >
         <div>
           © 2026.{' '}
@@ -219,7 +219,7 @@ const SuccessPage: FC<Props> = () => {
             RRG Tech
           </a>
         </div>
-        <ul className="flex space-x-[3vw]">
+        <ul className="flex space-x-[3vw] md:space-x-6">
           <li>
             <a
               href="https://www.facebook.com/rrg.com.np"
