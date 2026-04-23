@@ -104,41 +104,40 @@ const Index: FC<Props> = () => {
 
     const isMobile = window.innerWidth < 768;
 
-    // On mobile: normalizeScroll prevents the browser address bar resize
-    // from causing position jumps and glitches on reverse scroll
     if (isMobile) {
       ScrollTrigger.normalizeScroll(true);
     }
 
     const ctx = gsap.context(() => {
-      const lineEls = sectionRef.current!.querySelectorAll<HTMLDivElement>('.bright-line');
+      const lineEls = Array.from(
+        sectionRef.current!.querySelectorAll<HTMLDivElement>('.bright-line'),
+      );
       if (!lineEls.length) return;
 
-      lineEls.forEach((el, i) => {
-        // Desktop: start later (lower %) so text reveals further down the page
-        // Mobile: start earlier since viewport is taller relative to content
-        const startVh = isMobile
-          ? 85 - i * 18   // mobile: line0: 85%, line1: 67%, line2: 49%
-          : 65 - i * 15;  // desktop: line0: 65%, line1: 50%, line2: 35%
+      // Reset all lines to hidden
+      gsap.set(lineEls, { clipPath: 'inset(0 100% 0 0)' });
 
-        const rangeVh = isMobile ? 20 : 18;
-        const endVh = startVh - rangeVh;
+      // Single timeline — lines are strictly sequential, line N cannot
+      // start until line N-1 is 100% done, regardless of scrub lag.
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          // Start when section top enters viewport at 80%
+          start: isMobile ? 'top 80%' : 'top 65%',
+          // End when section center reaches middle of viewport — all lines done by then
+          end: isMobile ? 'center 40%' : 'center 50%',
+          scrub: isMobile ? true : 1.5,
+          invalidateOnRefresh: true,
+        },
+      });
 
-        gsap.fromTo(
+      lineEls.forEach((el) => {
+        tl.fromTo(
           el,
           { clipPath: 'inset(0 100% 0 0)' },
-          {
-            clipPath: 'inset(0 0% 0 0)',
-            ease: 'none',
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: `top ${startVh}%`,
-              end: `top ${endVh}%`,
-              scrub: isMobile ? true : 2,
-              invalidateOnRefresh: true,
-            },
-          },
+          { clipPath: 'inset(0 0% 0 0)', ease: 'none', duration: 1 },
         );
+        // No overlap — next line starts at the exact end of this one
       });
     }, sectionRef);
 
