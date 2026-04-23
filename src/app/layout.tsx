@@ -1,9 +1,11 @@
 'use client';
 
 import Lenis from 'lenis';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import { Montserrat } from 'next/font/google';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 const montserrat = Montserrat({ subsets: ['latin'] });
 
@@ -14,26 +16,39 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [dimension, setDimension] = useState<any>(null);
-
   useEffect(() => {
-    const lenis = new Lenis();
+    gsap.registerPlugin(ScrollTrigger);
 
-    const raf = (time: number) => {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    };
+    // Disable Lenis on mobile — native momentum scroll is smoother
+    // and avoids ScrollTrigger conflicts on iOS/Android
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-    const resize = () => {
-      setDimension({ width: window.innerWidth, height: window.innerHeight });
-    };
+    let rafId: number;
 
-    window.addEventListener('resize', resize);
-    requestAnimationFrame(raf);
-    resize();
+    if (!isMobile) {
+      const lenis = new Lenis({
+        wrapper: window,
+        content: document.documentElement,
+      });
 
-    requestAnimationFrame(raf);
+      // Connect Lenis to ScrollTrigger so they share the same scroll position
+      lenis.on('scroll', ScrollTrigger.update);
+
+      const raf = (time: number) => {
+        lenis.raf(time);
+        rafId = requestAnimationFrame(raf);
+      };
+
+      rafId = requestAnimationFrame(raf);
+
+      return () => {
+        lenis.destroy();
+        cancelAnimationFrame(rafId);
+      };
+    }
+    // On mobile: just let native scroll drive ScrollTrigger directly
   }, []);
+
   return (
     <html lang="en">
       <head>
@@ -136,8 +151,8 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={montserrat.className}>
-        <main>
+      <body className={montserrat.className} suppressHydrationWarning>
+        <main className="relative">
           {children}
         </main>
       </body>

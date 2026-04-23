@@ -102,36 +102,49 @@ const Index: FC<Props> = () => {
 
     gsap.registerPlugin(ScrollTrigger);
 
+    const isMobile = window.innerWidth < 768;
+
+    if (isMobile) {
+      ScrollTrigger.normalizeScroll(true);
+    }
+
     const ctx = gsap.context(() => {
-      const lineEls = sectionRef.current!.querySelectorAll<HTMLDivElement>('.bright-line');
+      const lineEls = Array.from(
+        sectionRef.current!.querySelectorAll<HTMLDivElement>('.bright-line'),
+      );
       if (!lineEls.length) return;
 
-      // Each line gets a dedicated scroll window, stacked sequentially
-      const windowSize = 18; // vh each line takes to fully reveal
-      const gap = 4;         // vh gap between lines starting
+      // Reset all lines to hidden
+      gsap.set(lineEls, { clipPath: 'inset(0 100% 0 0)' });
 
-      lineEls.forEach((el, i) => {
-        const startVh = 78 - i * (windowSize + gap);
-        const endVh = startVh - windowSize;
+      // Single timeline — lines are strictly sequential, line N cannot
+      // start until line N-1 is 100% done, regardless of scrub lag.
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          // Start when section top enters viewport at 80%
+          start: isMobile ? 'top 80%' : 'top 65%',
+          // End when section center reaches middle of viewport — all lines done by then
+          end: isMobile ? 'center 40%' : 'center 50%',
+          scrub: isMobile ? true : 1.5,
+          invalidateOnRefresh: true,
+        },
+      });
 
-        gsap.fromTo(
+      lineEls.forEach((el) => {
+        tl.fromTo(
           el,
           { clipPath: 'inset(0 100% 0 0)' },
-          {
-            clipPath: 'inset(0 0% 0 0)',
-            ease: 'none',
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: `top ${startVh}%`,
-              end: `top ${endVh}%`,
-              scrub: 1,
-            },
-          },
+          { clipPath: 'inset(0 0% 0 0)', ease: 'none', duration: 1 },
         );
+        // No overlap — next line starts at the exact end of this one
       });
     }, sectionRef);
 
-    return () => ctx.revert();
+    return () => {
+      ctx.revert();
+      if (isMobile) ScrollTrigger.normalizeScroll(false);
+    };
   }, [lines]);
 
   const pClasses =
@@ -199,7 +212,7 @@ const Index: FC<Props> = () => {
                 fill
                 sizes="(max-width: 600px) 92vw, 30vw"
                 className="object-cover rounded-[0.125vw] md:rounded-sm hover:brightness-110 transition"
-                priority={false}
+                priority
               />
             </div>
           </div>
