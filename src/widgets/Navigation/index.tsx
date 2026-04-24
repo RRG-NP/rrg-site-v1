@@ -60,7 +60,7 @@ const Navigation: FC<Props> = ({ logoVisible = true, burgerVisible = true }) => 
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: logoVisible ? 1 : 0 }}
-              transition={{ duration: 0.4, ease: 'easeOut' }}
+              transition={{ duration: 0.4, ease: 'linear' }}
             >
               <LogoIcon
                 className="text-white transition-all duration-300 group-hover:text-white/90 group-hover:drop-shadow-[0_0_20px_rgba(255,255,255,0.5)]"
