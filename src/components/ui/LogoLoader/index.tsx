@@ -14,18 +14,26 @@ const LogoLoader: FC<Props> = ({ onComplete }) => {
   const [phase, setPhase] = useState<'enter' | 'travel' | 'done'>('enter');
   const [navTarget, setNavTarget] = useState<{ x: number; y: number; logoScale: number } | null>(null);
   const hasFired = useRef(false);
+  const iconRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const t1 = setTimeout(() => {
       const navEl = document.querySelector('[data-nav-logo]') as HTMLElement | null;
       if (navEl) {
-        const rect = navEl.getBoundingClientRect();
+        const navRect = navEl.getBoundingClientRect();
+        const loaderSize = iconRef.current?.getBoundingClientRect().width ?? 100;
         const vw = window.innerWidth;
         const vh = window.innerHeight;
+        
+        // Responsive offsets based on screen size
+        const isMobile = vw < 1024; // lg breakpoint
+        const offsetX = isMobile ? -10 : -42;
+        const offsetY = isMobile ? -20 : -22;
+        
         setNavTarget({
-          x: rect.left + rect.width / 2 - vw / 2,
-          y: rect.top + rect.height / 2 - vh / 2,
-          logoScale: rect.width / 100,
+          x: navRect.left + navRect.width / 2 - vw / 2 + offsetX,
+          y: navRect.top + navRect.height / 2 - vh / 2 + offsetY,
+          logoScale: navRect.width / loaderSize,
         });
       }
       setPhase('travel');
@@ -90,6 +98,7 @@ const LogoLoader: FC<Props> = ({ onComplete }) => {
           transition={{ duration: 0.3 }}
         />
         <motion.div
+          ref={iconRef}
           animate={
             phase === 'enter'
               ? {
