@@ -105,7 +105,7 @@ const Hero = ({ ready = true, showIntro = false, onIntroComplete }: HeroProps) =
             className="text-center text-[4.5vw] md:text-[7vw] lg:text-[2.5vw] font-medium text-white/70 max-w-4xl px-6 leading-relaxed"
             style={{ transform: isMobile ? 'none' : 'translateZ(30px)' }}
           >
-            Creative Digital Agency in Kathmandu, Nepal
+            Creative Digital Agency in Kathmandu
           </motion.p>
         </motion.div>
 
