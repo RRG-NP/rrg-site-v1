@@ -56,15 +56,15 @@ const Navigation: FC<Props> = ({ logoVisible = true, burgerVisible = true }) => 
           whileHover={{ scale: 1.1, transition: { duration: 0.2 } }}
           whileTap={{ scale: 0.95 }}
         >
-          <div data-nav-logo>
+          <div data-nav-logo style={{ width: 'clamp(32px, 5vw, 56px)', height: 'clamp(32px, 5vw, 56px)' }}>
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: logoVisible ? 1 : 0 }}
               transition={{ duration: 0.4, ease: 'easeOut' }}
+              className="w-full h-full"
             >
               <LogoIcon
-                className="text-white transition-all duration-300 group-hover:text-white/90 group-hover:drop-shadow-[0_0_20px_rgba(255,255,255,0.5)]"
-                style={{ width: 'clamp(32px, 5vw, 56px)', height: 'clamp(32px, 5vw, 56px)' }}
+                className="text-white w-full h-full transition-all duration-300 group-hover:text-white/90 group-hover:drop-shadow-[0_0_20px_rgba(255,255,255,0.5)]"
               />
             </motion.div>
           </div>

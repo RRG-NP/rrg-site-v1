@@ -13,6 +13,7 @@ import { STORAGE_KEY } from '@/components/ui/LogoLoader';
 export default function Home() {
   const [showIntro, setShowIntro] = useState(false);
   const [heroReady, setHeroReady] = useState(false);
+  const [isPointerDevice, setIsPointerDevice] = useState(false);
 
   useEffect(() => {
     if (sessionStorage.getItem(STORAGE_KEY)) {
@@ -20,6 +21,12 @@ export default function Home() {
     } else {
       setShowIntro(true);
     }
+  }, []);
+
+  useEffect(() => {
+    // Only enable the cursor effect on devices with a fine pointer (mouse/trackpad)
+    const query = window.matchMedia('(pointer: fine)');
+    setIsPointerDevice(query.matches);
   }, []);
 
   const handleIntroComplete = () => {
@@ -36,7 +43,7 @@ export default function Home() {
       <Services />
       <Approach />
       <CallToAction />
-      <ShadowCursor />
+      {isPointerDevice && <ShadowCursor />}
     </>
   );
 }
