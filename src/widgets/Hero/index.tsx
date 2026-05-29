@@ -3,15 +3,12 @@ import { useRef, useEffect, useState } from 'react';
 import { useScroll, useTransform, motion, useSpring } from 'framer-motion';
 import GridPattern from '@/components/ui/GridPattern';
 import FloatingParticles from '@/components/ui/FloatingParticles';
-import LogoLoader from '@/components/ui/LogoLoader';
 
 interface HeroProps {
   ready?: boolean;
-  showIntro?: boolean;
-  onIntroComplete?: () => void;
 }
 
-const Hero = ({ ready = true, showIntro = false, onIntroComplete }: HeroProps) => {
+const Hero = ({ ready = true }: HeroProps) => {
   const containerRef = useRef<HTMLElement>(null);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -68,10 +65,6 @@ const Hero = ({ ready = true, showIntro = false, onIntroComplete }: HeroProps) =
         <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black/70 pointer-events-none z-10" />
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black/80 pointer-events-none z-10" />
         <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black/60 pointer-events-none z-10" />
-
-        {showIntro && onIntroComplete && (
-          <LogoLoader onComplete={onIntroComplete} />
-        )}
 
         <motion.div
           style={{

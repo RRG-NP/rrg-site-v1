@@ -8,16 +8,16 @@ const initCursor = () => {
     DYE_RESOLUTION: 1440,
     CAPTURE_RESOLUTION: 512,
 
-    DENSITY_DISSIPATION: 2.2,
-    VELOCITY_DISSIPATION: 1.8,
+    DENSITY_DISSIPATION: 3.0,
+    VELOCITY_DISSIPATION: 2.0,
     PRESSURE: 0.1,
     PRESSURE_ITERATIONS: 20,
-    CURL: 8,
-    SPLAT_RADIUS: 0.35,
-    SPLAT_FORCE: 5000,
+    CURL: 5,
+    SPLAT_RADIUS: 0.2,
+    SPLAT_FORCE: 4000,
     SHADING: true,
     // COLOR_UPDATE_SPEED: 1000,
-    COLOR_UPDATE_SPEED: 10,
+    COLOR_UPDATE_SPEED: 3,
     PAUSED: false,
     BACK_COLOR: { r: 0, g: 0, b: 0 },
     TRANSPARENT: true,
@@ -922,9 +922,9 @@ const initCursor = () => {
 
   function clickSplat(pointer) {
     const color = generateColor();
-    color.r *= 10.0;
-    color.g *= 10.0;
-    color.b *= 10.0;
+    color.r *= 6.0;
+    color.g *= 6.0;
+    color.b *= 6.0;
     let dx = 10 * (Math.random() - 0.5);
     let dy = 30 * (Math.random() - 0.5);
     splat(pointer.texcoordX, pointer.texcoordY, dx, dy, color);
@@ -1091,10 +1091,12 @@ const initCursor = () => {
   }
 
   function generateColor() {
-    let c = HSVtoRGB(Math.random(), 1.0, 1.0);
-    c.r *= 0.28;
-    c.g *= 0.28;
-    c.b *= 0.28;
+    const hue = 0.7 + Math.random() * 0.13;
+    const sat = 0.55 + Math.random() * 0.25;
+    let c = HSVtoRGB(hue, sat, 1.0);
+    c.r *= 0.22;
+    c.g *= 0.22;
+    c.b *= 0.22;
     return c;
   }
 
