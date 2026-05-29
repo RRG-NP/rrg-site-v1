@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useLayoutEffect, useCallback } from 'react';
 import Navigation from '@/widgets/Navigation';
 import Hero from '@/widgets/Hero';
 import About from '@/widgets/About';
@@ -8,18 +8,19 @@ import Services from '@/widgets/Services';
 import Approach from '@/widgets/Approach';
 import CallToAction from '@/widgets/CallToAction';
 import ShadowCursor from '@/components/ui/ShadowCursor';
-import { STORAGE_KEY } from '@/components/ui/LogoLoader';
+import SplashScreen, { STORAGE_KEY } from '@/components/ui/SplashScreen';
+
+const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
 export default function Home() {
-  const [showIntro, setShowIntro] = useState(false);
+  const [showSplash, setShowSplash] = useState(true);
   const [heroReady, setHeroReady] = useState(false);
   const [isPointerDevice, setIsPointerDevice] = useState(false);
 
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (sessionStorage.getItem(STORAGE_KEY)) {
+      setShowSplash(false);
       setHeroReady(true);
-    } else {
-      setShowIntro(true);
     }
   }, []);
 
@@ -29,21 +30,27 @@ export default function Home() {
     setIsPointerDevice(query.matches);
   }, []);
 
-  const handleIntroComplete = () => {
+  // Fill reached 100% — reveal the page so it fades in behind the splash.
+  const handleReveal = useCallback(() => {
     sessionStorage.setItem(STORAGE_KEY, '1');
-    setShowIntro(false);
     setHeroReady(true);
-  };
+  }, []);
+
+  // Splash has fully animated out — remove it from the DOM.
+  const handleSplashDone = useCallback(() => {
+    setShowSplash(false);
+  }, []);
 
   return (
     <>
       <Navigation logoVisible={heroReady} burgerVisible={heroReady} />
-      <Hero ready={heroReady} showIntro={showIntro} onIntroComplete={handleIntroComplete} />
+      <Hero ready={heroReady} />
       <About />
       <Services />
       <Approach />
       <CallToAction />
       {isPointerDevice && <ShadowCursor />}
+      {showSplash && <SplashScreen onReveal={handleReveal} onDone={handleSplashDone} />}
     </>
   );
 }
