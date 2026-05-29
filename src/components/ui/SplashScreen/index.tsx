@@ -208,9 +208,9 @@ export default function SplashScreen({ onReveal, onDone }: Props) {
           {String(count).padStart(2, '0')}
           <span className="align-top text-base text-white/30">%</span>
         </span>
-        <div className="mt-1 h-px w-40 overflow-hidden bg-white/10">
+        {/* <div className="mt-1 h-px w-40 overflow-hidden bg-white/10">
           <div className="h-full bg-white/60" style={{ width: `${count}%`, transition: 'width 120ms linear' }} />
-        </div>
+        </div> */}
       </div>
     </motion.div>
   );
