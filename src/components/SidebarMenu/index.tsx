@@ -1,6 +1,9 @@
+'use client';
+
 import { FC, useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 
 import CustomLink from './Link';
 
@@ -44,10 +47,19 @@ const SOCIAL_LINKS = [
 
 const Index: FC<Props> = ({ close }) => {
   const [selectedIndicator, setSelectedIndicator] = useState(null);
+  const pathname = usePathname();
+  const router = useRouter();
 
-  const smoothScroll = (id: string) => {
-    const el = document.getElementById(id);
-    el?.scrollIntoView({ behavior: 'smooth' });
+  // Route items navigate via their <Link>; anchor items scroll to the matching
+  // homepage section, or route to `/#id` when we're on another page.
+  const handleNav = (item: { href: string; type: 'anchor' | 'route' }) => {
+    if (item.type === 'anchor') {
+      if (pathname === '/') {
+        document.getElementById(item.href)?.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        router.push(`/#${item.href}`);
+      }
+    }
     close();
   };
 
@@ -70,7 +82,7 @@ const Index: FC<Props> = ({ close }) => {
         <nav className="flex flex-col gap-4 md:gap-5 flex-1" onMouseLeave={() => setSelectedIndicator(null)}>
           {NAV_ITEMS.map((item, index) => (
             <CustomLink
-              handleClick={() => smoothScroll(item.href)}
+              handleClick={() => handleNav(item)}
               key={item.title}
               data={{ ...item, index }}
               isActive={selectedIndicator === item.href}

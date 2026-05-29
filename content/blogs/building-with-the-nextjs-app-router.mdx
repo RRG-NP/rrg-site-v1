@@ -1,0 +1,90 @@
+---
+title: Building with the Next.js App Router
+description: Server components, streaming, and metadata done right. A pragmatic tour of the patterns we reach for on every App Router project.
+date: 2026-05-10
+updated: 2026-05-15
+published: true
+featured: false
+category: Engineering
+tags:
+  - Next.js
+  - React
+  - Performance
+  - Web Development
+author: RRG Tech
+---
+
+The App Router changed how we structure Next.js apps. After shipping several
+production sites on it, these are the patterns we keep coming back to.
+
+## Server components are the default — keep it that way
+
+The biggest mental shift is that components render on the server unless you opt out.
+Push `'use client'` as far down the tree as possible so the interactive bits are
+small islands in an otherwise static page.
+
+```tsx
+// app/dashboard/page.tsx — a Server Component, no client JS shipped.
+import { getStats } from '@/lib/stats';
+import { LiveChart } from './live-chart'; // 'use client' lives here, not here.
+
+export default async function Dashboard() {
+  const stats = await getStats(); // runs on the server
+  return (
+    <section>
+      <h1>Overview</h1>
+      <LiveChart initial={stats} />
+    </section>
+  );
+}
+```
+
+<Warning>
+A `'use client'` directive is contagious downward: every component imported by a
+client component also becomes client code. Audit your boundaries.
+</Warning>
+
+## Metadata belongs in the framework
+
+Hand-writing `<head>` tags is error prone. The Metadata API gives you typed,
+per-route metadata that merges across layouts.
+
+```tsx
+import type { Metadata } from 'next';
+
+export async function generateMetadata({ params }): Promise<Metadata> {
+  const post = await getPost(params.slug);
+  return {
+    title: post.title,
+    description: post.description,
+    alternates: { canonical: `/blog/${post.slug}` },
+    openGraph: { type: 'article', title: post.title },
+  };
+}
+```
+
+## Choosing a rendering strategy
+
+Not every route wants the same strategy. A rough guide:
+
+| Strategy | When to use | Trade-off |
+| --- | --- | --- |
+| Static (SSG) | Content known at build time | Rebuild to update |
+| ISR | Mostly static, occasional updates | Slightly stale until revalidate |
+| Dynamic (SSR) | Per-request, personalized | Slower TTFB, no full-page cache |
+
+<Note>
+For a blog, static generation with a long `revalidate` is almost always the right
+call: instant loads, great SEO, and content still refreshes on a schedule.
+</Note>
+
+## A checklist before you ship
+
+- [x] Server components by default, client islands where needed
+- [x] `generateStaticParams` for known dynamic routes
+- [x] Typed metadata via `generateMetadata`
+- [ ] Lighthouse run on a production build
+- [ ] Real-device check on a mid-range phone
+
+Done well, the App Router gives you fast pages, clean data flow, and SEO that mostly
+takes care of itself. The constraints are the feature.

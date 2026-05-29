@@ -1,3 +1,5 @@
+import { withContentlayer } from 'next-contentlayer2';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Modern JavaScript - reduce polyfills for modern browsers
@@ -89,4 +91,4 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+export default withContentlayer(nextConfig);

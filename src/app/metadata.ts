@@ -30,6 +30,18 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://rrg.com.np'),
   alternates: {
     canonical: '/',
+    types: {
+      'application/rss+xml': [{ url: '/feed.xml', title: 'RRG Tech Blog RSS Feed' }],
+    },
+  },
+  manifest: '/site.webmanifest',
+  icons: {
+    icon: [
+      { url: '/favicon.ico' },
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+    ],
+    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180' }],
   },
   openGraph: {
     title: 'RRG Tech - Creative Digital Agency in Kathmandu',
@@ -66,5 +78,8 @@ export const metadata: Metadata = {
   },
   verification: {
     google: 'your-google-verification-code', // TODO: Replace with actual verification code
+    other: {
+      'msvalidate.01': 'FC160AC750D5E6D051F295C8ACD13670',
+    },
   },
 };

@@ -1,27 +1,17 @@
 import { First, Second, Third, Fourth, Fifth } from '@/icons/ApproachIcons';
 
+/**
+ * `anchor` items scroll to a homepage section (or route to `/#id` from another
+ * page); `route` items navigate to a real URL.
+ */
 export const NAV_ITEMS = [
-  {
-    title: 'Main',
-    href: 'main',
-  },
-  {
-    title: 'About',
-    href: 'about',
-  },
-  {
-    title: 'Services',
-    href: 'services',
-  },
-  {
-    title: 'Approach',
-    href: 'approach',
-  },
-  {
-    title: 'Contact',
-    href: 'cta',
-  },
-];
+  { title: 'Main', href: 'main', type: 'anchor' },
+  { title: 'About', href: 'about', type: 'anchor' },
+  { title: 'Services', href: 'services', type: 'anchor' },
+  { title: 'Approach', href: 'approach', type: 'anchor' },
+  { title: 'Contact', href: 'cta', type: 'anchor' },
+  { title: 'Blog', href: '/blog', type: 'route' },
+] as const;
 
 export const CARDS = [
   {
