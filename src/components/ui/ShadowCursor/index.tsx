@@ -9,7 +9,10 @@ interface Props { }
 const Index: FC<Props> = () => {
 
   useEffect(() => {
-    initCursor();
+    const dispose = initCursor();
+    return () => {
+      if (typeof dispose === 'function') dispose();
+    };
   }, [])
   return (
     <div className='h-screen w-full fixed top-0 left-0 z-[1] pointer-events-none'>

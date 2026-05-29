@@ -1,7 +1,16 @@
 const initCursor = () => {
   // anim setup || in an active project you can set this to the html body. however ive found a bound box to the viewport looks + performs better
   const canvas = document.getElementById('fluid');
+  if (!canvas) return () => {};
   resizeCanvas();
+
+  let disposed = false;
+  let mainRafId = null;
+  const cleanups = [];
+  const on = (target, type, handler, opts) => {
+    target.addEventListener(type, handler, opts);
+    cleanups.push(() => target.removeEventListener(type, handler, opts));
+  };
 
   let config = {
     SIM_RESOLUTION: 128,
@@ -41,6 +50,14 @@ const initCursor = () => {
 
   const { gl, ext } = getWebGLContext(canvas);
 
+  // Some mobile GPUs expose WebGL2 but not EXT_color_buffer_float, so the
+  // half-float render targets this simulation needs (RGBA16F has no fallback)
+  // come back null. Bail gracefully instead of throwing — an uncaught error
+  // here propagates out of the mount effect and can take down the page.
+  if (!gl || !ext || !ext.formatRGBA || !ext.formatRG || !ext.formatR) {
+    return () => {};
+  }
+
   if (!ext.supportLinearFiltering) {
     config.DYE_RESOLUTION = 256;
     config.SHADING = false;
@@ -53,6 +70,9 @@ const initCursor = () => {
     const isWebGL2 = !!gl;
     if (!isWebGL2) gl = canvas.getContext('webgl', params) || canvas.getContext('experimental-webgl', params);
 
+    // No usable WebGL context at all (some locked-down/old mobile browsers).
+    if (!gl) return { gl: null, ext: null };
+
     let halfFloat;
     let supportLinearFiltering;
     if (isWebGL2) {
@@ -62,6 +82,9 @@ const initCursor = () => {
       halfFloat = gl.getExtension('OES_texture_half_float');
       supportLinearFiltering = gl.getExtension('OES_texture_half_float_linear');
     }
+
+    // WebGL1 without OES_texture_half_float can't supply the texture type below.
+    if (!isWebGL2 && !halfFloat) return { gl: null, ext: null };
 
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
@@ -786,13 +809,14 @@ const initCursor = () => {
   let colorUpdateTimer = 0.0;
 
   function update() {
+    if (disposed) return;
     const dt = calcDeltaTime();
     if (resizeCanvas()) initFramebuffers();
     updateColors(dt);
     applyInputs();
     step(dt);
     render(null);
-    requestAnimationFrame(update);
+    mainRafId = requestAnimationFrame(update);
   }
 
   function calcDeltaTime() {
@@ -964,7 +988,7 @@ const initCursor = () => {
     return false;
   }
 
-  window.addEventListener('mousedown', (e) => {
+  on(window, 'mousedown', (e) => {
     if (isOverDisabledSection(e.clientY)) return;
     let pointer = pointers[0];
     let posX = scaleByPixelRatio(e.clientX);
@@ -973,7 +997,7 @@ const initCursor = () => {
     clickSplat(pointer);
   });
 
-  document.body.addEventListener('mousemove', function handleFirstMouseMove(e) {
+  on(document.body, 'mousemove', function handleFirstMouseMove(e) {
     if (isOverDisabledSection(e.clientY)) return;
     let pointer = pointers[0];
     let posX = scaleByPixelRatio(e.clientX);
@@ -987,7 +1011,7 @@ const initCursor = () => {
     document.body.removeEventListener('mousemove', handleFirstMouseMove);
   });
 
-  window.addEventListener('mousemove', (e) => {
+  on(window, 'mousemove', (e) => {
     if (isOverDisabledSection(e.clientY)) return;
     let pointer = pointers[0];
     let posX = scaleByPixelRatio(e.clientX);
@@ -997,7 +1021,7 @@ const initCursor = () => {
     updatePointerMoveData(pointer, posX, posY, color);
   });
 
-  document.body.addEventListener('touchstart', function handleFirstTouchStart(e) {
+  on(document.body, 'touchstart', function handleFirstTouchStart(e) {
     const touches = e.targetTouches;
     let pointer = pointers[0];
 
@@ -1014,7 +1038,7 @@ const initCursor = () => {
     document.body.removeEventListener('touchstart', handleFirstTouchStart);
   });
 
-  window.addEventListener('touchstart', (e) => {
+  on(window, 'touchstart', (e) => {
     const touches = e.targetTouches;
     let pointer = pointers[0];
     for (let i = 0; i < touches.length; i++) {
@@ -1025,7 +1049,8 @@ const initCursor = () => {
     }
   });
 
-  window.addEventListener(
+  on(
+    window,
     'touchmove',
     (e) => {
       const touches = e.targetTouches;
@@ -1040,7 +1065,7 @@ const initCursor = () => {
     false,
   );
 
-  window.addEventListener('touchend', (e) => {
+  on(window, 'touchend', (e) => {
     const touches = e.changedTouches;
     let pointer = pointers[0];
 
@@ -1167,6 +1192,12 @@ const initCursor = () => {
     }
     return hash;
   }
+
+  return () => {
+    disposed = true;
+    if (mainRafId != null) cancelAnimationFrame(mainRafId);
+    cleanups.forEach((fn) => fn());
+  };
 };
 
 export default initCursor;

@@ -26,7 +26,7 @@ const Index: FC<Props> = () => {
   const brightRef = useRef<HTMLParagraphElement>(null);
   const [lines, setLines] = useState<LineData[]>([]);
 
-  // ── Measure rendered line positions from the dim paragraph ──────────────
+
   const measureLines = () => {
     const p = dimRef.current;
     if (!p) return;
@@ -34,49 +34,18 @@ const Index: FC<Props> = () => {
     const textNode = p.firstChild;
     if (!textNode || textNode.nodeType !== Node.TEXT_NODE) return;
 
-    const text = textNode.textContent ?? '';
     const pRect = p.getBoundingClientRect();
-    const measured: LineData[] = [];
+    const range = document.createRange();
+    range.selectNodeContents(textNode);
 
-    let lineStart = 0;
-    let prevTop: number | null = null;
-
-    for (let i = 0; i <= text.length; i++) {
-      const isEnd = i === text.length;
-      let charTop = 0;
-
-      if (!isEnd) {
-        const r = document.createRange();
-        r.setStart(textNode, i);
-        r.setEnd(textNode, i + 1);
-        charTop = r.getBoundingClientRect().top;
-      }
-
-      if (prevTop === null && !isEnd) {
-        prevTop = charTop;
-        lineStart = i;
-        continue;
-      }
-
-      if (isEnd || Math.abs(charTop - prevTop!) > 2) {
-        const lineRange = document.createRange();
-        lineRange.setStart(textNode, lineStart);
-        lineRange.setEnd(textNode, isEnd ? text.length : i);
-        const rect = lineRange.getBoundingClientRect();
-
-        measured.push({
-          top: rect.top - pRect.top,
-          height: rect.height,
-          width: rect.width,
-          left: rect.left - pRect.left,
-        });
-
-        if (!isEnd) {
-          prevTop = charTop;
-          lineStart = i;
-        }
-      }
-    }
+    const measured: LineData[] = Array.from(range.getClientRects())
+      .filter((rect) => rect.width > 0)
+      .map((rect) => ({
+        top: rect.top - pRect.top,
+        height: rect.height,
+        width: rect.width,
+        left: rect.left - pRect.left,
+      }));
 
     setLines(measured);
   };
@@ -89,9 +58,14 @@ const Index: FC<Props> = () => {
     return () => cancelAnimationFrame(raf);
   }, []);
 
-  // Rebuild on resize
+
   useEffect(() => {
-    const onResize = () => requestAnimationFrame(measureLines);
+    let lastWidth = window.innerWidth;
+    const onResize = () => {
+      if (window.innerWidth === lastWidth) return;
+      lastWidth = window.innerWidth;
+      requestAnimationFrame(measureLines);
+    };
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
   }, []);
@@ -103,10 +77,6 @@ const Index: FC<Props> = () => {
     gsap.registerPlugin(ScrollTrigger);
 
     const isMobile = window.innerWidth < 768;
-
-    if (isMobile) {
-      ScrollTrigger.normalizeScroll(true);
-    }
 
     const ctx = gsap.context(() => {
       const lineEls = Array.from(
@@ -143,7 +113,6 @@ const Index: FC<Props> = () => {
 
     return () => {
       ctx.revert();
-      if (isMobile) ScrollTrigger.normalizeScroll(false);
     };
   }, [lines]);
 
