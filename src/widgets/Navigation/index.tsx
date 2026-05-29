@@ -1,6 +1,7 @@
 'use client';
 import { FC, useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { usePathname, useRouter } from 'next/navigation';
 import { LogoIcon } from '@/icons/ApproachIcons/LogoIcon';
 import SidebarMenu from '@/components/SidebarMenu';
 
@@ -13,6 +14,18 @@ const Navigation: FC<Props> = ({ logoVisible = true, burgerVisible = true }) => 
   const [isActive, setIsActive] = useState(false);
   const [hidden, setHidden] = useState(false);
   const lastScrollY = useRef(0);
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const handleLogoClick = () => {
+    // From any sub-page, the logo returns home; on the homepage it scrolls to top.
+    if (pathname !== '/') {
+      router.push('/');
+      return;
+    }
+    const el = document.getElementById('main');
+    el ? el.scrollIntoView({ behavior: 'smooth' }) : window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => e.key === 'Escape' && setIsActive(false);
@@ -48,10 +61,7 @@ const Navigation: FC<Props> = ({ logoVisible = true, burgerVisible = true }) => 
         <motion.button
           title="rrg tech"
           aria-label="RRG Tech - Go to homepage"
-          onClick={() => {
-            const el = document.getElementById('main');
-            el ? el.scrollIntoView({ behavior: 'smooth' }) : window.scrollTo({ top: 0, behavior: 'smooth' });
-          }}
+          onClick={handleLogoClick}
           className="p-[4vw] lg:p-[2vw] group cursor-pointer"
           whileHover={{ scale: 1.1, transition: { duration: 0.2 } }}
           whileTap={{ scale: 0.95 }}

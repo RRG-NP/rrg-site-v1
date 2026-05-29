@@ -1,0 +1,74 @@
+---
+title: Welcome to the RRG Tech Blog
+description: A new home for our thinking on web development, design, and building digital products that last. Here is what to expect.
+date: 2026-05-20
+published: true
+featured: true
+category: Announcements
+tags:
+  - Announcements
+  - Company
+  - Web Development
+coverImage: /images/og-image.jpg
+author: RRG Tech
+seoTitle: Welcome to the RRG Tech Blog — Notes on Building for the Web
+seoDescription: The RRG Tech blog covers web development, design systems, performance, and accessibility. Read what we are building and learning.
+---
+
+We build software for a living, and along the way we learn things worth sharing.
+This blog is where the RRG Tech team writes about the craft behind the products we
+ship — the **engineering decisions**, the **design tradeoffs**, and the small details
+that separate a good experience from a great one.
+
+## What you'll find here
+
+Expect practical, opinionated writing grounded in real projects. A few themes we'll
+return to often:
+
+- **Modern web architecture** — App Router patterns, server components, and edge rendering
+- **Design systems** — building interfaces that stay consistent as teams grow
+- **Performance** — Core Web Vitals, image optimization, and shipping less JavaScript
+- **Accessibility** — interfaces that work for everyone, by default
+
+<Note>
+New posts are written in MDX and deploy automatically when we push to GitHub. No
+admin panel, no database — just version-controlled content.
+</Note>
+
+## How we think about quality
+
+We hold ourselves to a simple standard: the work should feel fast, look considered,
+and behave predictably. That applies to a marketing page just as much as a complex
+dashboard.
+
+> The details are not the details. They make the design.
+> — Charles Eames
+
+### A quick example
+
+Here's the kind of thing we care about — measuring before optimizing:
+
+```ts
+// Measure the Largest Contentful Paint before you "optimize" anything.
+function reportLCP() {
+  new PerformanceObserver((list) => {
+    for (const entry of list.getEntries()) {
+      console.log('LCP candidate:', entry.startTime, entry);
+    }
+  }).observe({ type: 'largest-contentful-paint', buffered: true });
+}
+
+reportLCP();
+```
+
+<Tip>
+Profiling in production-like conditions beats guessing every time. Ship the
+measurement first, then the fix.
+</Tip>
+
+## What's next
+
+We're just getting started. Browse the posts below, and check back as we publish more.
+
+If you're building something ambitious and want a partner who sweats these details,
+[get in touch](/book).

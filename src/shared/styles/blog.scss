@@ -1,0 +1,165 @@
+/**
+ * Long-form article styling. Scoped to `.prose-rrg` so it can't leak into the
+ * landing page. Inherits the site palette (text-1 / primary / stroke / gray-1)
+ * and Montserrat; uses a stable rem-based measure for comfortable reading.
+ */
+
+.prose-rrg {
+  @apply text-[1.0625rem] leading-[1.8] text-text-1/85;
+
+  // Anchor offset so in-page jumps clear the fixed header.
+  :is(h1, h2, h3, h4, h5, h6) {
+    scroll-margin-top: 6rem;
+  }
+
+  h2 {
+    @apply mb-4 mt-12 text-2xl font-bold leading-tight text-text-1 sm:text-3xl;
+  }
+
+  h3 {
+    @apply mb-3 mt-9 text-xl font-semibold leading-snug text-text-1 sm:text-2xl;
+  }
+
+  h4 {
+    @apply mb-2 mt-7 text-lg font-semibold text-text-1;
+  }
+
+  p {
+    @apply my-5;
+  }
+
+  // Heading auto-link (rehype-autolink-headings, behavior: wrap)
+  .heading-anchor {
+    @apply font-[inherit] text-inherit no-underline;
+    position: relative;
+
+    &:hover {
+      @apply text-primary;
+    }
+  }
+
+  // In-content links (exclude the heading wrap anchors)
+  a:not(.heading-anchor) {
+    @apply font-medium text-primary underline decoration-primary/40 underline-offset-4 transition-colors;
+
+    &:hover {
+      @apply decoration-primary;
+    }
+  }
+
+  strong {
+    @apply font-semibold text-text-1;
+  }
+
+  ul,
+  ol {
+    @apply my-5 space-y-2 pl-6;
+  }
+
+  ul {
+    @apply list-disc marker:text-stroke;
+  }
+
+  ol {
+    @apply list-decimal marker:text-text-1/50;
+  }
+
+  li > ul,
+  li > ol {
+    @apply my-2;
+  }
+
+  // GFM task lists
+  ul:has(input[type='checkbox']) {
+    @apply list-none pl-1;
+  }
+
+  li:has(> input[type='checkbox']) {
+    @apply flex items-baseline gap-2;
+  }
+
+  input[type='checkbox'] {
+    @apply mt-1 h-4 w-4 shrink-0 accent-primary;
+  }
+
+  blockquote {
+    @apply my-6 border-l-4 border-primary/50 pl-5 italic text-text-1/75;
+
+    p {
+      @apply my-2;
+    }
+  }
+
+  hr {
+    @apply my-10 border-0 border-t border-gray-1;
+  }
+
+  // Tables (remark-gfm)
+  table {
+    @apply my-6 block w-full overflow-x-auto border-collapse text-[0.95rem];
+  }
+
+  thead {
+    @apply border-b border-stroke;
+  }
+
+  th {
+    @apply px-4 py-2.5 text-left font-semibold text-text-1;
+  }
+
+  td {
+    @apply border-t border-gray-1 px-4 py-2.5 align-top;
+  }
+
+  tbody tr:hover {
+    @apply bg-bg-2/40;
+  }
+
+  // Inline code (block code handled below, excluded via :not(pre))
+  :not(pre) > code {
+    @apply rounded-md border border-gray-1 bg-bg-2 px-1.5 py-0.5 text-[0.85em] text-primary;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+  }
+
+  // ---- Code blocks (rehype-pretty-code) ----
+  figure[data-rehype-pretty-code-figure] {
+    @apply my-6;
+  }
+
+  figcaption[data-rehype-pretty-code-title] {
+    @apply rounded-t-2xl border border-b-0 border-stroke bg-bg-2 px-4 py-2 font-mono text-xs text-text-1/60;
+
+    & + div pre {
+      @apply rounded-t-none;
+    }
+  }
+
+  pre {
+    @apply overflow-x-auto rounded-2xl border border-stroke bg-bg-2/60 py-4 text-[0.9rem] leading-relaxed;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+
+    code {
+      @apply grid; // each line on its own row, enables full-width line highlights
+      counter-reset: line;
+    }
+
+    [data-line] {
+      @apply border-l-2 border-transparent px-4;
+    }
+
+    // Optional line numbers (```lang showLineNumbers)
+    code[data-line-numbers] [data-line]::before {
+      counter-increment: line;
+      content: counter(line);
+      @apply mr-4 inline-block w-4 text-right text-text-1/30;
+    }
+
+    [data-highlighted-line] {
+      @apply border-l-primary bg-primary/10;
+    }
+
+    [data-highlighted-chars] {
+      @apply rounded bg-primary/20;
+    }
+  }
+}

@@ -1,0 +1,90 @@
+---
+title: Designing Accessible Interfaces from the Start
+description: Accessibility is not a feature you add at the end. Here is how we bake it into design and code so it costs almost nothing.
+date: 2026-04-28
+published: true
+featured: false
+category: Design
+tags:
+  - Accessibility
+  - Design
+  - UX
+author: RRG Tech
+---
+
+The cheapest accessibility work happens before a single line of code is written.
+When it's an afterthought, it becomes a retrofit — expensive and brittle. Treated as
+a constraint from day one, it's mostly free and makes the product better for everyone.
+
+## Start with semantics
+
+Most accessibility wins come from using the right element. A `<button>` is focusable,
+keyboard-operable, and announced correctly — for free. A `<div onClick>` is none of
+those things until you reimplement them.
+
+```html
+<!-- Don't reinvent the button. -->
+<div class="btn" onclick="submit()">Send</div>
+
+<!-- Do this instead. -->
+<button type="submit">Send</button>
+```
+
+<Tip>
+If you find yourself adding `role`, `tabindex`, and key handlers to a `<div>`, there is
+probably a native element that already does the job.
+</Tip>
+
+## Color and contrast
+
+Our palette is dark by default, so contrast matters. Body text should clear **WCAG AA**
+(a 4.5:1 ratio for normal text). Don't rely on color alone to convey meaning — pair it
+with an icon or text label.
+
+| Use case | Minimum ratio |
+| --- | --- |
+| Body text | 4.5:1 |
+| Large text (24px+) | 3:1 |
+| UI components & graphics | 3:1 |
+
+## Focus is not optional
+
+Keyboard users navigate with the focus ring. Never remove it without replacing it with
+something at least as visible.
+
+```css
+/* Bad: strands keyboard users. */
+:focus { outline: none; }
+
+/* Good: a clear, on-brand focus style. */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+```
+
+<Warning>
+`outline: none` with no replacement is one of the most common — and most damaging —
+accessibility mistakes on the web. Audit for it.
+</Warning>
+
+## Images need real alt text
+
+Alt text describes the *purpose* of an image, not just its contents. Decorative images
+should have an empty `alt=""` so screen readers skip them.
+
+<Note>
+In this blog, the image component requires an `alt` prop at the type level — you
+can't ship a content image without describing it.
+</Note>
+
+## A short checklist
+
+- Use semantic HTML before reaching for ARIA
+- Maintain AA contrast across the palette
+- Keep a visible focus indicator everywhere
+- Provide meaningful alt text
+- Test the whole flow with the keyboard only
+
+Accessibility done early is nearly invisible in the budget and unmistakable in the
+result. It's simply good engineering.
