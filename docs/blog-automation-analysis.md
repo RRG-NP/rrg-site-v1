@@ -175,6 +175,13 @@ rendering code.
 
 ### Writing style & voice
 
+> **Forward-looking note:** the three legacy posts use the first-person-plural "we" team
+> voice described below. The **current writing standard** (see
+> [`blog-writing-guide.md`](./blog-writing-guide.md) §3–4) is a **first-person individual**
+> persona — a 28-year-old Nepali software engineer sharing lessons from real work — written
+> for a broad audience, 500–1000 words, with strict anti-AI-slop rules. New posts follow the
+> guide; the observations below document the existing corpus.
+
 - **First-person plural ("we").** The blog speaks as the RRG Tech team: "these are the
   patterns we keep coming back to," "we hold ourselves to a simple standard."
 - **Pragmatic and opinionated**, grounded in real project experience. Takes a position

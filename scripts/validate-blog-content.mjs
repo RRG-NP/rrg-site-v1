@@ -36,6 +36,32 @@ const ALLOWED_COMPONENTS = new Set(['Callout', 'Note', 'Info', 'Tip', 'Warning',
 const ALLOWED_CATEGORIES = new Set(['Engineering', 'Design', 'Announcements']);
 const KNOWN_BOOLEANS = ['published', 'featured'];
 
+// Tell-tale AI filler — see docs/blog-writing-guide.md §4. Flagged as warnings.
+const AI_SLOP_PHRASES = [
+  "in today's fast-paced world",
+  'it is important to note',
+  "it's worth mentioning",
+  'leveraging',
+  'delve into',
+  'game changer',
+  'revolutionize',
+  'unlock the power of',
+  'seamlessly',
+  'comprehensive guide',
+  'cutting-edge',
+  'transformative',
+  'ever-evolving landscape',
+  'robust',
+  'furthermore',
+  'moreover',
+  'additionally',
+  'in conclusion',
+];
+
+function escapeRe(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 // ── Tiny frontmatter parser (handles inline scalars, lists, and >|- block scalars) ──
 function parseFrontmatter(raw) {
   if (!raw.startsWith('---')) return { data: {}, body: raw, ok: false };
@@ -88,6 +114,17 @@ function parseFrontmatter(raw) {
         continue;
       }
       data[key] = '';
+      i++;
+      continue;
+    }
+
+    // Inline flow-style list: tags: [a, b, c]
+    const flow = /^\[(.*)\]$/.exec(rest.trim());
+    if (flow) {
+      data[key] = flow[1]
+        .split(',')
+        .map((s) => s.trim().replace(/^['"]|['"]$/g, ''))
+        .filter(Boolean);
       i++;
       continue;
     }
@@ -248,11 +285,23 @@ function validateFile(filePath, knownSlugs) {
 
   // 6. Reading quality (warnings)
   const words = wordCount(body);
-  if (words < 150) {
-    warnings.push(`body is only ~${words} words (drafts/short posts; aim for ~400–900).`);
+  const isDraftScaffold =
+    typeof data.description === 'string' && data.description.startsWith('TODO');
+  if (!isDraftScaffold && words < 400) {
+    warnings.push(`body is ~${words} words; aim for 500–1000 (a 2–5 minute read).`);
+  } else if (words > 1300) {
+    warnings.push(`body is ~${words} words; trim toward 500–1000 (a 2–5 minute read).`);
   }
   if (!/\]\(\/book\)/.test(body)) {
     warnings.push('no closing /book CTA found (house style links to /book).');
+  }
+
+  // AI-slop phrases (case-insensitive, word-boundary; code stripped out).
+  const prose = stripCode(body).toLowerCase();
+  for (const phrase of AI_SLOP_PHRASES) {
+    if (new RegExp(`\\b${escapeRe(phrase)}\\b`, 'i').test(prose)) {
+      warnings.push(`AI-slop phrase "${phrase}" — rewrite in a more human voice (guide §4).`);
+    }
   }
 
   // 7. FAQ

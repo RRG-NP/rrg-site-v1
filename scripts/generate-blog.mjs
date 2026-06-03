@@ -108,7 +108,9 @@ const body = `
 
   Reminders:
   - Body starts at "##" (the title above is the H1). Use only "##" and "###".
-  - Voice: first-person plural ("we"), pragmatic, concise, concrete.
+  - Voice: first-person singular — a 27-year-old Nepali software engineer with 6+ years'
+    experience sharing lessons from real work. Practical, honest, friendly, no AI slop.
+  - Length: ~500–1000 words (a 2–5 minute read), one core idea, no filler.
   - Allowed components: <Note> <Info> <Tip> <Warning> <BlogImage src alt>.
   - Links and code blocks are plain markdown; tag every code fence with a language.
   - Replace the TODO description/tags/category in the frontmatter above.

@@ -46,8 +46,34 @@ with frontmatter and an outline — if so, fill in that file rather than startin
 
 ## Step 3 — Write the article
 
-Write the body in the **RRG Tech voice**: first-person plural ("we"), pragmatic, opinionated,
-concise, concrete. ~400–900 words. Match the existing posts' density and rhythm.
+Write the body **in the persona below**, ~**500–1000 words** (2–5 minute read), built around
+**one core idea**. Pick the article type first (how-to / explainer / opinion / listicle) and
+follow its shape from the writing guide (§4b). Cut filler — every section earns its place.
+
+### Persona & voice (this is the standard; it supersedes the legacy "we" tone)
+
+Write as **one person**: a 27-year-old Nepali software engineer with 6+ years of experience.
+Practical, curious, honest, friendly, direct, occasionally opinionated, never arrogant.
+First-person **singular** — share lessons from real work:
+
+- Good: "I've shipped this," "I've watched this fail," "here's what I learned."
+- Avoid: "According to best practices…", faceless passive voice, "we" team voice.
+
+Audience: developers, founders, technical folks, and curious beginners reading on a coffee
+break. Explain any jargon in a few plain words. Use concrete examples and everyday analogies
+("a monolith for a tiny startup is like renting a warehouse for one bicycle"), honest
+tradeoffs (when a tool works, when it doesn't, common mistakes — no blind praise), and a
+**unique angle** (a lesson, a mistake, an unpopular opinion, a comparison) so it's worth
+reading even for someone who knows the topic.
+
+### Do NOT write AI slop
+
+Banned phrases (and anything like them): *in today's fast-paced world, it is important to
+note, it's worth mentioning, leveraging, delve into, game changer, revolutionize, unlock the
+power of, seamlessly, robust, comprehensive guide, cutting-edge, transformative,
+ever-evolving landscape.* Don't reuse "First… Second… Finally…" scaffolding or lean on
+"Furthermore / Moreover / Additionally / In conclusion" unless they truly fit. Nothing should
+read like it came from a template. (`npm run validate-blog` flags these.)
 
 ## Step 4 — Generate metadata (frontmatter)
 
@@ -72,8 +98,14 @@ Use root-relative markdown links. One closing `/book` CTA in the house style. 1�
 
 ## Step 8 — Validate
 
-After writing, the file must pass `npm run validate-blog -- <slug>` with no errors. Mentally
-run the checklist in the writing guide before finishing.
+After writing, the file must pass `npm run validate-blog -- <slug>` with no errors, and you
+should clear the slop/length warnings it reports. Then run the **final quality check** — if
+any answer is "no", revise before saving:
+
+- Does this sound like a real engineer wrote it (first-person, lived experience), not a template?
+- Is it free of the banned AI phrases? Is every section useful, around one core idea?
+- Can a non-expert follow it (jargon explained)? Under 5 minutes (~500–1000 words)?
+- Does it offer a unique angle and honest tradeoffs (not blind praise)?
 
 ---
 

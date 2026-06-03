@@ -71,34 +71,116 @@ You never write OG images, JSON-LD, sitemap entries, or canonical tags by hand �
 framework generates all of them from frontmatter (see the analysis doc, §5). Just fill the
 frontmatter well.
 
----
-
-## 3. Writing style
-
-- **Voice: first-person plural ("we"),** as the RRG Tech team. "These are the patterns we
-  keep coming back to." Never "I"; avoid faceless passive voice.
-- **Pragmatic and opinionated.** Take a clear position and justify it from real project
-  experience. Prefer "do X because Y" over surveying every option neutrally.
-- **Concise.** Short paragraphs (2–4 sentences). Plain words. Cut throat-clearing
-  ("In this article we will…"). Open with the substance.
-- **Concrete.** Show, don't just tell: pair a claim with a code sample, table, or a
-  wrong-way/right-way contrast.
-- **Skimmable.** A reader scanning headings, callouts, and the closing checklist should get
-  the gist.
-
-### Length
-
-Target **~400–900 words** of prose. The existing posts sit at the shorter end (~300–450,
-1–3 min read) and are tightly scoped to a single idea. Go longer only with more substance,
-never with filler — keep the density high.
+**SEO supports readability — never the reverse.** Priority order: (1) helpful content,
+(2) human readability, (3) search optimization. No keyword stuffing; write the title,
+description, and headings for a person first.
 
 ---
 
-## 4. Tone of voice
+## 3. Audience, voice & reading time
 
-Knowledgeable peer, not lecturer or marketer. Confident but not boastful; helpful and
-direct. Light, dry asides are fine ("The constraints are the feature."). Avoid hype,
-buzzwords, and exclamation marks. The reader is a competent developer or designer.
+### Who you're writing for
+
+Developers, founders, technical professionals, curious learners, and people with **little
+or no prior knowledge** of the topic. Assume a smart reader skimming on a coffee break.
+
+- Avoid unnecessary jargon. When you must use a technical term, explain it in a few plain
+  words the first time.
+- Anyone in the audience should be able to follow the post start to finish without looking
+  things up.
+
+### Reading time & length
+
+Target **2–5 minutes** — usually **500–1000 words**.
+
+- Focus on **one core idea**. Cut filler; every section must earn its place.
+- Don't pad to hit a length. A tight 600-word post beats a baggy 1,200-word one.
+
+### Voice & persona
+
+Write as **one person**: a 27-year-old Nepali software engineer with 6+ years of
+professional experience. Practical, curious, honest, experienced, self-aware, friendly,
+direct, occasionally opinionated — never arrogant.
+
+> **Note — this supersedes the older "we" convention.** The three legacy posts used a
+> first-person-plural team voice. New posts use a **first-person individual** voice. The
+> author shares lessons from real work, not textbook rules:
+>
+> - Good: "I've shipped this in production," "I've watched this fail," "here's what I learned."
+> - Avoid: "According to best practices…", faceless passive voice.
+
+Keep paragraphs short (2–4 sentences), words plain, and open with the substance — no
+throat-clearing. Show, don't just tell: back a claim with a code sample, a quick comparison,
+or a real wrong-way/right-way contrast. (The `author` frontmatter can stay `RRG Tech` or be
+a person's name; it doesn't change the writing voice.)
+
+---
+
+## 4. Tone, authenticity & avoiding AI slop
+
+### Tone
+
+Conversational, human, thoughtful, genuine — smart but approachable, like a real engineer
+sharing what they've learned. Confident, not boastful. Light, dry asides are fine. **Avoid**
+corporate/marketing language, buzzwords, overly formal prose, clickbait, and exclamation
+marks.
+
+### Anti-AI-slop rules
+
+Do **not** use tell-tale AI filler. Banned phrases (non-exhaustive):
+
+> in today's fast-paced world · it is important to note · it's worth mentioning · leveraging ·
+> delve into · game changer · revolutionize · unlock the power of · seamlessly · robust ·
+> comprehensive guide · cutting-edge · transformative · ever-evolving landscape
+
+Also avoid:
+
+- Template scaffolding repeated every article ("First… Second… Third… Finally…").
+- Generic transitions (`Furthermore`, `Moreover`, `Additionally`, `In conclusion`) unless
+  they genuinely fit.
+- Anything that reads like it was filled into a template.
+
+`npm run validate-blog` flags these phrases as warnings — clear them before publishing.
+
+### Authenticity
+
+Include real-world observations, practical examples, your own reasoning, and honest
+tradeoffs. When you discuss a tool/framework, cover **why you'd use it, when it works well,
+when it doesn't, and the common mistakes**. No blind praise.
+
+### Creativity — find an angle
+
+Every post needs a unique angle, not just a concept dump. Pick one: a lesson learned, a
+mistake made, a surprising discovery, an unpopular opinion, a practical shortcut, a
+real-world use case, or a comparison. Aim to be worth reading **even for someone who already
+knows the topic**.
+
+### Examples & analogies
+
+Prefer concrete examples (real projects, startup situations, developer workflows) and
+everyday analogies over abstract description.
+
+- Good: "Using a monolith for a tiny startup is like renting a warehouse to store one bicycle."
+- Bad: "Monolithic architectures have both advantages and disadvantages."
+
+---
+
+## 4b. Article type & structure
+
+Pick the type that fits the idea before you write; each has a natural shape.
+
+- **How-to** — Intro (hook · the problem · why it matters) → step-by-step walkthrough →
+  conclusion (recap · lesson learned · a practical next step).
+- **Explainer** — Intro (hook · why it matters) → concepts explained simply with examples
+  tied to real life → conclusion (key takeaway · what to explore next).
+- **Opinion / thought-leadership** — Intro (clear viewpoint · why it matters) → arguments,
+  examples, tradeoffs, counterpoints → conclusion (final perspective · invite discussion).
+- **Listicle** — Intro (why the list matters) → items (each with explanation, a practical
+  example, and a personal insight where possible) → conclusion (favorite takeaway · a reader
+  action).
+
+These map onto the heading rules below — the intro is prose before the first `##`, each
+phase/step/concept/item is an `##` (or `###`) section.
 
 ---
 
@@ -235,11 +317,12 @@ Don't use buttons, banners, or multiple CTAs.
 
 Before setting `published: true`, confirm:
 
+**Mechanics**
+
 - [ ] Required frontmatter present: `title`, `description`, `date`.
 - [ ] `title` ≤ 60 chars; `description` 120–160 chars; 3–6 reused `tags`; `category` set.
 - [ ] Filename is lowercase-kebab-case and matches the intended URL.
 - [ ] Body starts at `##`; only H2/H3 used; no level skips; no body `#` H1.
-- [ ] Written in the "we" voice; pragmatic, concise, concrete.
 - [ ] At least one code block (language-tagged), table, or wrong/right contrast where useful.
 - [ ] 1–3 callouts, used meaningfully (not decoration).
 - [ ] All images have meaningful `alt` (or `alt=""` if decorative); stored under `/images/blog/`.
@@ -248,3 +331,18 @@ Before setting `published: true`, confirm:
 - [ ] Single closing `/book` CTA in the house style.
 - [ ] `npm run validate-blog -- <slug>` passes with no errors.
 - [ ] Previewed with `npm run dev`.
+
+**Voice & substance** — answer honestly; if any is "no", revise before saving:
+
+- [ ] Does this sound like a real engineer wrote it (first-person, lived experience)?
+- [ ] Would I personally publish this? Does it sound human?
+- [ ] Does it avoid the AI clichés in §4 (validator warnings cleared)?
+- [ ] Is every section useful, with no filler? One core idea?
+- [ ] Can a non-expert follow it, with jargon explained?
+- [ ] Would someone finish it in under 5 minutes (~500–1000 words)?
+- [ ] Does it offer a unique angle (lesson, mistake, opinion, comparison) — worth reading
+      even for someone who knows the topic?
+- [ ] Honest tradeoffs included, not blind praise?
+
+> The goal isn't to generate content. It's to publish posts that feel authentic, useful, and
+> genuinely written by an experienced engineer sharing what they've learned.
