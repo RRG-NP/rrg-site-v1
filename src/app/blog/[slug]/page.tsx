@@ -19,7 +19,13 @@ import {
   getRelatedPosts,
   toSummary,
 } from '@/lib/blog';
-import { buildArticleJsonLd, buildBreadcrumbJsonLd, buildPostMetadata } from '@/lib/seo';
+import {
+  buildArticleJsonLd,
+  buildBreadcrumbJsonLd,
+  buildFaqJsonLd,
+  buildPostMetadata,
+  type FaqItem,
+} from '@/lib/seo';
 
 import '@/shared/styles/blog.scss';
 
@@ -51,6 +57,7 @@ export default function PostPage({ params }: { params: { slug: string } }) {
     { name: 'Blog', url: '/blog' },
     { name: post.title, url: post.url },
   ]);
+  const faqJsonLd = buildFaqJsonLd((post.faq as FaqItem[] | undefined) ?? []);
 
   return (
     <>
@@ -58,6 +65,9 @@ export default function PostPage({ params }: { params: { slug: string } }) {
 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
+      {faqJsonLd && (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+      )}
 
       <div className="mx-auto max-w-6xl px-5 pb-24 pt-28 sm:px-8 lg:pt-32">
         <Breadcrumbs

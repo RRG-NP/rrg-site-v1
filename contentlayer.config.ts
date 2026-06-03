@@ -47,6 +47,73 @@ function extractHeadings(raw: string): TocHeading[] {
   return headings;
 }
 
+/** A single question/answer pair extracted from a post's FAQ section. */
+export type FaqItem = {
+  question: string;
+  answer: string;
+};
+
+/**
+ * Parse a "## Frequently Asked Questions" section out of the raw markdown so we
+ * can emit FAQPage structured data without re-parsing MDX. Each `###` under the
+ * FAQ heading is a question; its answer is the first paragraph that follows (the
+ * authoring guide constrains answers to a single 1–3 sentence paragraph, so this
+ * stays clean even when a closing CTA paragraph follows the last question).
+ * Markdown markers are stripped so the JSON-LD stays plain text.
+ */
+function extractFaq(raw: string): FaqItem[] {
+  const lines = raw.split('\n');
+  const items: FaqItem[] = [];
+  let inFence = false;
+  let inFaq = false;
+  let current: { question: string; answer: string[]; done: boolean } | null = null;
+
+  const clean = (s: string) => s.replace(/[*`_~]/g, '').replace(/\[([^\]]+)\]\([^)]*\)/g, '$1').trim();
+  const flush = () => {
+    if (current && current.answer.join(' ').trim()) {
+      items.push({ question: current.question, answer: clean(current.answer.join(' ')) });
+    }
+    current = null;
+  };
+
+  for (const line of lines) {
+    if (/^\s*(```|~~~)/.test(line)) {
+      inFence = !inFence;
+      continue;
+    }
+    if (inFence) continue;
+
+    if (!inFence) {
+      const h2 = /^##\s+(.*)$/.exec(line);
+      if (h2) {
+        // Entering or leaving the FAQ section.
+        flush();
+        inFaq = /frequently asked questions/i.test(h2[1]);
+        continue;
+      }
+    }
+    if (!inFaq) continue;
+
+    const h3 = /^###\s+(.*)$/.exec(line);
+    if (h3) {
+      flush();
+      current = { question: clean(h3[1]), answer: [], done: false };
+      continue;
+    }
+    if (!current || current.done) continue;
+
+    if (line.trim() === '') {
+      // Blank line ends the answer once we've captured its first paragraph.
+      if (current.answer.length > 0) current.done = true;
+      continue;
+    }
+    current.answer.push(line.trim());
+  }
+  flush();
+
+  return items;
+}
+
 export const Blog = defineDocumentType(() => ({
   name: 'Blog',
   filePathPattern: 'blogs/**/*.mdx',
@@ -86,6 +153,10 @@ export const Blog = defineDocumentType(() => ({
     headings: {
       type: 'json',
       resolve: (doc: any) => extractHeadings(doc.body.raw),
+    },
+    faq: {
+      type: 'json',
+      resolve: (doc: any) => extractFaq(doc.body.raw),
     },
   },
 }));
