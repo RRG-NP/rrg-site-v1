@@ -11,7 +11,7 @@ text, so edit wording before it's used, not after.
 ## Topics
 
 - [x] The End of CRUD Apps: What Developers Should Build Instead
-- [ ] Why I stopped reaching for useEffect in React
+- [x] Why I stopped reaching for useEffect in React
 - [ ] Server Components changed how I think about data fetching
 - [ ] The hidden cost of a slow build, and how I cut ours in half
 - [ ] The accessibility bugs I keep finding in code reviews
