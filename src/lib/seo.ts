@@ -64,6 +64,23 @@ export function buildArticleJsonLd(post: Blog): JsonLd {
   };
 }
 
+/** A question/answer pair (matches the `faq` computed field in contentlayer.config.ts). */
+export type FaqItem = { question: string; answer: string };
+
+/** FAQPage structured data from a post's FAQ section. Returns null when empty. */
+export function buildFaqJsonLd(faqs: FaqItem[]): JsonLd | null {
+  if (!faqs || faqs.length === 0) return null;
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((item) => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: { '@type': 'Answer', text: item.answer },
+    })),
+  };
+}
+
 /** BreadcrumbList structured data from an ordered list of crumbs. */
 export function buildBreadcrumbJsonLd(items: { name: string; url: string }[]): JsonLd {
   return {
