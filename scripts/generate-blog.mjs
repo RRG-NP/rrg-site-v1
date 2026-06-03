@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 /**
- * Scaffold a new blog DRAFT for the RRG Tech blog.
+ * Scaffold a new blog post for the RRG Tech blog.
  *
- *   npm run generate-blog -- "<topic or title>"
+ *   npm run generate-blog -- "<topic or title>"            # draft (published: false)
+ *   npm run generate-blog -- --publish "<topic or title>"  # publish-ready (published: true)
  *
  * What it does:
  *   1. Analyzes the topic into a title + kebab-case slug.
@@ -66,9 +67,11 @@ function fail(msg) {
 }
 
 // ── Parse args ───────────────────────────────────────────────────────────────
-const topic = process.argv.slice(2).join(' ').trim();
+const rawArgs = process.argv.slice(2);
+const publish = rawArgs.includes('--publish');
+const topic = rawArgs.filter((a) => !a.startsWith('--')).join(' ').trim();
 if (!topic) {
-  fail('Usage: npm run generate-blog -- "<topic or title>"');
+  fail('Usage: npm run generate-blog -- [--publish] "<topic or title>"');
 }
 
 const title = toTitle(topic);
@@ -90,7 +93,7 @@ const frontmatter = `---
 title: ${title}
 description: TODO — one benefit-led sentence, 120–160 characters, used as the meta description.
 date: ${today()}
-published: false
+published: ${publish ? 'true' : 'false'}
 featured: false
 category: ${ALLOWED_CATEGORIES[0]}
 tags:
@@ -103,7 +106,7 @@ author: RRG Tech
 const body = `
 
 {/*
-  DRAFT SCAFFOLD — fill this in by following prompts/blog-generator.md and
+  SCAFFOLD — fill this in by following prompts/blog-generator.md and
   docs/blog-writing-guide.md, then run:  npm run validate-blog -- ${slug}
 
   Reminders:
@@ -114,7 +117,7 @@ const body = `
   - Allowed components: <Note> <Info> <Tip> <Warning> <BlogImage src alt>.
   - Links and code blocks are plain markdown; tag every code fence with a language.
   - Replace the TODO description/tags/category in the frontmatter above.
-  - Keep published: false until reviewed.
+  - published is set to ${publish ? 'true (publish-ready — review before merging)' : 'false (draft — flip to true to publish)'}.
 */}
 
 Intro hook — replace with one or two sentences stating the core idea. No "in this article".
@@ -151,16 +154,19 @@ fs.writeFileSync(filePath, frontmatter + body, 'utf8');
 
 // ── Report ───────────────────────────────────────────────────────────────────
 console.log(`
-✓ Draft created: content/blogs/${slug}.mdx
+✓ Created: content/blogs/${slug}.mdx
   Title:    ${title}
   Slug/URL: /blog/${slug}
-  Status:   published: false  (draft — not listed, not in sitemap, not deployed)
+  Status:   published: ${publish ? 'true   (publish-ready — review before merging)' : 'false  (draft — not listed, not in sitemap, not deployed)'}
 
 Next steps:
   1. Have an agent fill the body using prompts/blog-generator.md
      (or write it by hand following docs/blog-writing-guide.md).
   2. Replace the TODO description, tags, and category in the frontmatter.
   3. Validate:   npm run validate-blog -- ${slug}
-  4. Preview:    npm run dev   (http://localhost:3400/blog/${slug})
-  5. Publish only after review by setting published: true and committing.
+  4. Preview:    npm run dev   (http://localhost:3400/blog/${slug})${
+    publish
+      ? '\n  5. Review, then commit on a branch and open a PR (merge publishes it).'
+      : '\n  5. Publish only after review by setting published: true and committing.'
+  }
 `);

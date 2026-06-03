@@ -1,0 +1,75 @@
+---
+title: "The End of CRUD Apps: What to Build Instead"
+description: CRUD isn't dead, but shipping apps as thin wrappers over database tables is a losing game. Here's what I build instead, and where plain CRUD still wins.
+date: 2026-06-03
+published: true
+featured: false
+category: Engineering
+tags:
+  - Web Development
+  - Next.js
+  - React
+author: RRG Tech
+---
+
+A few years ago I could describe most of my work in one sentence: I built screens that put data into a database and pulled it back out. Forms, tables, an edit button, a delete confirmation. It paid well and I was good at it. I don't think that job survives much longer — at least not as something worth hiring a developer to do.
+
+## What CRUD actually was
+
+CRUD stands for Create, Read, Update, Delete — the four things you do to a row in a database. A CRUD app is mostly a nice-looking wrapper around those four operations: an admin panel, a contact list, an inventory screen.
+
+If you're newer to this: picture a spreadsheet that got a login page and prettier buttons. That describes a huge slice of the business software ever written, including a lot of what I shipped in my first few years.
+
+## The floor is falling out
+
+The reason I'm uneasy is simple — generating CRUD is close to a solved problem. Low-code tools like Retool, Airtable, and Supabase's auto-generated APIs will hand you a working data screen in an afternoon. Point an AI assistant at a database schema and it scaffolds the forms before you've finished your chai.
+
+Hand-coding a CRUD form today is a bit like hand-rolling your own date picker. You *can*. But you're spending your rarest hours on something the rest of the industry already turned into a button.
+
+When a skill becomes a button, the people who only knew that skill lose their edge. This isn't doom — it's a shift in where the value sits.
+
+## Build verbs, not nouns
+
+Here's the pattern I noticed looking back at old projects: the apps that survived weren't the ones with the cleanest tables. They were the ones that modeled what people were actually trying to *do*.
+
+A CRUD mindset models nouns — `User`, `Invoice`, `Order`. The work that's still genuinely hard models verbs: "approve the invoice," "refund the order," "escalate the ticket." Those verbs carry rules, edge cases, and consequences that no schema captures on its own.
+
+```ts
+// CRUD: the UI knows the rules, the API just writes fields.
+await updateOrder(id, { status: 'refunded', refundedAt: Date.now() });
+
+// Verb: the action owns the rules — validation, side effects, an audit trail.
+await refundOrder(id, { reason, by: actor });
+```
+
+The second version is where the real work lives — and, honestly, where the reason a human is still in the loop lives too. A tool can generate `updateOrder`. It can't decide that a refund older than 30 days needs a manager's sign-off, or that it should email the customer and reverse the loyalty points.
+
+<Tip>
+When you're scoping a feature, write down the verbs your users say out loud in meetings. "Publish," "assign," "reconcile." Those are your real endpoints — not the tables sitting behind them.
+</Tip>
+
+The same shift shows up in the things CRUD never handled well: real-time collaboration, multi-step workflows, integrations between systems that disagree about everything. That's also why how you render and stream those screens matters — something I dug into in [building with the Next.js App Router](/blog/building-with-the-nextjs-app-router).
+
+## Where CRUD still wins
+
+I'm not telling you to throw it out. For an internal tool three staff will use, a quick admin screen, or an MVP you're shipping to test whether anyone even wants the thing — CRUD is exactly the right amount of effort. Reaching for a fancy workflow engine there is its own kind of mistake.
+
+The trap isn't using CRUD. It's treating CRUD as the *product* when it's only the storage layer. If the most interesting sentence you can say about your app is "users can edit records," a tool is going to eat that app, and probably soon.
+
+## Frequently Asked Questions
+
+### Is CRUD actually going away?
+
+No. Every app still reads and writes data, so the operations aren't disappearing. What's fading is CRUD as the *whole* product — the plumbing is commoditized, but the judgment wrapped around it isn't.
+
+### I'm learning to code. Should I skip CRUD entirely?
+
+Build a couple of CRUD apps first; they teach you how data flows, which is the floor you stand on for everything else. Just don't stop there — push into modeling real actions and rules once the basics click.
+
+### What does "model verbs, not nouns" mean day to day?
+
+Design your API and UI around the actions people take — refund, approve, publish — instead of raw table edits. The action owns its rules, and that's precisely the part a generator can't write for you.
+
+The boring news is that knowing how to move a row in and out of a database is now table stakes, not a career. The good news is that the interesting part — the rules, the workflows, the judgment — is the part I actually enjoy, and the part that's hard to automate away.
+
+If you're building something where the verbs matter and you want a partner who sweats those details, [get in touch](/book).
