@@ -1,0 +1,104 @@
+---
+title: Why I stopped reaching for useEffect in React
+description: Most useEffect calls I wrote early on were bugs waiting to happen. Here's how I learned to tell the few I really need from the many I don't.
+date: 2026-06-03
+published: true
+featured: false
+category: Engineering
+tags:
+  - React
+  - Web Development
+  - Performance
+author: RRG Tech
+---
+
+For a couple of years, `useEffect` was my answer to almost everything in React. Need to filter a list? Effect. Update a total when the cart changes? Effect. Reset a form when a prop changed? Effect. Then I spent a long week chasing a bug that turned out to be three effects fighting over the same piece of state, and I realized most of those effects never needed to exist.
+
+## What useEffect is actually for
+
+`useEffect` exists to synchronize your component with something *outside* React — a browser API, a network subscription, a timer, a third-party widget. That's it. The mental test I use now: "Am I reaching out to a system React doesn't control?" If yes, an effect is the right tool.
+
+```tsx
+// Legitimate: subscribe to something external, clean up after.
+useEffect(() => {
+  const socket = connectToRoom(roomId);
+  socket.onMessage(setMessages);
+  return () => socket.close();
+}, [roomId]);
+```
+
+If the answer is no — if I'm just computing a value from props and state — an effect is almost always the wrong tool, even when it works.
+
+## Derived state doesn't need an effect
+
+This was my most common mistake. I'd store something in state, then add an effect to keep a second piece of state in sync with it.
+
+```tsx
+// Wrong: an extra render, a stale frame, and a bug magnet.
+const [items, setItems] = useState([]);
+const [total, setTotal] = useState(0);
+useEffect(() => {
+  setTotal(items.reduce((sum, i) => sum + i.price, 0));
+}, [items]);
+```
+
+The total isn't independent state — it's a function of `items`. Storing it separately means there's a render where `items` updated but `total` hasn't caught up yet. Just compute it during render:
+
+```tsx
+// Right: one source of truth, always consistent.
+const [items, setItems] = useState([]);
+const total = items.reduce((sum, i) => sum + i.price, 0);
+```
+
+<Tip>
+Before writing an effect that calls a setter, ask whether the value is really state or just a calculation. If you can derive it from what you already have, derive it. No effect, no extra render, no chance of the two values disagreeing.
+</Tip>
+
+If the calculation is genuinely expensive, `useMemo` is the answer — not an effect plus a second state variable.
+
+## Events belong in event handlers
+
+The other half of my old effects were responding to user actions. A button toggles something, and "in response" I'd run an effect.
+
+The problem is an effect can't tell *why* it ran. It fires on every matching dependency change, whether the user clicked, the component just mounted, or a parent re-rendered for an unrelated reason. Event handlers don't have that ambiguity — they run because the user did a specific thing.
+
+```tsx
+// Wrong: this re-submits on remount or any time `submitted` flips back.
+useEffect(() => {
+  if (submitted) sendAnalytics('checkout');
+}, [submitted]);
+
+// Right: it runs exactly when the user checks out.
+function handleCheckout() {
+  setSubmitted(true);
+  sendAnalytics('checkout');
+}
+```
+
+<Warning>
+If you find yourself adding flags like `hasRun` or `didSubmit` to stop an effect from firing twice, that's the code telling you the logic belongs in an event handler, not an effect.
+</Warning>
+
+## Where effects still earn their place
+
+I don't want to oversell this. Effects are still the correct tool for a real category of work: setting up subscriptions, syncing with `localStorage`, integrating a non-React map or chart library, focusing an input after mount, or kicking off data fetching when you don't have a framework doing it for you. On a Next.js project I usually let the server handle data loading instead — something I get into in [building with the Next.js App Router](/blog/building-with-the-nextjs-app-router) — which removes a whole class of fetch-in-effect code.
+
+The shift that helped me most: I stopped treating `useEffect` as the glue between every two things and started treating it as a deliberate escape hatch to the world outside React. My components got simpler, the render-then-flicker bugs disappeared, and the effects I kept are the ones I can actually explain.
+
+## Frequently Asked Questions
+
+### Is useEffect bad or deprecated?
+
+Not at all. It's a sharp tool for synchronizing with external systems, and it's not going anywhere. The point is that most everyday tasks — deriving values, handling clicks — have simpler solutions that don't involve it.
+
+### How do I know if I actually need an effect?
+
+Ask whether you're talking to a system React doesn't control, like the network, the DOM directly, or a browser API. If you're only computing from props and state, you almost certainly don't need an effect.
+
+### What do I use instead for derived values?
+
+Compute them during render from your existing state. If the calculation is heavy enough to matter, wrap it in `useMemo` — but skip the extra state variable and the effect that syncs it.
+
+I still write effects every week — just far fewer, and each one earns its spot. The habit worth building isn't avoiding `useEffect`; it's pausing for one second before you type it to ask whether the problem is really about the world outside React.
+
+If you're building something ambitious and want a partner who sweats these details, [get in touch](/book).
