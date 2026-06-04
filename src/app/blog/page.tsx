@@ -4,18 +4,57 @@ import BlogIndex from '@/components/blog/BlogIndex';
 import { getAllPosts, getAllTags, getFeaturedPosts, toSummary } from '@/lib/blog';
 import { siteConfig } from '@/lib/site';
 
+const BLOG_TITLE = 'The RRG Tech Blog — Web & Mobile Development, AI, Performance';
+const BLOG_DESCRIPTION =
+  'Practical, opinionated writing on web and mobile development, React and React Native, AI for developers, performance on both web and mobile, design systems, and accessibility — from the RRG Tech team.';
+
 export const metadata: Metadata = {
   // Set explicitly (the layout's title template only applies to child segments).
-  title: 'The RRG Tech Blog — Web Development, Design & Performance',
-  description:
-    'Practical writing on web development, design systems, performance, and accessibility from the RRG Tech team.',
-  alternates: { canonical: '/blog' },
+  title: BLOG_TITLE,
+  description: BLOG_DESCRIPTION,
+  keywords: [
+    'RRG Tech blog',
+    'web development blog',
+    'mobile development',
+    'React Native',
+    'React',
+    'Next.js',
+    'AI for developers',
+    'web performance',
+    'mobile app performance',
+    'system design',
+    'software architecture',
+    'design systems',
+    'accessibility',
+    'frontend engineering',
+  ],
+  alternates: {
+    canonical: '/blog',
+    types: {
+      'application/rss+xml': [{ url: siteConfig.feedPath, title: 'RRG Tech Blog RSS Feed' }],
+    },
+  },
   openGraph: {
-    title: `Blog · ${siteConfig.name}`,
-    description:
-      'Practical writing on web development, design systems, performance, and accessibility from the RRG Tech team.',
+    title: BLOG_TITLE,
+    description: BLOG_DESCRIPTION,
     url: `${siteConfig.url}/blog`,
+    siteName: siteConfig.name,
+    locale: siteConfig.locale,
     type: 'website',
+    images: [
+      {
+        url: siteConfig.ogImage,
+        width: 1200,
+        height: 630,
+        alt: 'The RRG Tech Blog',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: BLOG_TITLE,
+    description: BLOG_DESCRIPTION,
+    images: [siteConfig.ogImage],
   },
 };
 
@@ -31,8 +70,8 @@ export default function BlogPage() {
         <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-primary">The RRG Tech Blog</p>
         <h1 className="text-4xl font-extrabold leading-tight text-text-1 sm:text-5xl">Insights & ideas</h1>
         <p className="mt-4 text-lg text-text-1/60">
-          Practical, opinionated writing on web development, design systems, performance, and accessibility —
-          grounded in the work we ship.
+          Practical, opinionated writing on web and mobile development, AI for developers, performance enhancement, and
+          system architecture — grounded in the work we ship.
         </p>
       </header>
 
