@@ -14,6 +14,15 @@ async function loadLogo(): Promise<string | null> {
   }
 }
 
+/** Embed Montserrat so the card matches the site type and the title renders truly bold. */
+async function loadFont(weight: 400 | 600 | 800): Promise<Buffer | null> {
+  try {
+    return await readFile(join(process.cwd(), 'public', 'fonts', `Montserrat-${weight}.ttf`));
+  } catch {
+    return null;
+  }
+}
+
 export const alt = 'RRG Tech blog article';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
@@ -26,9 +35,25 @@ export function generateStaticParams() {
 export default async function OpengraphImage({ params }: { params: { slug: string } }) {
   const post = getPostBySlug(params.slug);
   const title = post?.title ?? siteConfig.name;
-  const category = post?.category ?? 'Blog';
+  const category = post?.category ?? 'Article';
   const readingTime = post?.readingTime ?? '';
-  const logoSrc = await loadLogo();
+  const author = post?.author ?? siteConfig.blogAuthor.name;
+
+  const [logoSrc, regular, semibold, extrabold] = await Promise.all([
+    loadLogo(),
+    loadFont(400),
+    loadFont(600),
+    loadFont(800),
+  ]);
+
+  // Scale the headline so long titles stay on a few balanced lines.
+  const titleSize = title.length > 78 ? 52 : title.length > 52 ? 62 : 74;
+
+  const fonts = [
+    regular && { name: 'Montserrat', data: regular, weight: 400 as const, style: 'normal' as const },
+    semibold && { name: 'Montserrat', data: semibold, weight: 600 as const, style: 'normal' as const },
+    extrabold && { name: 'Montserrat', data: extrabold, weight: 800 as const, style: 'normal' as const },
+  ].filter(Boolean) as { name: string; data: Buffer; weight: 400 | 600 | 800; style: 'normal' }[];
 
   return new ImageResponse(
     (
@@ -39,76 +64,127 @@ export default async function OpengraphImage({ params }: { params: { slug: strin
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
-          padding: '72px',
+          padding: '64px 72px',
           backgroundColor: '#141218',
           backgroundImage:
-            'radial-gradient(900px circle at 15% 0%, rgba(204,194,220,0.18), transparent 45%), radial-gradient(700px circle at 100% 100%, rgba(74,68,88,0.5), transparent 40%)',
+            'radial-gradient(1100px circle at 12% -10%, rgba(204,194,220,0.20), transparent 42%), radial-gradient(900px circle at 110% 120%, rgba(132,118,168,0.28), transparent 46%)',
           color: '#E6E0E9',
-          fontFamily: 'sans-serif',
+          fontFamily: 'Montserrat',
+          position: 'relative',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          {logoSrc ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={logoSrc} width={56} height={56} alt="" style={{ borderRadius: '50%' }} />
-          ) : (
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '56px',
-                height: '56px',
-                borderRadius: '16px',
-                backgroundColor: '#CCC2DC',
-                color: '#141218',
-                fontSize: '28px',
-                fontWeight: 700,
-              }}
-            >
-              R
-            </div>
-          )}
-          <div style={{ display: 'flex', fontSize: '30px', fontWeight: 700 }}>{siteConfig.name}</div>
-        </div>
+        {/* Top accent rule */}
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: '8px',
+            background: 'linear-gradient(90deg, #CCC2DC 0%, #847AA8 55%, rgba(132,118,168,0) 100%)',
+          }}
+        />
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+        {/* Brand row */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '18px' }}>
+            {logoSrc ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={logoSrc} width={60} height={60} alt="" style={{ borderRadius: '50%' }} />
+            ) : (
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '60px',
+                  height: '60px',
+                  borderRadius: '16px',
+                  backgroundColor: '#CCC2DC',
+                  color: '#141218',
+                  fontSize: '30px',
+                  fontWeight: 800,
+                }}
+              >
+                R
+              </div>
+            )}
+            <div style={{ display: 'flex', fontSize: '30px', fontWeight: 800, letterSpacing: '-0.5px' }}>
+              {siteConfig.name}
+            </div>
+          </div>
+
           <div
             style={{
               display: 'flex',
-              fontSize: '24px',
+              alignItems: 'center',
+              padding: '10px 22px',
+              borderRadius: '999px',
+              border: '1px solid rgba(204,194,220,0.45)',
+              backgroundColor: 'rgba(204,194,220,0.10)',
+              fontSize: '20px',
               fontWeight: 600,
               textTransform: 'uppercase',
-              letterSpacing: '4px',
+              letterSpacing: '3px',
               color: '#CCC2DC',
             }}
           >
             {category}
           </div>
+        </div>
+
+        {/* Headline */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           <div
             style={{
               display: 'flex',
-              fontSize: title.length > 60 ? '56px' : '68px',
+              fontSize: `${titleSize}px`,
               fontWeight: 800,
-              lineHeight: 1.1,
-              maxWidth: '1000px',
+              lineHeight: 1.08,
+              letterSpacing: '-1px',
+              maxWidth: '1010px',
             }}
           >
             {title}
           </div>
+          <div
+            style={{
+              display: 'flex',
+              width: '120px',
+              height: '6px',
+              borderRadius: '999px',
+              backgroundColor: '#CCC2DC',
+            }}
+          />
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', fontSize: '26px', color: '#9a91a8' }}>
-          <span>{siteConfig.url.replace('https://', '')}</span>
-          {readingTime && (
-            <>
-              <span>·</span>
-              <span>{readingTime}</span>
-            </>
-          )}
+        {/* Footer meta */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            borderTop: '1px solid rgba(230,224,233,0.12)',
+            paddingTop: '28px',
+            fontSize: '24px',
+            color: '#B7AFC4',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+            <span style={{ fontWeight: 600, color: '#E6E0E9' }}>{author}</span>
+            {readingTime && (
+              <>
+                <span style={{ color: '#5A5368' }}>•</span>
+                <span>{readingTime}</span>
+              </>
+            )}
+          </div>
+          <div style={{ display: 'flex', fontWeight: 600, color: '#CCC2DC' }}>
+            {siteConfig.url.replace('https://', '')}
+          </div>
         </div>
       </div>
     ),
-    { ...size },
+    { ...size, ...(fonts.length ? { fonts } : {}) },
   );
 }
