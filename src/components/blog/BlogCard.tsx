@@ -1,33 +1,14 @@
-import Image from 'next/image';
 import Link from 'next/link';
 
+import CardImage from './CardImage';
 import PostMeta from './PostMeta';
 import { cn } from '@/shared/utils';
 import type { PostSummary } from '@/lib/blog';
 
-/** Cover image, or an on-brand gradient placeholder when none is set. */
-function Cover({ src, title }: { src?: string; title: string }) {
-  if (!src) {
-    return (
-      <div className="relative flex aspect-[16/9] w-full items-center justify-center overflow-hidden bg-gradient-to-br from-bg-2 via-stroke/40 to-primary/20 p-6">
-        <span className="text-center text-sm font-semibold uppercase tracking-widest text-text-1/40">{title}</span>
-      </div>
-    );
-  }
-  return (
-    <div className="relative aspect-[16/9] w-full overflow-hidden">
-      <Image
-        src={src}
-        alt=""
-        fill
-        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 380px"
-        className="object-cover transition-transform duration-500 group-hover:scale-105"
-      />
-    </div>
-  );
-}
-
 export default function BlogCard({ post, className }: { post: PostSummary; className?: string }) {
+  // Fall back to the auto-generated social card when no cover image is set.
+  const cover = post.coverImage || `${post.url}/opengraph-image`;
+
   return (
     <article
       className={cn(
@@ -39,7 +20,13 @@ export default function BlogCard({ post, className }: { post: PostSummary; class
         href={post.url}
         className="flex flex-1 flex-col rounded-2xl focus:outline-none focus-visible:ring-1 focus-visible:ring-primary"
       >
-        <Cover src={post.coverImage} title={post.title} />
+        <div className="relative aspect-[16/9] w-full overflow-hidden">
+          <CardImage
+            src={cover}
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 380px"
+            className="group-hover:scale-105"
+          />
+        </div>
         <div className="flex flex-1 flex-col gap-3 p-5">
           {post.category && (
             <span className="text-xs font-semibold uppercase tracking-wider text-primary">{post.category}</span>

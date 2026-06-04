@@ -1,13 +1,16 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 
+import CardImage from './CardImage';
 import PostMeta from './PostMeta';
 import TagBadge from './TagBadge';
 import type { PostSummary } from '@/lib/blog';
 
 /** Large hero card for the most prominent (featured) post. */
 export default function FeaturedPost({ post }: { post: PostSummary }) {
+  // Fall back to the auto-generated social card when no cover image is set.
+  const cover = post.coverImage || `${post.url}/opengraph-image`;
+
   return (
     <article className="group relative overflow-hidden rounded-3xl border border-gray-1 bg-bg-2/40 transition-colors hover:border-stroke">
       <Link
@@ -15,18 +18,12 @@ export default function FeaturedPost({ post }: { post: PostSummary }) {
         className="grid rounded-3xl focus:outline-none focus-visible:ring-1 focus-visible:ring-primary lg:grid-cols-2"
       >
         <div className="relative aspect-[16/10] w-full overflow-hidden lg:aspect-auto lg:h-full">
-          {post.coverImage ? (
-            <Image
-              src={post.coverImage}
-              alt=""
-              fill
-              priority
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              className="object-cover transition-transform duration-500 group-hover:scale-105"
-            />
-          ) : (
-            <div className="h-full w-full bg-gradient-to-br from-bg-2 via-stroke/40 to-primary/20" />
-          )}
+          <CardImage
+            src={cover}
+            priority
+            sizes="(max-width: 1024px) 100vw, 50vw"
+            className="group-hover:scale-105"
+          />
         </div>
 
         <div className="flex flex-col justify-center gap-4 p-6 sm:p-8 lg:p-10">

@@ -14,6 +14,7 @@ const Dot = () => <span aria-hidden="true">·</span>;
 /** Byline row: author · date · reading time. */
 export default function PostMeta({ date, readingTime, author, className }: PostMetaProps) {
   const d = new Date(date);
+  const utcDay = new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
   return (
     <div className={cn('flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-text-1/55', className)}>
       {author && (
@@ -29,7 +30,7 @@ export default function PostMeta({ date, readingTime, author, className }: PostM
           <Dot />
         </>
       )}
-      <time dateTime={d.toISOString()}>{format(d, 'MMM d, yyyy')}</time>
+      <time dateTime={d.toISOString()}>{format(utcDay, 'MMM d, yyyy')}</time>
       {readingTime && (
         <>
           <Dot />
