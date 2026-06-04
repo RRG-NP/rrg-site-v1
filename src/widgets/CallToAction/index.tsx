@@ -18,9 +18,9 @@ const Index: FC<Props> = () => {
     <SectionOpacity classes="flex flex-col justify-center h-screen">
 
       <div className="mx-auto flex w-full max-w-[60vw] md:max-w-[90%] flex-1 flex-col items-center justify-center text-center px-4">
-        <h3 className="text-[4vw] md:text-[10vw] font-medium">LET&apos;S CONNECT</h3>
+        <h3 className="text-[4vw] md:text-[10vw] font-medium">LET&rsquo;S CONNECT</h3>
         <p className="mt-[0.6vw] md:mt-4 text-[1.7vw] md:text-[4vw] font-normal text-gray-300 md:leading-[1.5]">
-          Ready to bring your vision to life? Let&apos;s discuss your project and create something extraordinary together.
+          Ready to bring your vision to life? Let&rsquo;s discuss your project and create something extraordinary together.
         </p>
         
         <a 
@@ -32,6 +32,7 @@ const Index: FC<Props> = () => {
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
+            aria-hidden="true"
           >
             <path
               strokeLinecap="round"

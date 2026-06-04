@@ -104,7 +104,10 @@ const Index: FC<Props> = () => {
                   type={item.type || 'text'}
                   name={item.name}
                   id={item.label}
-                  className="h-[3vw] md:h-11 w-full appearance-none rounded-[0.25vw] md:rounded border-[0.125vw] border-primary/80 bg-transparent px-[1vw] md:px-3 py-[0.8vw] md:py-2.5 md:text-sm"
+                  autoComplete={item.autoComplete}
+                  inputMode={item.inputMode}
+                  spellCheck={item.spellCheck}
+                  className="h-[3vw] md:h-11 w-full appearance-none rounded-[0.25vw] md:rounded border-[0.125vw] border-primary/80 bg-transparent px-[1vw] md:px-3 py-[0.8vw] md:py-2.5 md:text-sm focus-visible:outline-none focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/50"
                   required={item.required}
                 />
               </div>
@@ -119,20 +122,25 @@ const Index: FC<Props> = () => {
                 onChange={({ target: { name, value } }) => setForm((prev) => ({ ...prev, [name]: value }))}
                 id="message"
                 name="message"
-                className="min-h-[10vw] md:min-h-[40vw] w-full resize-none border-[0.125vw] rounded-[0.125vw] text-[1.2vw] md:text-sm border-primary/80 bg-transparent px-[0.8vw] md:px-3 py-[0.6vw] md:py-2.5"
+                className="min-h-[10vw] md:min-h-[40vw] w-full resize-none border-[0.125vw] rounded-[0.125vw] text-[1.2vw] md:text-sm border-primary/80 bg-transparent px-[0.8vw] md:px-3 py-[0.6vw] md:py-2.5 focus-visible:outline-none focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/50"
               />
             </div>
           </div>
 
           {/* Error Message */}
-          {submitStatus && submitStatus.type === 'error' && (
-            <div className="mb-[2vw] md:mb-4 w-full rounded-[0.5vw] md:rounded-lg p-[1.5vw] md:p-3 text-center text-[1.2vw] md:text-sm bg-red-500/20 text-red-300 border border-red-500/50">
-              {submitStatus.message}
-            </div>
-          )}
+          <div aria-live="polite" className="w-full">
+            {submitStatus && submitStatus.type === 'error' && (
+              <div
+                role="alert"
+                className="mb-[2vw] md:mb-4 w-full rounded-[0.5vw] md:rounded-lg p-[1.5vw] md:p-3 text-center text-[1.2vw] md:text-sm bg-red-500/20 text-red-300 border border-red-500/50"
+              >
+                {submitStatus.message}
+              </div>
+            )}
+          </div>
 
           <Button
-            title={isSubmitting ? 'Submitting...' : 'Submit'}
+            title={isSubmitting ? 'Submitting…' : 'Submit'}
             type="submit"
             classes={`py-[1.2vw] md:py-3.5 px-[5vw] md:px-10 text-[1.1vw] md:text-sm ${isSubmitting ? 'bg-bg-1/50 cursor-not-allowed' : 'bg-bg-1/90 hover:bg-bg-1/80'
               }`}

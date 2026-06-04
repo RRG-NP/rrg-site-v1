@@ -25,6 +25,7 @@ const Index: FC<Props> = () => {
   const dimRef = useRef<HTMLParagraphElement>(null);
   const brightRef = useRef<HTMLParagraphElement>(null);
   const [lines, setLines] = useState<LineData[]>([]);
+  const [wrapWidth, setWrapWidth] = useState<number | null>(null);
 
 
   const measureLines = () => {
@@ -35,6 +36,7 @@ const Index: FC<Props> = () => {
     if (!textNode || textNode.nodeType !== Node.TEXT_NODE) return;
 
     const pRect = p.getBoundingClientRect();
+    setWrapWidth(p.offsetWidth);
     const range = document.createRange();
     range.selectNodeContents(textNode);
 
@@ -77,12 +79,19 @@ const Index: FC<Props> = () => {
     gsap.registerPlugin(ScrollTrigger);
 
     const isMobile = window.innerWidth < 768;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const ctx = gsap.context(() => {
       const lineEls = Array.from(
         sectionRef.current!.querySelectorAll<HTMLDivElement>('.bright-line'),
       );
       if (!lineEls.length) return;
+
+      // Reduced motion: reveal the bright text immediately, no scroll-driven animation.
+      if (prefersReducedMotion) {
+        gsap.set(lineEls, { clipPath: 'inset(0 0% 0 0)' });
+        return;
+      }
 
       // Reset all lines to hidden
       gsap.set(lineEls, { clipPath: 'inset(0 100% 0 0)' });
@@ -164,7 +173,7 @@ const Index: FC<Props> = () => {
                     style={{
                       top: -line.top,
                       left: -line.left,
-                      width: dimRef.current?.offsetWidth ?? 'auto',
+                      width: wrapWidth ?? 'auto',
                       whiteSpace: 'normal',
                     }}
                   >

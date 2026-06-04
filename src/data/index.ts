@@ -128,12 +128,23 @@ export const RADIO_FIELDS = [
   },
 ];
 
-export const INPUT_FIELDS = [
-  { label: 'Your name*', name: 'first', classes: 'inline-block !w-[calc(50%-2vw)] mr-[4vw] md:!w-full md:!mr-0', required: true },
-  { label: 'Phone*', name: 'phone', classes: 'inline-block !w-[calc(50%-2vw)] md:!w-full', type: 'number', required: true },
-  { label: 'Email*', name: 'email', classes: '', type: 'email' },
-  { label: 'Company name*', name: 'company', classes: '', required: true },
-  { label: 'Company website', name: 'websiteUrl', classes: '' },
+interface InputFieldConfig {
+  label: string;
+  name: string;
+  classes: string;
+  type?: string;
+  required?: boolean;
+  autoComplete?: string;
+  inputMode?: 'text' | 'tel' | 'email' | 'url' | 'numeric' | 'decimal' | 'search' | 'none';
+  spellCheck?: boolean;
+}
+
+export const INPUT_FIELDS: InputFieldConfig[] = [
+  { label: 'Your name*', name: 'first', classes: 'inline-block !w-[calc(50%-2vw)] mr-[4vw] md:!w-full md:!mr-0', required: true, autoComplete: 'name' },
+  { label: 'Phone*', name: 'phone', classes: 'inline-block !w-[calc(50%-2vw)] md:!w-full', type: 'tel', required: true, autoComplete: 'tel', inputMode: 'tel', spellCheck: false },
+  { label: 'Email*', name: 'email', classes: '', type: 'email', autoComplete: 'email', inputMode: 'email', spellCheck: false },
+  { label: 'Company name*', name: 'company', classes: '', required: true, autoComplete: 'organization', spellCheck: false },
+  { label: 'Company website', name: 'websiteUrl', classes: '', type: 'url', autoComplete: 'url', inputMode: 'url', spellCheck: false },
 ];
 
 export const BOOK_FORM_DEFAULT_STATE = {

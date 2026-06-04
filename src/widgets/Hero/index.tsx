@@ -1,6 +1,6 @@
 'use client';
 import { useRef, useEffect, useState } from 'react';
-import { useScroll, useTransform, motion, useSpring } from 'framer-motion';
+import { useScroll, useTransform, motion, useSpring, useReducedMotion } from 'framer-motion';
 import GridPattern from '@/components/ui/GridPattern';
 import FloatingParticles from '@/components/ui/FloatingParticles';
 
@@ -11,6 +11,7 @@ interface HeroProps {
 const Hero = ({ ready = true }: HeroProps) => {
   const containerRef = useRef<HTMLElement>(null);
   const [isMobile, setIsMobile] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -29,14 +30,14 @@ const Hero = ({ ready = true }: HeroProps) => {
   const mouseY = useSpring(0, springConfig);
 
   useEffect(() => {
-    if (isMobile) return;
+    if (isMobile || prefersReducedMotion) return;
     const handle = (e: MouseEvent) => {
       mouseX.set((e.clientX / window.innerWidth - 0.5) * 2);
       mouseY.set((e.clientY / window.innerHeight - 0.5) * 2);
     };
     window.addEventListener('mousemove', handle);
     return () => window.removeEventListener('mousemove', handle);
-  }, [mouseX, mouseY, isMobile]);
+  }, [mouseX, mouseY, isMobile, prefersReducedMotion]);
 
   const scrollOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
   const scrollScale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
@@ -79,9 +80,9 @@ const Hero = ({ ready = true }: HeroProps) => {
           className="relative z-20 flex flex-col items-center justify-center px-4 md:px-6 max-w-7xl mx-auto"
         >
           <motion.h1
-            initial={{ opacity: 0, y: 36 }}
-            animate={ready ? { opacity: 1, y: 0 } : { opacity: 0, y: 36 }}
-            transition={{ duration: 1.0, ease: [0.16, 1, 0.3, 1] }}
+            initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 36 }}
+            animate={ready ? { opacity: 1, y: 0 } : prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 36 }}
+            transition={{ duration: prefersReducedMotion ? 0.3 : 1.0, ease: [0.16, 1, 0.3, 1] }}
             className="relative text-center text-[15vw] md:text-[22vw] lg:text-[10vw] font-black text-white leading-[0.9] mb-4 md:mb-5"
             style={{
               textShadow: '0 0 80px rgba(255,255,255,0.3), 0 0 40px rgba(255,255,255,0.2)',
@@ -92,9 +93,9 @@ const Hero = ({ ready = true }: HeroProps) => {
           </motion.h1>
 
           <motion.p
-            initial={{ opacity: 0, y: 24 }}
-            animate={ready ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
-            transition={{ duration: 1.0, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 24 }}
+            animate={ready ? { opacity: 1, y: 0 } : prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 24 }}
+            transition={{ duration: prefersReducedMotion ? 0.3 : 1.0, delay: prefersReducedMotion ? 0 : 0.3, ease: [0.16, 1, 0.3, 1] }}
             className="text-center text-[4.5vw] md:text-[7vw] lg:text-[2.5vw] font-medium text-white/70 max-w-4xl px-6 leading-relaxed"
             style={{ transform: isMobile ? 'none' : 'translateZ(30px)' }}
           >
@@ -113,6 +114,7 @@ const Hero = ({ ready = true }: HeroProps) => {
           xmlns="http://www.w3.org/2000/svg"
           className="absolute bottom-0 w-full h-full"
           preserveAspectRatio="none"
+          aria-hidden="true"
         >
           <path
             d="M0 0C240 40 480 60 720 60C960 60 1200 40 1440 0V120H0V0Z"
@@ -131,12 +133,12 @@ const Hero = ({ ready = true }: HeroProps) => {
           transition={{ duration: 0.7, delay: 0.55, ease: [0.16, 1, 0.3, 1] }}
         >
           <motion.div
-            animate={{ y: [0, 6, 0] }}
+            animate={prefersReducedMotion ? undefined : { y: [0, 6, 0] }}
             transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
             className="flex flex-col items-center gap-1.5"
           >
             <span className="text-white/40 text-[9px] uppercase tracking-[0.35em]">Scroll</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="text-white/40">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="text-white/40" aria-hidden="true">
               <path
                 d="M12 5v14m0 0l-7-7m7 7l7-7"
                 stroke="currentColor"

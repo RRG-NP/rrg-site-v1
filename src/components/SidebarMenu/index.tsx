@@ -66,6 +66,7 @@ const Index: FC<Props> = ({ close }) => {
   return (
     <>
       <motion.div
+        id="sidebar-menu"
         variants={menuSlide}
         initial="initial"
         animate="enter"
