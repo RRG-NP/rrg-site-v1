@@ -13,7 +13,7 @@ text, so edit wording before it's used, not after.
 
 - [x] The End of CRUD Apps: What Developers Should Build Instead
 - [x] Why I stopped reaching for useEffect in React
-- [ ] I cut our LCP in half by deleting code, not adding it
+- [x] I cut our LCP in half by deleting code, not adding it
 - [ ] The 200ms that cost us 30% of signups: a web performance autopsy
 - [ ] Your site isn't slow — your JavaScript is lying to you about when it's ready
 - [ ] Lazy-loading everything made my site slower, and I should've seen it coming
