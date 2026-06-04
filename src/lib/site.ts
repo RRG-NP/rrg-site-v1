@@ -11,6 +11,8 @@ export const siteConfig = {
   blogPath: '/blog',
   feedPath: '/feed.xml',
   author: { name: 'RRG Tech', url: 'https://rrg.com.np' },
+  // Byline author for blog posts (links to the author's personal site).
+  blogAuthor: { name: 'Rohan Gautam', url: 'https://www.rohanrajgautam.com.np/' },
   social: {
     facebook: 'https://www.facebook.com/rrg.com.np',
     linkedin: 'https://www.linkedin.com/company/rrgnepal/',
