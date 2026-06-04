@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { motion, MotionConfig } from 'framer-motion';
 import { Search, X } from 'lucide-react';
 
 import BlogCard from './BlogCard';
@@ -33,11 +33,32 @@ export default function BlogIndex({ posts, featured, tags }: BlogIndexProps) {
   const [activeTags, setActiveTags] = useState<string[]>([]);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
-  // Seed the tag filter from a `?tag=` deep link (e.g. clicked from a post).
+  // Seed filter state from the URL so deep links (e.g. /blog?tag=React&q=hooks) and
+  // page refreshes restore the same view.
   useEffect(() => {
-    const tag = new URLSearchParams(window.location.search).get('tag');
-    if (tag && tags.includes(tag)) setActiveTags([tag]);
+    const params = new URLSearchParams(window.location.search);
+    const q = params.get('q') ?? '';
+    const tagParam = params.get('tag');
+    const urlTags = tagParam ? tagParam.split(',').filter((t) => tags.includes(t)) : [];
+    if (q) setQuery(q);
+    if (urlTags.length > 0) setActiveTags(urlTags);
   }, [tags]);
+
+  // Mirror the active filters back into the URL (shareable/bookmarkable). replaceState
+  // keeps the address bar in sync without a server round-trip or scroll jump.
+  const didMount = useRef(false);
+  useEffect(() => {
+    if (!didMount.current) {
+      didMount.current = true;
+      return;
+    }
+    const params = new URLSearchParams();
+    const q = query.trim();
+    if (q) params.set('q', q);
+    if (activeTags.length > 0) params.set('tag', activeTags.join(','));
+    const qs = params.toString();
+    window.history.replaceState(null, '', qs ? `${window.location.pathname}?${qs}` : window.location.pathname);
+  }, [query, activeTags]);
 
   const isFiltering = query.trim().length > 0 || activeTags.length > 0;
 
@@ -63,6 +84,7 @@ export default function BlogIndex({ posts, featured, tags }: BlogIndexProps) {
   };
 
   return (
+    <MotionConfig reducedMotion="user">
     <div className="flex flex-col gap-10">
       {/* Search + tag filters */}
       <div className="flex flex-col gap-5">
@@ -174,5 +196,6 @@ export default function BlogIndex({ posts, featured, tags }: BlogIndexProps) {
         </div>
       )}
     </div>
+    </MotionConfig>
   );
 }

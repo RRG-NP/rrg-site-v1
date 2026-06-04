@@ -22,6 +22,14 @@ html {
   color-scheme: dark;
 }
 
+// Disable purely decorative looping animations for users who prefer reduced motion.
+@media (prefers-reduced-motion: reduce) {
+  .animate-pulse,
+  .animate-pulse-slow {
+    animation: none !important;
+  }
+}
+
 body {
 }
 

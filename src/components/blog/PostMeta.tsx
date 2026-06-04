@@ -1,6 +1,13 @@
-import { format } from 'date-fns';
 import { cn } from '@/shared/utils';
 import { siteConfig } from '@/lib/site';
+
+// Locale-aware, UTC-pinned so server and client render identically (no hydration drift).
+const dateFormatter = new Intl.DateTimeFormat(siteConfig.locale.replace('_', '-'), {
+  month: 'short',
+  day: 'numeric',
+  year: 'numeric',
+  timeZone: 'UTC',
+});
 
 interface PostMetaProps {
   date: string;
@@ -14,7 +21,6 @@ const Dot = () => <span aria-hidden="true">·</span>;
 /** Byline row: author · date · reading time. */
 export default function PostMeta({ date, readingTime, author, className }: PostMetaProps) {
   const d = new Date(date);
-  const utcDay = new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
   return (
     <div className={cn('flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-text-1/55', className)}>
       {author && (
@@ -30,7 +36,7 @@ export default function PostMeta({ date, readingTime, author, className }: PostM
           <Dot />
         </>
       )}
-      <time dateTime={d.toISOString()}>{format(utcDay, 'MMM d, yyyy')}</time>
+      <time dateTime={d.toISOString()}>{dateFormatter.format(d)}</time>
       {readingTime && (
         <>
           <Dot />

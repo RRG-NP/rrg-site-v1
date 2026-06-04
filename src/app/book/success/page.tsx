@@ -1,7 +1,7 @@
 'use client';
 import { FC, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { motion } from 'framer-motion';
+import { motion, MotionConfig } from 'framer-motion';
 
 import Button from '@/components/ui/Button';
 import SectionOpacity from '@/components/ui/SectionOpacity';
@@ -33,6 +33,7 @@ const SuccessPage: FC<Props> = () => {
   };
 
   return (
+    <MotionConfig reducedMotion="user">
     <SectionOpacity classes="flex flex-col justify-center min-h-screen bg-gradient-to-b from-bg-1 to-bg-2 my-10">
       <div className="mx-auto flex w-full max-w-[70vw] md:max-w-[92vw] flex-1 flex-col items-center justify-center text-center px-[4vw] md:px-5">
         {/* Success Icon Animation */}
@@ -104,7 +105,7 @@ const SuccessPage: FC<Props> = () => {
             submitted, and our team is excited to review them.
           </p>
           <p className="text-[1.2vw] md:text-[3.5vw] leading-[1.6] text-text-1/70">
-            We&apos;ll get back to you within <span className="font-semibold text-primary">24-48 hours</span> to discuss
+            We&rsquo;ll get back to you within <span className="font-semibold text-primary">24&ndash;48 hours</span> to discuss
             your project in detail and explore how we can bring your vision to life.
           </p>
         </motion.div>
@@ -175,6 +176,7 @@ const SuccessPage: FC<Props> = () => {
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
+              aria-hidden="true"
             >
               <path
                 strokeLinecap="round"
@@ -201,7 +203,7 @@ const SuccessPage: FC<Props> = () => {
             btnClasses=""
           />
           <p className="text-[1vw] md:text-[3.2vw] text-text-1/50 mb-2">
-            Redirecting in <span className="font-semibold text-primary">{countdown}</span> seconds...
+            Redirecting in <span className="font-semibold text-primary">{countdown}</span> seconds…
           </p>
         </motion.div>
       </div>
@@ -253,6 +255,7 @@ const SuccessPage: FC<Props> = () => {
         </ul>
       </motion.footer>
     </SectionOpacity>
+    </MotionConfig>
   );
 };
 

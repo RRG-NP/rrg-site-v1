@@ -40,8 +40,9 @@ export default function TableOfContents({ headings }: { headings: TocHeading[] }
           <li key={heading.slug}>
             <a
               href={`#${heading.slug}`}
+              aria-current={activeId === heading.slug ? 'location' : undefined}
               className={cn(
-                'block border-l-2 py-1 pr-2 leading-snug transition-colors hover:text-text-1',
+                'block border-l-2 py-1 pr-2 leading-snug transition-colors hover:text-text-1 focus:outline-none focus-visible:ring-1 focus-visible:ring-primary',
                 heading.level === 3 ? 'pl-6' : 'pl-3',
                 activeId === heading.slug
                   ? 'border-primary font-medium text-primary'
