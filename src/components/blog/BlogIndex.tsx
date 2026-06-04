@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { motion, MotionConfig } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { Search, X } from 'lucide-react';
 
 import BlogCard from './BlogCard';
@@ -32,6 +32,7 @@ export default function BlogIndex({ posts, featured, tags }: BlogIndexProps) {
   const [query, setQuery] = useState('');
   const [activeTags, setActiveTags] = useState<string[]>([]);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const prefersReducedMotion = useReducedMotion();
 
   // Seed filter state from the URL so deep links (e.g. /blog?tag=React&q=hooks) and
   // page refreshes restore the same view.
@@ -84,7 +85,6 @@ export default function BlogIndex({ posts, featured, tags }: BlogIndexProps) {
   };
 
   return (
-    <MotionConfig reducedMotion="user">
     <div className="flex flex-col gap-10">
       {/* Search + tag filters */}
       <div className="flex flex-col gap-5">
@@ -102,7 +102,7 @@ export default function BlogIndex({ posts, featured, tags }: BlogIndexProps) {
             }}
             placeholder="Search articles…"
             aria-label="Search articles"
-            className="w-full rounded-full border border-gray-1 bg-bg-2/40 py-3 pl-12 pr-4 text-text-1 placeholder:text-text-1/40 transition-colors focus:border-primary/60 focus:outline-none focus:ring-1 focus:ring-primary"
+            className="w-full rounded-full border border-gray-1 bg-bg-2/40 py-3 pl-12 pr-4 text-text-1 transition-colors placeholder:text-text-1/40 focus:border-primary/60 focus:outline-none focus:ring-1 focus:ring-primary"
           />
         </div>
 
@@ -152,16 +152,13 @@ export default function BlogIndex({ posts, featured, tags }: BlogIndexProps) {
               {filtered.length} {filtered.length === 1 ? 'article' : 'articles'} found
             </p>
           )}
-          <motion.div
-            layout
-            className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
-          >
+          <motion.div layout className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {visible.map((post) => (
               <motion.div
                 key={post.slug}
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
+                transition={{ duration: prefersReducedMotion ? 0 : 0.3 }}
               >
                 <BlogCard post={post} className="h-full" />
               </motion.div>
@@ -196,6 +193,5 @@ export default function BlogIndex({ posts, featured, tags }: BlogIndexProps) {
         </div>
       )}
     </div>
-    </MotionConfig>
   );
 }

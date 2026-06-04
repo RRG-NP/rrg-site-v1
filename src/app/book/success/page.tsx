@@ -1,7 +1,7 @@
 'use client';
 import { FC, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { motion, MotionConfig } from 'framer-motion';
+import { motion, useReducedMotion, type Transition } from 'framer-motion';
 
 import Button from '@/components/ui/Button';
 import SectionOpacity from '@/components/ui/SectionOpacity';
@@ -11,6 +11,10 @@ interface Props {}
 const SuccessPage: FC<Props> = () => {
   const router = useRouter();
   const [countdown, setCountdown] = useState(20);
+  const prefersReducedMotion = useReducedMotion();
+  // Collapse every transition to instant for reduced-motion users. This only changes
+  // animation timing, not the rendered `initial` DOM — so it stays hydration-safe.
+  const t = (base: Transition): Transition => (prefersReducedMotion ? { duration: 0 } : base);
 
   useEffect(() => {
     // Countdown timer
@@ -33,19 +37,18 @@ const SuccessPage: FC<Props> = () => {
   };
 
   return (
-    <MotionConfig reducedMotion="user">
     <SectionOpacity classes="flex flex-col justify-center min-h-screen bg-gradient-to-b from-bg-1 to-bg-2 my-10">
       <div className="mx-auto flex w-full max-w-[70vw] md:max-w-[92vw] flex-1 flex-col items-center justify-center text-center px-[4vw] md:px-5">
         {/* Success Icon Animation */}
         <motion.div
           initial={{ scale: 0, rotate: -180 }}
           animate={{ scale: 1, rotate: 0 }}
-          transition={{
+          transition={t({
             type: 'spring',
             stiffness: 260,
             damping: 20,
             duration: 0.6,
-          }}
+          })}
           className="mb-[3vw] md:mb-8"
         >
           <div className="relative">
@@ -53,7 +56,7 @@ const SuccessPage: FC<Props> = () => {
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.3, duration: 0.5 }}
+              transition={t({ delay: 0.3, duration: 0.5 })}
               className="absolute inset-0 rounded-full bg-primary/20 blur-2xl"
             />
             
@@ -62,7 +65,7 @@ const SuccessPage: FC<Props> = () => {
               <motion.svg
                 initial={{ pathLength: 0 }}
                 animate={{ pathLength: 1 }}
-                transition={{ delay: 0.5, duration: 0.6, ease: 'easeInOut' }}
+                transition={t({ delay: 0.5, duration: 0.6, ease: 'easeInOut' })}
                 className="h-[6vw] w-[6vw] md:h-12 md:w-12"
                 viewBox="0 0 24 24"
                 fill="none"
@@ -83,7 +86,7 @@ const SuccessPage: FC<Props> = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8, duration: 0.5 }}
+          transition={t({ delay: 0.8, duration: 0.5 })}
         >
           <h1 className="mb-[1.5vw] md:mb-4 text-[4.5vw] md:text-[9vw] font-bold text-primary">
             Thank You!
@@ -97,7 +100,7 @@ const SuccessPage: FC<Props> = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1, duration: 0.5 }}
+          transition={t({ delay: 1, duration: 0.5 })}
           className="mb-[3vw] md:mb-8 max-w-[55vw] md:max-w-full"
         >
           <p className="mb-[1.5vw] md:mb-4 text-[1.4vw] md:text-[3.8vw] leading-[1.6] text-text-1/90">
@@ -114,7 +117,7 @@ const SuccessPage: FC<Props> = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.2, duration: 0.5 }}
+          transition={t({ delay: 1.2, duration: 0.5 })}
           className="mb-[3vw] md:mb-8 w-full max-w-[60vw] md:max-w-full"
         >
           <h3 className="mb-[1.5vw] md:mb-5 text-[1.8vw] md:text-[5vw] font-semibold text-primary">
@@ -142,7 +145,7 @@ const SuccessPage: FC<Props> = () => {
                 key={item.step}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.4 + index * 0.1, duration: 0.4 }}
+                transition={t({ delay: 1.4 + index * 0.1, duration: 0.4 })}
                 className="rounded-[0.5vw] md:rounded-xl border border-stroke bg-bg-2/50 p-[1.5vw] md:p-5 backdrop-blur-sm text-left md:text-left"
               >
                 <div className="mb-[0.5vw] md:mb-2 text-[2vw] md:text-[6vw] font-bold text-primary/50">
@@ -161,7 +164,7 @@ const SuccessPage: FC<Props> = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.7, duration: 0.5 }}
+          transition={t({ delay: 1.7, duration: 0.5 })}
           className="mb-[3vw] md:mb-8 rounded-[0.5vw] md:rounded-xl border border-stroke bg-bg-2/30 p-[2vw] md:p-5 backdrop-blur-sm w-full max-w-[60vw] md:max-w-full"
         >
           <p className="mb-[0.8vw] md:mb-3 text-[1.1vw] md:text-[3.5vw] text-text-1/80">
@@ -193,7 +196,7 @@ const SuccessPage: FC<Props> = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.8, duration: 0.5 }}
+          transition={t({ delay: 1.8, duration: 0.5 })}
           className="flex flex-col items-center gap-[1.5vw] md:gap-5"
         >
           <Button
@@ -212,7 +215,7 @@ const SuccessPage: FC<Props> = () => {
       <motion.footer
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 2, duration: 0.5 }}
+        transition={t({ delay: 2, duration: 0.5 })}
         className="mt-auto flex justify-between border-t border-t-gray-800 px-[5vw] md:px-6 py-[1.8vw] md:py-5 text-[1.6vw] md:text-[3.2vw] md:flex-col md:gap-3"
       >
         <div>
@@ -255,7 +258,6 @@ const SuccessPage: FC<Props> = () => {
         </ul>
       </motion.footer>
     </SectionOpacity>
-    </MotionConfig>
   );
 };
 
