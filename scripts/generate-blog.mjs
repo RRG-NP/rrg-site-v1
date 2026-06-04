@@ -100,7 +100,7 @@ tags:
   - TODO-tag-1
   - TODO-tag-2
   - TODO-tag-3
-author: RRG Tech
+author: Rohan Gautam
 ---`;
 
 const body = `

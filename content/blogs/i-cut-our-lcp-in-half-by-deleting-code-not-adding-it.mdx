@@ -1,0 +1,88 @@
+---
+title: I cut our LCP in half by deleting code, not adding it
+description: Our biggest performance win came from deleting a render-blocking script and a bloated hero, not from clever optimization. Here's what I removed and why.
+date: 2026-06-04
+published: true
+featured: false
+category: Engineering
+tags:
+  - Performance
+  - Web Development
+  - Next.js
+  - React
+author: Rohan Gautam
+---
+
+A client's marketing site took almost four seconds to show its hero image on a mid-range Android phone. I spent a day expecting to add things — a CDN tweak, a preload hint, some clever caching. The fix that actually halved our LCP was the opposite: I deleted code until the page had less to do.
+
+## What LCP is really measuring
+
+LCP — Largest Contentful Paint — is the moment the biggest thing in the viewport finishes rendering. On most sites that's the hero image or headline. Google treats anything under 2.5 seconds as good. Ours was sitting at 3.8s on a throttled connection, and the number barely moved no matter how much I optimized the image itself.
+
+That was the clue. The image wasn't slow; everything *in front of it* was slow. The browser couldn't paint the hero until it had finished parsing and running a pile of JavaScript it didn't need yet.
+
+## The render-blocking script nobody remembered
+
+The first thing I found was a third-party analytics snippet loaded in the `<head>` with a plain synchronous tag.
+
+```html
+<!-- This blocks the parser until the script downloads and runs. -->
+<script src="https://example-analytics.com/heavy.js"></script>
+```
+
+A synchronous script in the head stops HTML parsing dead until it downloads and executes. The browser literally cannot get to the hero markup until this finishes. Deleting it — the team had switched analytics providers a year earlier and never removed the old tag — took 600ms off LCP on its own. Zero code added.
+
+<Warning>
+A synchronous `<script>` in the `<head>` blocks everything below it from rendering. If you need third-party scripts, defer them, load them lazily, or move them out of the critical path entirely.
+</Warning>
+
+## A hero component that shipped a whole carousel
+
+The second culprit was our own code. The hero was a "flexible" component that imported a carousel library, a video player, and an animation package — so it could handle every layout the design team might someday want. This page used none of them. It showed one static image.
+
+But the JavaScript still downloaded, parsed, and hydrated before the browser considered the page interactive, and the bundle pushed back the paint. I replaced the do-everything component with about fifteen lines of markup that rendered the one thing the page used.
+
+```tsx
+// Before: one component, three heavy dependencies, none of them used here.
+import { Carousel, VideoPlayer, Animate } from '@/components/hero-kit';
+
+// After: the page only ever showed a static image, so that's all it ships.
+export function Hero({ src, alt, heading }) {
+  return (
+    <section className="hero">
+      <img src={src} alt={alt} fetchPriority="high" width={1200} height={600} />
+      <h1>{heading}</h1>
+    </section>
+  );
+}
+```
+
+That cut another 900ms. The lesson I keep relearning: a generic component that handles every case ships the cost of every case, even on pages that need one.
+
+## Why deleting beats optimizing
+
+Optimizing code makes slow code faster. Deleting code makes it free. There's no caching strategy faster than a request you never make, and no script as fast as one that isn't there. When I'm chasing LCP now, my first pass is a subtraction exercise — what is on this page that this page doesn't actually use?
+
+Most of the framework-level work compounds this. Rendering on the server and shipping fewer client components, the way I described in [building with the Next.js App Router](/blog/building-with-the-nextjs-app-router), means less JavaScript stands between the browser and the paint. And a lot of unnecessary client code traces back to patterns like fetching in effects — something I dug into in [why I stopped reaching for useEffect](/blog/why-i-stopped-reaching-for-useeffect-in-react).
+
+<Tip>
+Before you add a preload hint or a caching layer, open the network and coverage tabs and ask what you can remove. Unused JavaScript is almost always the cheapest win available.
+</Tip>
+
+## Frequently Asked Questions
+
+### What is a good LCP score?
+
+Google's Core Web Vitals consider an LCP of 2.5 seconds or less "good," measured at the 75th percentile of real users on mobile. Above 4 seconds is rated poor.
+
+### Why does JavaScript hurt LCP if my largest element is an image?
+
+The browser has to download, parse, and often execute blocking scripts before it can finish rendering the page — including your image. Heavy JavaScript delays the paint even when the largest element itself is lightweight.
+
+### How do I find unused code on a page?
+
+Chrome DevTools has a Coverage tab that shows how much of each loaded script and stylesheet went unused. Pair it with the Network tab to spot render-blocking requests, then question whether each one needs to be there at all.
+
+The next time a page feels slow, resist the urge to add something clever first. Open the page, list everything it loads, and delete what it doesn't use — you'll often find your biggest win was hiding in code nobody needed.
+
+If you're building something ambitious and want a partner who sweats these details, [get in touch](/book).

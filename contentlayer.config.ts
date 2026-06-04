@@ -128,7 +128,7 @@ export const Blog = defineDocumentType(() => ({
     tags: { type: 'list', of: { type: 'string' }, default: [] },
     category: { type: 'string', required: false },
     coverImage: { type: 'string', required: false },
-    author: { type: 'string', default: 'RRG Tech' },
+    author: { type: 'string', default: 'Rohan Gautam' },
     seoTitle: { type: 'string', required: false },
     seoDescription: { type: 'string', required: false },
     canonicalUrl: { type: 'string', required: false },

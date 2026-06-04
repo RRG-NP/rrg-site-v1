@@ -51,7 +51,7 @@ export function buildArticleJsonLd(post: Blog): JsonLd {
     image,
     datePublished: new Date(post.date).toISOString(),
     dateModified: new Date(post.updated || post.date).toISOString(),
-    author: { '@type': 'Organization', name: post.author, url: siteConfig.url },
+    author: { '@type': 'Person', name: post.author, url: siteConfig.blogAuthor.url },
     publisher: {
       '@type': 'Organization',
       name: siteConfig.name,

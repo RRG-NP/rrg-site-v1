@@ -1,5 +1,6 @@
 import { format } from 'date-fns';
 import { cn } from '@/shared/utils';
+import { siteConfig } from '@/lib/site';
 
 interface PostMetaProps {
   date: string;
@@ -17,7 +18,14 @@ export default function PostMeta({ date, readingTime, author, className }: PostM
     <div className={cn('flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-text-1/55', className)}>
       {author && (
         <>
-          <span>{author}</span>
+          <a
+            href={siteConfig.blogAuthor.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="transition-colors hover:text-text-1"
+          >
+            {author}
+          </a>
           <Dot />
         </>
       )}
