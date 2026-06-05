@@ -74,6 +74,15 @@ const nextConfig = {
         ],
       },
       {
+        // Service worker must never be cached long, or clients get stuck on an old
+        // version. Service-Worker-Allowed lets it control the whole origin scope.
+        source: '/sw.js',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=0, must-revalidate' },
+          { key: 'Service-Worker-Allowed', value: '/' },
+        ],
+      },
+      {
         // Override Content-Type for webmanifest — must come after /:path* so it wins
         source: '/site.webmanifest',
         headers: [

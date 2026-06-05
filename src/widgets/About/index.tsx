@@ -26,7 +26,10 @@ const Index: FC<Props> = () => {
   const brightRef = useRef<HTMLParagraphElement>(null);
   const [lines, setLines] = useState<LineData[]>([]);
   const [wrapWidth, setWrapWidth] = useState<number | null>(null);
+  const [staticReveal, setStaticReveal] = useState(false);
 
+  const shouldReveal = () =>
+    !window.matchMedia('(max-width: 768px)').matches && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const measureLines = () => {
     const p = dimRef.current;
@@ -53,6 +56,11 @@ const Index: FC<Props> = () => {
   };
 
   useEffect(() => {
+    if (!shouldReveal()) {
+      setStaticReveal(true);
+      return;
+    }
+
     // Wait for fonts/layout to settle before measuring
     const raf = requestAnimationFrame(() => {
       measureLines();
@@ -71,6 +79,7 @@ const Index: FC<Props> = () => {
 
 
   useEffect(() => {
+    if (!shouldReveal()) return;
     let lastWidth = window.innerWidth;
     const onResize = () => {
       if (window.innerWidth === lastWidth) return;
@@ -138,25 +147,22 @@ const Index: FC<Props> = () => {
     'grow-[4] basis-0 text-[2.3vw] md:text-[4.2vw] md:leading-[1.5] md:text-balance md:text-center';
 
   return (
-    <section id="about" className="relative bg-bg-1 py-[6vw] md:py-10 z-[2]">
+    <section id="about" className="relative z-[2] bg-bg-1 py-[6vw] md:py-10">
       <SectionOpacity classes="z-2">
         <SectionTitle title="ABOUT." classes="px-[6vw] md:px-6 pt-[3vw] md:pt-8 z-10" />
-        <div className="relative self-start px-[6vw] md:px-6 pb-[5vw] md:pb-10 pt-[3vw] md:pt-6">
-          <div className="flex space-x-[5vw] md:space-x-0 md:flex-col md:gap-6 md:items-center">
-
+        <div className="relative self-start px-[6vw] pb-[5vw] pt-[3vw] md:px-6 md:pb-10 md:pt-6">
+          <div className="flex space-x-[5vw] md:flex-col md:items-center md:gap-6 md:space-x-0">
             <div ref={sectionRef} className={`relative ${pClasses}`}>
-
               {/* Layer 1 — dim base text, drives layout */}
               <p ref={dimRef} className="text-white/25">
                 {DESCRIPTION}
               </p>
 
-              {/* Layer 2 — bright text, always rendered but fully clipped */}
               <p
                 ref={brightRef}
                 aria-hidden="true"
-                className="absolute inset-0 text-white pointer-events-none select-none overflow-hidden"
-                style={{ clipPath: 'inset(0 100% 0 0)' }}
+                className="pointer-events-none absolute inset-0 select-none overflow-hidden text-white"
+                style={{ clipPath: staticReveal ? 'inset(0 0% 0 0)' : 'inset(0 100% 0 0)' }}
               >
                 {DESCRIPTION}
               </p>
@@ -165,7 +171,7 @@ const Index: FC<Props> = () => {
               {lines.map((line, i) => (
                 <div
                   key={i}
-                  className="bright-line absolute text-white pointer-events-none select-none overflow-hidden"
+                  className="bright-line pointer-events-none absolute select-none overflow-hidden text-white"
                   style={{
                     top: line.top,
                     left: line.left,
@@ -192,13 +198,13 @@ const Index: FC<Props> = () => {
               ))}
             </div>
 
-            <div className="relative h-[20vw] w-[30vw] md:h-[56vw] md:max-w-[92%] md:text-center grow-[3] md:w-full basis-0 md:basis-[initial] bg-bg-2">
+            <div className="relative h-[20vw] w-[30vw] grow-[3] basis-0 bg-bg-2 md:h-[56vw] md:w-full md:max-w-[92%] md:basis-[initial] md:text-center">
               <Image
                 src="/images/hands_v2.webp"
                 alt="Team collaboration - hands working together"
                 fill
                 sizes="(max-width: 600px) 92vw, 30vw"
-                className="object-cover rounded-[0.125vw] md:rounded-sm hover:brightness-110 transition"
+                className="rounded-[0.125vw] object-cover transition hover:brightness-110 md:rounded-sm"
                 priority
               />
             </div>

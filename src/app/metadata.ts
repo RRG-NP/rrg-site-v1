@@ -35,6 +35,14 @@ export const metadata: Metadata = {
     },
   },
   manifest: '/site.webmanifest',
+  appleWebApp: {
+    capable: true,
+    title: 'RRG Tech',
+    statusBarStyle: 'black-translucent',
+  },
+  other: {
+    'mobile-web-app-capable': 'yes',
+  },
   icons: {
     icon: [
       { url: '/favicon.ico' },
@@ -77,7 +85,11 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: 'your-google-verification-code', // TODO: Replace with actual verification code
+    // Google Search Console is already verified out-of-band; emit a meta tag only
+    // if a code is supplied via env (avoids shipping an invalid placeholder tag).
+    ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
+      ? { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION }
+      : {}),
     other: {
       'msvalidate.01': 'FC160AC750D5E6D051F295C8ACD13670',
     },

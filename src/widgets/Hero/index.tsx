@@ -48,7 +48,7 @@ const Hero = ({ ready = true }: HeroProps) => {
   const gradientY = useTransform(mouseY, [-1, 1], [-100, 100]);
 
   return (
-    <section id="main" ref={containerRef} className="relative bg-black overflow-hidden">
+    <section id="main" ref={containerRef} className="relative overflow-hidden bg-black">
       <div className="relative flex h-screen w-full flex-col items-center justify-center overflow-hidden">
         <GridPattern />
         <FloatingParticles />
@@ -56,16 +56,16 @@ const Hero = ({ ready = true }: HeroProps) => {
         {!isMobile && (
           <motion.div
             style={{ x: gradientX, y: gradientY }}
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] pointer-events-none z-[5]"
+            className="pointer-events-none absolute left-1/2 top-1/2 z-[5] h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2"
           >
-            <div className="absolute inset-0 bg-gradient-radial from-blue-500/20 via-purple-500/15 to-transparent rounded-full blur-[120px] mix-blend-screen" />
-            <div className="absolute inset-0 bg-gradient-radial from-pink-500/15 via-blue-500/10 to-transparent rounded-full blur-[100px] mix-blend-screen animate-pulse-slow" />
+            <div className="absolute inset-0 rounded-full bg-gradient-radial from-blue-500/20 via-purple-500/15 to-transparent mix-blend-screen blur-[120px]" />
+            <div className="absolute inset-0 animate-pulse-slow rounded-full bg-gradient-radial from-pink-500/15 via-blue-500/10 to-transparent mix-blend-screen blur-[100px]" />
           </motion.div>
         )}
 
-        <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black/70 pointer-events-none z-10" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black/80 pointer-events-none z-10" />
-        <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black/60 pointer-events-none z-10" />
+        <div className="pointer-events-none absolute inset-0 z-10 bg-gradient-radial from-transparent via-transparent to-black/70" />
+        <div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-b from-black/50 via-transparent to-black/80" />
+        <div className="pointer-events-none absolute inset-0 z-10 bg-gradient-radial from-transparent via-transparent to-black/60" />
 
         <motion.div
           style={{
@@ -77,13 +77,13 @@ const Hero = ({ ready = true }: HeroProps) => {
             transformStyle: 'preserve-3d',
             perspective: 1000,
           }}
-          className="relative z-20 flex flex-col items-center justify-center px-4 md:px-6 max-w-7xl mx-auto"
+          className="relative z-20 mx-auto flex max-w-7xl flex-col items-center justify-center px-4 md:px-6"
         >
           <motion.h1
             initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 36 }}
             animate={ready ? { opacity: 1, y: 0 } : prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 36 }}
             transition={{ duration: prefersReducedMotion ? 0.3 : 1.0, ease: [0.16, 1, 0.3, 1] }}
-            className="relative text-center text-[15vw] md:text-[22vw] lg:text-[10vw] font-black text-white leading-[0.9] mb-4 md:mb-5"
+            className="relative mb-4 text-center text-[15vw] font-black leading-[0.9] text-white md:mb-5 md:text-[22vw] lg:text-[10vw]"
             style={{
               textShadow: '0 0 80px rgba(255,255,255,0.3), 0 0 40px rgba(255,255,255,0.2)',
               transform: isMobile ? 'none' : 'translateZ(50px)',
@@ -95,36 +95,37 @@ const Hero = ({ ready = true }: HeroProps) => {
           <motion.p
             initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 24 }}
             animate={ready ? { opacity: 1, y: 0 } : prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 24 }}
-            transition={{ duration: prefersReducedMotion ? 0.3 : 1.0, delay: prefersReducedMotion ? 0 : 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="text-center text-[4.5vw] md:text-[7vw] lg:text-[2.5vw] font-medium text-white/70 max-w-4xl px-6 leading-relaxed"
+            transition={{
+              duration: prefersReducedMotion ? 0.3 : 1.0,
+              delay: prefersReducedMotion ? 0 : 0.3,
+              ease: [0.16, 1, 0.3, 1],
+            }}
+            className="max-w-4xl px-6 text-center text-[4.5vw] font-medium leading-relaxed text-white/70 md:text-[7vw] lg:text-[2.5vw]"
             style={{ transform: isMobile ? 'none' : 'translateZ(30px)' }}
           >
             Creative Digital Agency in Kathmandu
           </motion.p>
         </motion.div>
 
-        <div className="absolute top-1/4 left-1/4 w-64 h-64 md:w-96 md:h-96 bg-blue-500/10 rounded-full blur-[100px] md:blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 md:w-96 md:h-96 bg-purple-500/10 rounded-full blur-[100px] md:blur-[120px] pointer-events-none" />
+        <div className="pointer-events-none absolute left-1/4 top-1/4 hidden h-64 w-64 rounded-full bg-blue-500/10 blur-[100px] md:block md:h-96 md:w-96 md:blur-[120px]" />
+        <div className="pointer-events-none absolute bottom-1/4 right-1/4 hidden h-64 w-64 rounded-full bg-purple-500/10 blur-[100px] md:block md:h-96 md:w-96 md:blur-[120px]" />
       </div>
 
-      <div className="absolute -bottom-2 left-0 right-0 h-24 md:h-32 lg:h-48 z-30">
+      <div className="absolute -bottom-2 left-0 right-0 z-30 h-24 md:h-32 lg:h-48">
         <svg
           viewBox="0 0 1440 120"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          className="absolute bottom-0 w-full h-full"
+          className="absolute bottom-0 h-full w-full"
           preserveAspectRatio="none"
           aria-hidden="true"
         >
-          <path
-            d="M0 0C240 40 480 60 720 60C960 60 1200 40 1440 0V120H0V0Z"
-            className="fill-bg-1"
-          />
+          <path d="M0 0C240 40 480 60 720 60C960 60 1200 40 1440 0V120H0V0Z" className="fill-bg-1" />
         </svg>
       </div>
 
       <div
-        className="absolute left-1/2 -translate-x-1/2 z-[50] flex flex-col items-center gap-2 pointer-events-none"
+        className="pointer-events-none absolute left-1/2 z-[50] flex -translate-x-1/2 flex-col items-center gap-2"
         style={{ bottom: 'clamp(5rem, 11vw, 9rem)' }}
       >
         <motion.div
@@ -137,7 +138,7 @@ const Hero = ({ ready = true }: HeroProps) => {
             transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
             className="flex flex-col items-center gap-1.5"
           >
-            <span className="text-white/40 text-[9px] uppercase tracking-[0.35em]">Scroll</span>
+            <span className="text-[9px] uppercase tracking-[0.35em] text-white/40">Scroll</span>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="text-white/40" aria-hidden="true">
               <path
                 d="M12 5v14m0 0l-7-7m7 7l7-7"
@@ -154,7 +155,7 @@ const Hero = ({ ready = true }: HeroProps) => {
           initial={{ scaleX: 0, opacity: 0 }}
           animate={ready ? { scaleX: 1, opacity: 1 } : { scaleX: 0, opacity: 0 }}
           transition={{ duration: 1.9, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-2 h-px w-16 md:w-24 lg:w-36 bg-gradient-to-r from-transparent via-white/45 to-transparent origin-center"
+          className="mt-2 h-px w-16 origin-center bg-gradient-to-r from-transparent via-white/45 to-transparent md:w-24 lg:w-36"
         />
       </div>
     </section>

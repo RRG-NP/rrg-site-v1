@@ -1,68 +1,74 @@
 import { siteConfig } from '@/lib/site';
 
 /**
- * Site-wide Organization + ProfessionalService structured data.
- * Rendered server-side in the root layout (replaces the old hand-written
- * <script> tags that lived in the client layout's <head>).
+ * Site-wide structured data, emitted once from the root layout as a single
+ * `@graph` so Organization, ProfessionalService, and WebSite are unified by
+ * `@id` (no duplicated, conflicting entities). Empty fields are intentionally
+ * omitted — partial addresses/phones are worse than absent ones.
  */
 export default function OrganizationJsonLd() {
-  const organization = {
-    '@context': 'https://schema.org',
-    '@type': 'Organization',
-    name: siteConfig.name,
-    url: siteConfig.url,
-    logo: `${siteConfig.url}/images/logo.png`,
-    description:
-      'Creative digital agency in Kathmandu specializing in web development, mobile app development, and design.',
-    address: {
-      '@type': 'PostalAddress',
-      addressLocality: 'Kathmandu',
-      addressCountry: 'NP',
-    },
-    sameAs: [siteConfig.social.facebook, siteConfig.social.linkedin, siteConfig.social.github],
-    contactPoint: {
-      '@type': 'ContactPoint',
-      contactType: 'Customer Service',
-      availableLanguage: ['English', 'Nepali'],
-    },
-  };
+  const orgId = `${siteConfig.url}/#organization`;
+  const siteId = `${siteConfig.url}/#website`;
+  const logoUrl = `${siteConfig.url}${siteConfig.logo}`;
 
-  const professionalService = {
+  const graph = {
     '@context': 'https://schema.org',
-    '@type': 'ProfessionalService',
-    name: siteConfig.name,
-    image: `${siteConfig.url}/images/logo.png`,
-    '@id': siteConfig.url,
-    url: siteConfig.url,
-    telephone: '',
-    address: {
-      '@type': 'PostalAddress',
-      streetAddress: '',
-      addressLocality: 'Kathmandu',
-      addressRegion: 'Bagmati',
-      postalCode: '',
-      addressCountry: 'NP',
-    },
-    geo: { '@type': 'GeoCoordinates', latitude: 27.7172, longitude: 85.324 },
-    openingHoursSpecification: {
-      '@type': 'OpeningHoursSpecification',
-      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-      opens: '09:00',
-      closes: '18:00',
-    },
-    priceRange: '$$',
+    '@graph': [
+      {
+        '@type': ['Organization', 'ProfessionalService'],
+        '@id': orgId,
+        name: siteConfig.name,
+        url: siteConfig.url,
+        logo: { '@type': 'ImageObject', url: logoUrl },
+        image: logoUrl,
+        description:
+          'Creative digital agency in Kathmandu specializing in web development, mobile app development, UI/UX design, and branding.',
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: 'Kathmandu',
+          addressRegion: 'Bagmati',
+          addressCountry: 'NP',
+        },
+        geo: { '@type': 'GeoCoordinates', latitude: 27.7172, longitude: 85.324 },
+        areaServed: { '@type': 'Country', name: 'Nepal' },
+        knowsAbout: [
+          'Web Development',
+          'Mobile App Development',
+          'React',
+          'React Native',
+          'Next.js',
+          'UI/UX Design',
+          'Branding',
+        ],
+        openingHoursSpecification: {
+          '@type': 'OpeningHoursSpecification',
+          dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+          opens: '09:00',
+          closes: '18:00',
+        },
+        priceRange: '$$',
+        email: 'hi@rrg.com.np',
+        sameAs: [siteConfig.social.facebook, siteConfig.social.linkedin, siteConfig.social.github],
+        contactPoint: {
+          '@type': 'ContactPoint',
+          contactType: 'Customer Service',
+          email: 'hi@rrg.com.np',
+          availableLanguage: ['English', 'Nepali'],
+        },
+      },
+      {
+        '@type': 'WebSite',
+        '@id': siteId,
+        url: siteConfig.url,
+        name: siteConfig.name,
+        description: siteConfig.description,
+        inLanguage: 'en',
+        publisher: { '@id': orgId },
+      },
+    ],
   };
 
   return (
-    <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(organization) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(professionalService) }}
-      />
-    </>
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(graph) }} />
   );
 }

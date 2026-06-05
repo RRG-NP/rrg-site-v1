@@ -108,7 +108,7 @@ export default function SplashScreen({ onReveal, onDone }: Props) {
 
     let cancelled = false;
     let lastCount = -1;
-    const duration = reducedMotion ? 600 : FILL_DURATION;
+    const duration = reducedMotion ? 600 : isMobile ? 1500 : FILL_DURATION;
 
     const startReveal = async () => {
       if (cancelled) return;

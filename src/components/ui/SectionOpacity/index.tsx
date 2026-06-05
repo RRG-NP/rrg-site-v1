@@ -1,5 +1,7 @@
 import { FC, ReactNode, useEffect, useRef, useState } from 'react';
-import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
+
+import { cn } from '@/shared/utils';
 
 interface Props {
   children: ReactNode;
@@ -7,16 +9,8 @@ interface Props {
   offset?: any;
 }
 
-const Index: FC<Props> = ({ children, classes, offset }) => {
+const AnimatedSection: FC<Props> = ({ children, classes, offset }) => {
   const container = useRef(null);
-  const prefersReducedMotion = useReducedMotion();
-  const [enabled, setEnabled] = useState(false);
-
-  useEffect(() => {
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    setEnabled(!isMobile && !prefersReducedMotion);
-  }, [prefersReducedMotion]);
-
   const { scrollYProgress } = useScroll({
     target: container,
     offset: offset || ['end 0.9', 'start 0.9'],
@@ -24,9 +18,29 @@ const Index: FC<Props> = ({ children, classes, offset }) => {
   const fade = useTransform(scrollYProgress, [0, 1], [1, 0]);
 
   return (
-    <motion.div className={classes} ref={container} style={{ opacity: enabled ? fade : 1 }}>
+    <motion.div className={cn('relative', classes)} ref={container} style={{ opacity: fade }}>
       {children}
     </motion.div>
+  );
+};
+
+const Index: FC<Props> = ({ children, classes, offset }) => {
+  const [enabled, setEnabled] = useState(false);
+
+  useEffect(() => {
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    setEnabled(!isMobile && !prefersReducedMotion);
+  }, []);
+
+  if (!enabled) {
+    return <div className={classes}>{children}</div>;
+  }
+
+  return (
+    <AnimatedSection classes={classes} offset={offset}>
+      {children}
+    </AnimatedSection>
   );
 };
 export default Index;
