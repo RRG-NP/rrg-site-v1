@@ -1,6 +1,8 @@
 import { FC, ReactNode, useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
+import { cn } from '@/shared/utils';
+
 interface Props {
   children: ReactNode;
   classes?: string;
@@ -16,7 +18,7 @@ const AnimatedSection: FC<Props> = ({ children, classes, offset }) => {
   const fade = useTransform(scrollYProgress, [0, 1], [1, 0]);
 
   return (
-    <motion.div className={classes} ref={container} style={{ opacity: fade }}>
+    <motion.div className={cn('relative', classes)} ref={container} style={{ opacity: fade }}>
       {children}
     </motion.div>
   );

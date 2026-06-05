@@ -34,8 +34,6 @@ export default function BlogIndex({ posts, featured, tags }: BlogIndexProps) {
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const prefersReducedMotion = useReducedMotion();
 
-  // Seed filter state from the URL so deep links (e.g. /blog?tag=React&q=hooks) and
-  // page refreshes restore the same view.
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const q = params.get('q') ?? '';
@@ -45,8 +43,6 @@ export default function BlogIndex({ posts, featured, tags }: BlogIndexProps) {
     if (urlTags.length > 0) setActiveTags(urlTags);
   }, [tags]);
 
-  // Mirror the active filters back into the URL (shareable/bookmarkable). replaceState
-  // keeps the address bar in sync without a server round-trip or scroll jump.
   const didMount = useRef(false);
   useEffect(() => {
     if (!didMount.current) {

@@ -40,6 +40,9 @@ export const metadata: Metadata = {
     title: 'RRG Tech',
     statusBarStyle: 'black-translucent',
   },
+  other: {
+    'mobile-web-app-capable': 'yes',
+  },
   icons: {
     icon: [
       { url: '/favicon.ico' },
