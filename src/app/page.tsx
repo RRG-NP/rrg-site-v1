@@ -18,7 +18,8 @@ export default function Home() {
   const [isPointerDevice, setIsPointerDevice] = useState(false);
 
   useIsomorphicLayoutEffect(() => {
-    if (sessionStorage.getItem(STORAGE_KEY)) {
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    if (isMobile || sessionStorage.getItem(STORAGE_KEY)) {
       setShowSplash(false);
       setHeroReady(true);
     }
