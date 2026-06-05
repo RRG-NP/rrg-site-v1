@@ -1,10 +1,11 @@
 'use client';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
 import { useRef } from 'react';
 
 export default function GridPattern() {
   const containerRef = useRef(null);
-  
+  const prefersReducedMotion = useReducedMotion();
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end start'],
@@ -12,11 +13,12 @@ export default function GridPattern() {
 
   const opacity = useTransform(scrollYProgress, [0, 0.5], [0.3, 0]);
   const scale = useTransform(scrollYProgress, [0, 0.5], [1, 1.2]);
+  const style = prefersReducedMotion ? { opacity: 0.3 } : { opacity, scale };
 
   return (
     <div ref={containerRef} className="absolute inset-0 overflow-hidden">
       <motion.div
-        style={{ opacity, scale }}
+        style={style}
         className="absolute inset-0"
       >
         {/* Dot grid pattern */}

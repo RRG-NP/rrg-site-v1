@@ -92,10 +92,10 @@ export default function SplashScreen({ onReveal, onDone }: Props) {
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // Lock scrolling while the splash is up.
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     const html = document.documentElement;
     const prevOverflow = html.style.overflow;
-    html.style.overflow = 'hidden';
+    if (!isMobile) html.style.overflow = 'hidden';
 
     // Size: ~46% of the smaller viewport edge, capped; backing store oversampled
     // so the logo stays crisp when it scales up during the reveal.
@@ -175,7 +175,7 @@ export default function SplashScreen({ onReveal, onDone }: Props) {
     return () => {
       cancelled = true;
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      html.style.overflow = prevOverflow;
+      if (!isMobile) html.style.overflow = prevOverflow;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
