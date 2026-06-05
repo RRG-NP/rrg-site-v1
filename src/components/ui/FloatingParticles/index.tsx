@@ -17,12 +17,12 @@ export default function FloatingParticles() {
   const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
-    if (prefersReducedMotion) {
+    const isMobile = window.innerWidth <= 768;
+    if (prefersReducedMotion || isMobile) {
       setParticles([]);
       return;
     }
-    const isMobile = window.innerWidth <= 768;
-    const count = isMobile ? 15 : 30;
+    const count = 30;
 
     setParticles(
       Array.from({ length: count }, (_, i) => ({
