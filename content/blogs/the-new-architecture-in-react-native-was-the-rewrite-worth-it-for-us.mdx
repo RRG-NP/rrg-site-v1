@@ -1,0 +1,71 @@
+---
+title: Was React Native's New Architecture worth the rewrite?
+description: We migrated a production app to React Native's New Architecture. Here's what the bridge rewrite actually bought us, and where it wasn't worth the pain.
+date: 2026-06-05
+published: true
+featured: false
+category: Engineering
+tags:
+  - React Native
+  - React
+  - Performance
+  - Mobile
+author: Rohan Gautam
+---
+
+For years, React Native had a quiet bottleneck most of us learned to ignore: the bridge. Every time JavaScript wanted to talk to native code, it serialized a message to JSON, sent it across asynchronously, and waited. The New Architecture rips that out. We spent a chunk of last year moving a real production app onto it, and the honest answer to "was it worth it" is: it depends on what was hurting you.
+
+## What the New Architecture actually changes
+
+The old model kept JavaScript and native in two separate worlds connected by a single async channel. That channel was fine for most screens and miserable for anything chatty — gestures, animations, or a list firing native calls on every frame.
+
+The New Architecture replaces it with a few pieces working together:
+
+- **JSI (JavaScript Interface)** — a C++ layer that lets JavaScript hold a direct reference to a native object and call its methods synchronously, no serialization.
+- **TurboModules** — native modules loaded lazily and called over JSI, so startup doesn't pay for modules a screen never touches.
+- **Fabric** — the new renderer, which finally makes React's concurrent features (Suspense, transitions) behave the way they do on the web.
+- **Codegen** — generates typed native interfaces from your TypeScript specs, so a mismatch fails at build time instead of crashing a user's phone.
+
+As of React Native 0.76 this stopped being opt-in. The New Architecture is the default now, which reframes the whole question — you're not deciding *whether* to adopt it, only *when*.
+
+## Where the rewrite paid off
+
+Our app had a gesture-heavy screen: a draggable canvas talking to a native module on every move. On the old bridge it felt slightly rubbery, and we'd thrown a lot of `useNativeDriver` workarounds at it. After the migration, synchronous JSI calls made that lag disappear without the hacks. That was the clearest win.
+
+Startup also improved, mostly because TurboModules stopped eagerly initializing modules we only used on two screens. Not dramatic, but measurable.
+
+<Note>
+The biggest gains showed up exactly where the bridge was the bottleneck — frequent JS-to-native calls. Screens that were just rendering React components and fetching data barely changed.
+</Note>
+
+## Where it cost us
+
+The migration tax was real. Our own native modules had to be rewritten as TurboModules with codegen specs, and that's fiddly work the first time. The interop layer kept most third-party libraries running, but a couple of older ones either lagged on support or had subtle behavior changes we only caught in testing.
+
+<Warning>
+Before committing, audit your dependencies. One unmaintained native library with no New Architecture support can hold an entire migration hostage. Check each one *before* you start, not after.
+</Warning>
+
+Build complexity went up too. More C++ in the pipeline means longer clean builds and error messages that assume you know how codegen wires things together. Nothing unsolvable — just a steeper week than we'd planned for.
+
+## So, was it worth it?
+
+For our gesture-heavy app, yes. For a colleague's mostly-static CRUD app, the migration itself would never have paid for itself on performance alone. The lesson echoes one I keep relearning: the best wins often come from removing a bottleneck, not adding cleverness — the same thing happened when [I cut our LCP in half by deleting code](/blog/i-cut-our-lcp-in-half-by-deleting-code-not-adding-it).
+
+My advice: if you're starting fresh, take the New Architecture without hesitation. If you have a stable app, migrate when you hit a bridge bottleneck or when a dependency forces it — but don't rewrite a calm app just to be current. And as with [knowing which effects you actually need in React](/blog/why-i-stopped-reaching-for-useeffect-in-react), the skill is telling the cases that matter from the ones that don't.
+
+## Frequently Asked Questions
+
+### Is the old bridge architecture being removed entirely?
+
+It's already deprecated and disabled by default from React Native 0.76 onward. New projects use the New Architecture out of the box, and the legacy bridge will be removed in a future release.
+
+### Do I have to rewrite all my native modules?
+
+Only the ones you maintain yourself, and the interop layer keeps many older modules working during the transition. Audit your dependencies first — an unmaintained native library is the most common thing that blocks a migration.
+
+### Will the New Architecture make my app faster automatically?
+
+Not on its own. The gains concentrate in code that talks to native frequently — gestures, animations, custom modules. A screen that just renders components and fetches data sees little difference.
+
+If you're weighing a migration like this and want a partner who's already felt the sharp edges, [get in touch](/book).
