@@ -107,8 +107,8 @@ const Hero = ({ ready = true }: HeroProps) => {
           </motion.p>
         </motion.div>
 
-        <div className="pointer-events-none absolute left-1/4 top-1/4 hidden h-64 w-64 rounded-full bg-blue-500/10 blur-[100px] md:block md:h-96 md:w-96 md:blur-[120px]" />
-        <div className="pointer-events-none absolute bottom-1/4 right-1/4 hidden h-64 w-64 rounded-full bg-purple-500/10 blur-[100px] md:block md:h-96 md:w-96 md:blur-[120px]" />
+        <div className="pointer-events-none absolute left-1/4 top-1/4 h-96 w-96 rounded-full bg-blue-500/10 blur-[120px] md:hidden" />
+        <div className="pointer-events-none absolute bottom-1/4 right-1/4 h-96 w-96 rounded-full bg-purple-500/10 blur-[120px] md:hidden" />
       </div>
 
       <div className="absolute -bottom-2 left-0 right-0 z-30 h-24 md:h-32 lg:h-48">
