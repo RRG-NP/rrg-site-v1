@@ -3,6 +3,7 @@ import { Montserrat } from 'next/font/google';
 
 import SmoothScroll from '@/components/SmoothScroll';
 import OrganizationJsonLd from '@/components/StructuredData/OrganizationJsonLd';
+import ServiceWorkerRegister from '@/components/ServiceWorkerRegister';
 
 import '@/shared/styles/globals.scss';
 
@@ -28,6 +29,7 @@ export default function RootLayout({
           <main className="relative">{children}</main>
         </SmoothScroll>
         <OrganizationJsonLd />
+        <ServiceWorkerRegister />
       </body>
     </html>
   );
