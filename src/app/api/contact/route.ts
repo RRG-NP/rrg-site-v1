@@ -41,10 +41,10 @@ const formatServiceType = (service: string): string => {
 // Format budget for display
 const formatBudget = (budget: string): string => {
   const budgetMap: Record<string, string> = {
-    '<1': '< $1000',
-    '2-4': '$2000 - $4000',
-    '4-8': '$4000 - $8000',
-    '8-10': '$8000 - $10000',
+    '<0.5': '< $500',
+    '1-2': '$1000 - $2000',
+    '2-5': '$2000 - $5000',
+    '5-10': '$5000 - $10000',
     '10+': '> $10000',
   };
   return budgetMap[budget] || budget;
@@ -172,7 +172,7 @@ export async function POST(req: NextRequest) {
             <h2 style="color: #333; border-bottom: 3px solid #4CAF50; padding-bottom: 15px; margin-top: 0;">
               New Project Request
             </h2>
-            
+
             <div style="background-color: #f9f9f9; padding: 20px; border-radius: 5px; margin: 20px 0;">
               <h3 style="color: #4CAF50; margin-top: 0;">Contact Information</h3>
               <table style="width: 100%; border-collapse: collapse;">

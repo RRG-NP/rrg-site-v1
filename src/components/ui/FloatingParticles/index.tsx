@@ -1,5 +1,5 @@
 'use client';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 
 interface Particle {
@@ -14,8 +14,13 @@ interface Particle {
 
 export default function FloatingParticles() {
   const [particles, setParticles] = useState<Particle[]>([]);
+  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
+    if (prefersReducedMotion) {
+      setParticles([]);
+      return;
+    }
     const isMobile = window.innerWidth <= 768;
     const count = isMobile ? 15 : 30;
 
@@ -30,7 +35,7 @@ export default function FloatingParticles() {
         driftX: Math.random() * 50 - 25,
       })),
     );
-  }, []);
+  }, [prefersReducedMotion]);
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">

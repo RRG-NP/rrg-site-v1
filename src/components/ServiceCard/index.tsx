@@ -1,17 +1,12 @@
 import { FC } from 'react';
-import { useInView } from 'react-intersection-observer';
 
 interface Props {
   card: any;
 }
 
 const Index: FC<Props> = ({ card: { title, services, description, number, classes } }) => {
-  const { ref } = useInView({
-    triggerOnce: true,
-    threshold: 0.6,
-  });
   return (
-    <div ref={ref} key={number} className="px-[6vw] md:px-6 pb-[9.5vw] md:pb-14 last:pb-[13vw] md:last:pb-20">
+    <div className="px-[6vw] md:px-6 pb-[9.5vw] md:pb-14 last:pb-[13vw] md:last:pb-20">
       <h4 className="text-[3.7vw] md:text-[9vw] md:mt-6 font-light">{title}</h4>
       <div className={`flex items-start space-x-[3vw] md:space-x-0 pt-[3vw] md:pt-5 first:border-none md:flex-col ${classes}`}>
         <div className="flex-1 md:mb-5">

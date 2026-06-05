@@ -57,7 +57,16 @@ const Index: FC<Props> = () => {
     const raf = requestAnimationFrame(() => {
       measureLines();
     });
-    return () => cancelAnimationFrame(raf);
+    let cancelled = false;
+    if (typeof document !== 'undefined' && 'fonts' in document) {
+      document.fonts.ready.then(() => {
+        if (!cancelled) measureLines();
+      });
+    }
+    return () => {
+      cancelled = true;
+      cancelAnimationFrame(raf);
+    };
   }, []);
 
 

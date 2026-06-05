@@ -40,7 +40,13 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
         cancelAnimationFrame(rafId);
       };
     }
-    // On mobile: just let native scroll drive ScrollTrigger directly
+
+    const onLoad = () => ScrollTrigger.refresh();
+    window.addEventListener('load', onLoad);
+    if (typeof document !== 'undefined' && 'fonts' in document) {
+      document.fonts.ready.then(() => ScrollTrigger.refresh());
+    }
+    return () => window.removeEventListener('load', onLoad);
   }, []);
 
   return <>{children}</>;
