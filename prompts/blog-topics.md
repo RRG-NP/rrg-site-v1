@@ -14,6 +14,7 @@ text, so edit wording before it's used, not after.
 - [x] The End of CRUD Apps: What Developers Should Build Instead
 - [x] Why I stopped reaching for useEffect in React
 - [x] I cut our LCP in half by deleting code, not adding it
+- [x] The New Architecture in React Native: was the rewrite worth it for us?
 - [ ] The 200ms that cost us 30% of signups: a web performance autopsy
 - [ ] Your site isn't slow — your JavaScript is lying to you about when it's ready
 - [ ] Lazy-loading everything made my site slower, and I should've seen it coming
@@ -24,7 +25,6 @@ text, so edit wording before it's used, not after.
 - [ ] Shipping on a 3G connection: what actually moved my Web Vitals
 - [ ] The underrated power of a good loading state — and how it tricks the brain
 - [ ] React Native in production: the warnings nobody put in the docs
-- [ ] The New Architecture in React Native: was the rewrite worth it for us?
 - [ ] How I got React Native cold-start under one second
 - [ ] Why your React Native list scrolls like garbage, and the fix that stuck
 - [ ] Expo vs bare React Native: the choice I regret and the one I don't
