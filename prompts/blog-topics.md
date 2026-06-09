@@ -15,6 +15,7 @@ text, so edit wording before it's used, not after.
 - [x] Why I stopped reaching for useEffect in React
 - [x] I cut our LCP in half by deleting code, not adding it
 - [x] The New Architecture in React Native: was the rewrite worth it for us?
+- [x] What I wish I knew before freelancing as a developer from Nepal
 - [ ] The 200ms that cost us 30% of signups: a web performance autopsy
 - [ ] Your site isn't slow — your JavaScript is lying to you about when it's ready
 - [ ] Lazy-loading everything made my site slower, and I should've seen it coming
@@ -64,4 +65,3 @@ text, so edit wording before it's used, not after.
 - [ ] Why I keep a decisions log in every project (and what goes in it)
 - [ ] Migrating a legacy app without the big-bang rewrite that kills morale
 - [ ] The git workflow that finally stuck for our small team
-- [ ] What I wish I knew before freelancing as a developer from Nepal
