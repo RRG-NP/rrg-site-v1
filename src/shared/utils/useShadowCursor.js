@@ -52,7 +52,7 @@ const initCursor = () => {
 
   // Some mobile GPUs expose WebGL2 but not EXT_color_buffer_float, so the
   // half-float render targets this simulation needs (RGBA16F has no fallback)
-  // come back null. Bail gracefully instead of throwing — an uncaught error
+  // come back null. Bail gracefully instead of throwing - an uncaught error
   // here propagates out of the mount effect and can take down the page.
   if (!gl || !ext || !ext.formatRGBA || !ext.formatRG || !ext.formatR) {
     return () => {};

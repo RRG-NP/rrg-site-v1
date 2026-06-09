@@ -2,7 +2,7 @@ import type { Blog } from '@/lib/blog';
 import { getAllPosts } from '@/lib/blog';
 import { siteConfig, absoluteUrl } from '@/lib/site';
 
-// Public, cacheable JSON — safe to expose cross-origin so other sites can fetch it.
+// Public, cacheable JSON - safe to expose cross-origin so other sites can fetch it.
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Methods': 'GET, OPTIONS',

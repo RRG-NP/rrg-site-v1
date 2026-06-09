@@ -4,7 +4,7 @@ import { siteConfig } from '@/lib/site';
  * Site-wide structured data, emitted once from the root layout as a single
  * `@graph` so Organization, ProfessionalService, and WebSite are unified by
  * `@id` (no duplicated, conflicting entities). Empty fields are intentionally
- * omitted — partial addresses/phones are worse than absent ones.
+ * omitted - partial addresses/phones are worse than absent ones.
  */
 export default function OrganizationJsonLd() {
   const orgId = `${siteConfig.url}/#organization`;

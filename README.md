@@ -38,13 +38,13 @@ RRG Tech is a leading creative digital agency specializing in:
 
 ## 📚 Libraries
 
-- **[Next.js](https://nextjs.org/)** — React framework for production
-- **[TailwindCSS](https://tailwindcss.com/)** — Utility-first CSS framework
-- **[GSAP](https://greensock.com/gsap/)** — Professional-grade animation library
-- **[Framer Motion](https://www.framer.com/motion/)** — Declarative animations for React
-- **[Lenis](https://github.com/darkroomengineering/lenis)** — Smooth scroll library
-- **[Edil Ozi](https://github.com/Edil-ozi/edil-ozi)** — Animated React components
-- **[shadcn/ui](https://ui.shadcn.dev/)** — Customizable UI components
+- **[Next.js](https://nextjs.org/)** - React framework for production
+- **[TailwindCSS](https://tailwindcss.com/)** - Utility-first CSS framework
+- **[GSAP](https://greensock.com/gsap/)** - Professional-grade animation library
+- **[Framer Motion](https://www.framer.com/motion/)** - Declarative animations for React
+- **[Lenis](https://github.com/darkroomengineering/lenis)** - Smooth scroll library
+- **[Edil Ozi](https://github.com/Edil-ozi/edil-ozi)** - Animated React components
+- **[shadcn/ui](https://ui.shadcn.dev/)** - Customizable UI components
 
 ## 🚀 Running the Project
 

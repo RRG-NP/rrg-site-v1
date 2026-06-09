@@ -7,7 +7,7 @@ const nextConfig = {
     // Remove console logs in production
     removeConsole: process.env.NODE_ENV === 'production',
   },
-  
+
   // Image optimization
   images: {
     formats: ['image/avif', 'image/webp'],
@@ -24,27 +24,27 @@ const nextConfig = {
           // HSTS - Force HTTPS
           {
             key: 'Strict-Transport-Security',
-            value: 'max-age=63072000; includeSubDomains; preload'
+            value: 'max-age=63072000; includeSubDomains; preload',
           },
           // Prevent clickjacking
           {
             key: 'X-Frame-Options',
-            value: 'SAMEORIGIN'
+            value: 'SAMEORIGIN',
           },
           // XSS Protection
           {
             key: 'X-Content-Type-Options',
-            value: 'nosniff'
+            value: 'nosniff',
           },
           // Referrer Policy
           {
             key: 'Referrer-Policy',
-            value: 'strict-origin-when-cross-origin'
+            value: 'strict-origin-when-cross-origin',
           },
           // Permissions Policy
           {
             key: 'Permissions-Policy',
-            value: 'camera=(), microphone=(), geolocation=()'
+            value: 'camera=(), microphone=(), geolocation=()',
           },
           // Content Security Policy
           {
@@ -58,19 +58,19 @@ const nextConfig = {
               "connect-src 'self'",
               "frame-ancestors 'self'",
               "base-uri 'self'",
-              "form-action 'self'"
-            ].join('; ')
+              "form-action 'self'",
+            ].join('; '),
           },
           // Cross-Origin-Opener-Policy
           {
             key: 'Cross-Origin-Opener-Policy',
-            value: 'same-origin'
+            value: 'same-origin',
           },
           // Cross-Origin-Resource-Policy
           {
             key: 'Cross-Origin-Resource-Policy',
-            value: 'same-origin'
-          }
+            value: 'same-origin',
+          },
         ],
       },
       {
@@ -83,7 +83,7 @@ const nextConfig = {
         ],
       },
       {
-        // Override Content-Type for webmanifest — must come after /:path* so it wins
+        // Override Content-Type for webmanifest - must come after /:path* so it wins
         source: '/site.webmanifest',
         headers: [
           {

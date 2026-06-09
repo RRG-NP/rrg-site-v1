@@ -88,7 +88,7 @@ if (args[0] === '--done') {
 // Default: print the next available topic.
 const open = openTopics(content);
 if (open.length === 0) {
-  console.error('Backlog empty — add topics to prompts/blog-topics.md.');
+  console.error('Backlog empty - add topics to prompts/blog-topics.md.');
   process.exit(2);
 }
 console.log(open[0]);

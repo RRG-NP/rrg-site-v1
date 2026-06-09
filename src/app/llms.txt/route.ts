@@ -2,7 +2,7 @@ import { getAllPosts } from '@/lib/blog';
 import { siteConfig, absoluteUrl } from '@/lib/site';
 
 /**
- * `/llms.txt` — a machine-readable site overview for LLMs and AI search/retrieval
+ * `/llms.txt` - a machine-readable site overview for LLMs and AI search/retrieval
  * systems (llmstxt.org convention). Lists the canonical entry points and every
  * published post so an agent can map the site without crawling/JS execution.
  *

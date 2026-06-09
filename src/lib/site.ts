@@ -1,7 +1,7 @@
 /** Single source of truth for site-wide identity used across SEO, feeds, and JSON-LD. */
 export const siteConfig = {
   name: 'RRG Tech',
-  title: 'RRG Tech — Creative Digital Agency in Kathmandu',
+  title: 'RRG Tech - Creative Digital Agency in Kathmandu',
   description:
     'RRG Tech is a creative digital agency in Kathmandu specializing in web development, mobile apps, UI/UX design, and branding.',
   url: 'https://rrg.com.np',

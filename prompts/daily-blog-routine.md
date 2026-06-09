@@ -1,7 +1,7 @@
 # Daily blog routine
 
 This is the playbook the scheduled agent runs every morning. It generates one publish-ready
-post and opens a **PR for a human to merge** — it never merges or deploys itself. Merging the
+post and opens a **PR for a human to merge** - it never merges or deploys itself. Merging the
 PR is what puts the post online (the site builds from `main`).
 
 Work from the repo root. If any step fails, stop and report the failure (don't push a broken
@@ -19,7 +19,7 @@ post).
    node scripts/next-blog-topic.mjs
    ```
    Capture the printed topic as `$TOPIC`. If the script exits 2 ("backlog empty"), stop and
-   report that the backlog needs new topics — do not invent one.
+   report that the backlog needs new topics - do not invent one.
 
 3. **Scaffold a publish-ready file.**
    ```bash
@@ -37,7 +37,7 @@ post).
      one closing `/book` CTA.
    - Leave `published: true` (already set by `--publish`).
 
-5. **Validate — this is the gate.**
+5. **Validate - this is the gate.**
    ```bash
    npm run validate-blog -- $SLUG
    ```
@@ -66,7 +66,7 @@ post).
      --body "Automated daily draft for $DATE. Topic: $TOPIC.
 
    - Validated: \`npm run validate-blog -- $SLUG\` passed (0 errors).
-   - published: true — merging this PR puts it live at /blog/$SLUG.
+   - published: true - merging this PR puts it live at /blog/$SLUG.
    - Please skim for voice and accuracy before merging." \
      --base main
    ```
@@ -76,7 +76,7 @@ post).
 
 ## Guardrails
 - Never run `gh pr merge`, never push to `main`, never deploy.
-- One post per run. If the slug already exists, `generate-blog` will refuse — pick the next
+- One post per run. If the slug already exists, `generate-blog` will refuse - pick the next
   topic instead and report the skip.
 - If validation can't reach 0 errors after a couple of honest attempts, push nothing and
   report the problem.
