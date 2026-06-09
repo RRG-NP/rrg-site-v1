@@ -10,10 +10,7 @@ interface Props {}
 
 const Index: FC<Props> = () => {
   return (
-    <section
-      id="approach"
-      className="relative z-[2] border-t border-gray-1 bg-bg-1 py-[6vw] pb-[12vw] md:py-10 md:pb-16"
-    >
+    <section id="approach" className="relative z-[2] bg-bg-1 py-[6vw] pb-[12vw] md:py-10 md:pb-16">
       <SectionOpacity>
         <div className="flex items-end justify-between gap-[6vw] px-[6vw] pt-[2.5vw] md:flex-col md:items-start md:gap-4 md:px-6 md:pt-8">
           <SectionTitle title="APPROACH." classes="shrink-0" />
