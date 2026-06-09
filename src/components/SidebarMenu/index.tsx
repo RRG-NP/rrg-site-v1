@@ -71,16 +71,15 @@ const Index: FC<Props> = ({ close }) => {
         initial="initial"
         animate="enter"
         exit="exit"
-        className="fixed right-0 top-0 z-[4000] h-[100svh] w-[80vw] sm:w-[60vw] md:w-[88vw] lg:w-[32vw] bg-gray-1 flex flex-col px-8 sm:px-10 md:px-7 pt-24 md:pt-20 pb-[max(2.5rem,env(safe-area-inset-bottom,0px)+1.5rem)] text-text-1"
+        className="fixed right-0 top-0 z-[4000] flex h-[100svh] w-[80vw] flex-col bg-gray-1 px-8 pb-[max(2.5rem,env(safe-area-inset-bottom,0px)+1.5rem)] pt-24 text-text-1 sm:w-[60vw] sm:px-10 md:w-[88vw] md:px-7 md:pt-20 lg:w-[32vw]"
       >
-
         {/* Nav label */}
-        <div className="w-full border-b border-white/20 uppercase text-white/50 pb-2 mb-6 md:mb-5">
-          <h3 className="text-xs md:text-[3vw] tracking-widest">Navigation</h3>
+        <div className="mb-6 w-full border-b border-white/20 pb-2 uppercase text-white/50 md:mb-5">
+          <h3 className="text-xs tracking-widest md:text-[3vw]">Navigation</h3>
         </div>
 
         {/* Nav links */}
-        <nav className="flex flex-col gap-4 md:gap-5 flex-1" onMouseLeave={() => setSelectedIndicator(null)}>
+        <nav className="flex flex-1 flex-col gap-6 md:gap-5" onMouseLeave={() => setSelectedIndicator(null)}>
           {NAV_ITEMS.map((item, index) => (
             <CustomLink
               handleClick={() => handleNav(item)}
@@ -93,11 +92,11 @@ const Index: FC<Props> = ({ close }) => {
         </nav>
 
         {/* Connect section */}
-        <div className="flex flex-col gap-3 mt-auto md:mt-6">
-          <div className="w-full border-b border-white/20 uppercase text-white/50 pb-2 mb-1">
-            <h3 className="text-xs md:text-[3vw] tracking-widest">Connect</h3>
+        <div className="mt-auto flex flex-col gap-3 md:mt-6">
+          <div className="mb-1 w-full border-b border-white/20 pb-2 uppercase text-white/50">
+            <h3 className="text-xs tracking-widest md:text-[3vw]">Connect</h3>
           </div>
-          <div className="flex items-center gap-3 md:gap-4">
+          <div className="ml-5 flex items-center gap-3 md:gap-4">
             {SOCIAL_LINKS.map(({ label, href, icon }) => (
               <Link
                 key={label}
@@ -105,9 +104,9 @@ const Index: FC<Props> = ({ close }) => {
                 target="_blank"
                 rel="noreferrer"
                 aria-label={label}
-                className="flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/10 hover:bg-white/20 active:bg-white/30 transition text-white"
+                className="flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20 active:bg-white/30 md:h-12 md:w-12"
               >
-                <span className="md:[&>svg]:w-6 md:[&>svg]:h-6">{icon}</span>
+                <span className="md:[&>svg]:h-6 md:[&>svg]:w-6">{icon}</span>
               </Link>
             ))}
           </div>
