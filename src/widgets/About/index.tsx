@@ -100,9 +100,7 @@ const Index: FC<Props> = () => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const ctx = gsap.context(() => {
-      const lineEls = Array.from(
-        sectionRef.current!.querySelectorAll<HTMLDivElement>('.bright-line'),
-      );
+      const lineEls = Array.from(sectionRef.current!.querySelectorAll<HTMLDivElement>('.bright-line'));
       if (!lineEls.length) return;
 
       // Reduced motion: reveal the bright text immediately, no scroll-driven animation.
@@ -114,27 +112,21 @@ const Index: FC<Props> = () => {
       // Reset all lines to hidden
       gsap.set(lineEls, { clipPath: 'inset(0 100% 0 0)' });
 
-      // Single timeline — lines are strictly sequential, line N cannot
+      // Single timeline - lines are strictly sequential, line N cannot
       // start until line N-1 is 100% done, regardless of scrub lag.
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
-          // Start when section top enters viewport at 80%
-          start: isMobile ? 'top 80%' : 'top 65%',
-          // End when section center reaches middle of viewport — all lines done by then
-          end: isMobile ? 'center 40%' : 'center 50%',
-          scrub: isMobile ? true : 1.5,
+          start: isMobile ? 'top 80%' : 'top 75%',
+          end: isMobile ? '+=80%' : '+=65%',
+          scrub: isMobile ? true : 0.5,
           invalidateOnRefresh: true,
         },
       });
 
       lineEls.forEach((el) => {
-        tl.fromTo(
-          el,
-          { clipPath: 'inset(0 100% 0 0)' },
-          { clipPath: 'inset(0 0% 0 0)', ease: 'none', duration: 1 },
-        );
-        // No overlap — next line starts at the exact end of this one
+        tl.fromTo(el, { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', ease: 'none', duration: 1 });
+        // No overlap - next line starts at the exact end of this one
       });
     }, sectionRef);
 
@@ -153,7 +145,7 @@ const Index: FC<Props> = () => {
         <div className="relative self-start px-[6vw] pb-[5vw] pt-[3vw] md:px-6 md:pb-10 md:pt-6">
           <div className="flex space-x-[5vw] md:flex-col md:items-center md:gap-6 md:space-x-0">
             <div ref={sectionRef} className={`relative ${pClasses}`}>
-              {/* Layer 1 — dim base text, drives layout */}
+              {/* Layer 1 - dim base text, drives layout */}
               <p ref={dimRef} className="text-white/25">
                 {DESCRIPTION}
               </p>
@@ -167,7 +159,7 @@ const Index: FC<Props> = () => {
                 {DESCRIPTION}
               </p>
 
-              {/* Layer 3 — per-line bright clips, revealed sequentially by GSAP */}
+              {/* Layer 3 - per-line bright clips, revealed sequentially by GSAP */}
               {lines.map((line, i) => (
                 <div
                   key={i}

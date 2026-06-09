@@ -118,7 +118,7 @@ export default function SplashScreen({ onReveal, onDone }: Props) {
         if (reducedMotion) {
           await overlayControls.start({ opacity: 0, transition: { duration: 0.45 } });
         } else {
-          // Subtle dissolve — a gentle "breath" + fade that hands off to the
+          // Subtle dissolve - a gentle "breath" + fade that hands off to the
           // home screen fading in behind. No jarring zoom.
           await Promise.all([
             logoControls.start({

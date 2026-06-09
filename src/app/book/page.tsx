@@ -3,9 +3,9 @@ import type { Metadata } from 'next';
 import BookForm from '@/widgets/BookForm';
 import { siteConfig } from '@/lib/site';
 
-const BOOK_TITLE = 'Start a Project — RRG Tech';
+const BOOK_TITLE = 'Start a Project - RRG Tech';
 const BOOK_DESCRIPTION =
-  'Tell us about your project. Book a free consultation with RRG Tech for web development, mobile apps, UI/UX design, or branding in Kathmandu — we reply within 24–48 hours.';
+  'Tell us about your project. Book a free consultation with RRG Tech for web development, mobile apps, UI/UX design, or branding in Kathmandu - we reply within 24–48 hours.';
 
 // Without an explicit metadata export this page would inherit the root canonical
 // ("/") and the homepage title/OG card. Set them so /book stands on its own.

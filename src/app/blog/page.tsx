@@ -4,9 +4,9 @@ import BlogIndex from '@/components/blog/BlogIndex';
 import { getAllPosts, getAllTags, getFeaturedPosts, toSummary } from '@/lib/blog';
 import { siteConfig } from '@/lib/site';
 
-const BLOG_TITLE = 'The RRG Tech Blog — Web & Mobile Development, AI, Performance';
+const BLOG_TITLE = 'The RRG Tech Blog - Web & Mobile Development, AI, Performance';
 const BLOG_DESCRIPTION =
-  'Practical, opinionated writing on web and mobile development, React and React Native, AI for developers, performance on both web and mobile, design systems, and accessibility — from the RRG Tech team.';
+  'Practical, opinionated writing on web and mobile development, React and React Native, AI for developers, performance on both web and mobile, design systems, and accessibility - from the RRG Tech team.';
 
 export const metadata: Metadata = {
   // Set explicitly (the layout's title template only applies to child segments).
@@ -71,7 +71,7 @@ export default function BlogPage() {
         <h1 className="text-4xl font-extrabold leading-tight text-text-1 sm:text-5xl">Insights & ideas</h1>
         <p className="mt-4 text-lg text-text-1/60">
           Practical, opinionated writing on web and mobile development, AI for developers, performance enhancement, and
-          system architecture — grounded in the work we ship.
+          system architecture - grounded in the work we ship.
         </p>
       </header>
 

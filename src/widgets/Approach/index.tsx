@@ -17,12 +17,12 @@ const Index: FC<Props> = () => {
       <SectionOpacity>
         <div className="flex items-end justify-between gap-[6vw] px-[6vw] pt-[2.5vw] md:flex-col md:items-start md:gap-4 md:px-6 md:pt-8">
           <SectionTitle title="APPROACH." classes="shrink-0" />
-          <p className="tab:text-[0.95rem] mb-2 max-w-[24vw] text-right text-[1.1vw] font-light leading-[1.6] text-white/40 md:max-w-full md:text-left md:text-[3.6vw]">
-            Five steps from a first conversation to a product we hand over.
+          <p className="mb-2 max-w-[24vw] text-right text-[1.1vw] font-light leading-[1.6] text-white/40 md:max-w-full md:text-left md:text-[3.6vw] tab:text-[0.95rem]">
+            {/* Five steps from a first conversation to a product we hand over. */}
           </p>
         </div>
 
-        <div className="tab:pt-12 px-[6vw] pt-[5vw] md:px-6 md:pt-10">
+        <div className="px-[6vw] pt-[5vw] md:px-6 md:pt-10 tab:pt-12">
           <ProcessTimeline steps={APPROACH_CARDS} />
         </div>
       </SectionOpacity>

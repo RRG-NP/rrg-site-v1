@@ -36,7 +36,7 @@ const ALLOWED_COMPONENTS = new Set(['Callout', 'Note', 'Info', 'Tip', 'Warning',
 const ALLOWED_CATEGORIES = new Set(['Engineering', 'Design', 'Announcements']);
 const KNOWN_BOOLEANS = ['published', 'featured'];
 
-// Tell-tale AI filler — see docs/blog-writing-guide.md §4. Flagged as warnings.
+// Tell-tale AI filler - see docs/blog-writing-guide.md §4. Flagged as warnings.
 const AI_SLOP_PHRASES = [
   "in today's fast-paced world",
   'it is important to note',
@@ -203,14 +203,14 @@ function validateFile(filePath, knownSlugs) {
   if (typeof data.description === 'string') {
     const len = data.description.length;
     if (data.description.startsWith('TODO')) {
-      warnings.push('description is still the TODO placeholder — draft not yet written.');
+      warnings.push('description is still the TODO placeholder - draft not yet written.');
     } else if (len < 120 || len > 160) {
       warnings.push(`description is ${len} chars (recommended 120–160).`);
     }
   }
   const tags = Array.isArray(data.tags) ? data.tags : [];
   if (tags.some((t) => /^TODO/.test(t))) {
-    warnings.push('tags still contain TODO placeholders — draft not yet written.');
+    warnings.push('tags still contain TODO placeholders - draft not yet written.');
   } else if (tags.length < 3) {
     warnings.push(`only ${tags.length} tag(s) (recommended 3–6).`);
   } else if (tags.length > 6) {
@@ -247,7 +247,7 @@ function validateFile(filePath, knownSlugs) {
     prevLevel = level;
   }
   if (sawH1) {
-    errors.push('Body contains an H1 ("# ..."). The title frontmatter is the only H1 — start at "##".');
+    errors.push('Body contains an H1 ("# ..."). The title frontmatter is the only H1 - start at "##".');
   }
   if (!sawHeading) {
     warnings.push('no H2 sections found in the body.');
@@ -300,7 +300,7 @@ function validateFile(filePath, knownSlugs) {
   const prose = stripCode(body).toLowerCase();
   for (const phrase of AI_SLOP_PHRASES) {
     if (new RegExp(`\\b${escapeRe(phrase)}\\b`, 'i').test(prose)) {
-      warnings.push(`AI-slop phrase "${phrase}" — rewrite in a more human voice (guide §4).`);
+      warnings.push(`AI-slop phrase "${phrase}" - rewrite in a more human voice (guide §4).`);
     }
   }
 
@@ -360,9 +360,7 @@ function main() {
     if (!errors.length && !warnings.length) console.log('   no issues.');
   }
 
-  console.log(
-    `\n— ${targets.length} post(s) checked · ${totalErrors} error(s) · ${totalWarnings} warning(s) —`,
-  );
+  console.log(`\n- ${targets.length} post(s) checked · ${totalErrors} error(s) · ${totalWarnings} warning(s) -`);
 
   if (totalErrors > 0) process.exit(1);
 }

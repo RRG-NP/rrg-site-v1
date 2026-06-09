@@ -13,7 +13,7 @@ const SuccessClient: FC<Props> = () => {
   const [countdown, setCountdown] = useState(20);
   const prefersReducedMotion = useReducedMotion();
   // Collapse every transition to instant for reduced-motion users. This only changes
-  // animation timing, not the rendered `initial` DOM — so it stays hydration-safe.
+  // animation timing, not the rendered `initial` DOM - so it stays hydration-safe.
   const t = (base: Transition): Transition => (prefersReducedMotion ? { duration: 0 } : base);
 
   useEffect(() => {
@@ -38,7 +38,7 @@ const SuccessClient: FC<Props> = () => {
 
   return (
     <SectionOpacity classes="flex flex-col justify-center min-h-screen bg-gradient-to-b from-bg-1 to-bg-2 my-10">
-      <div className="mx-auto flex w-full max-w-[70vw] md:max-w-[92vw] flex-1 flex-col items-center justify-center text-center px-[4vw] md:px-5">
+      <div className="mx-auto flex w-full max-w-[70vw] flex-1 flex-col items-center justify-center px-[4vw] text-center md:max-w-[92vw] md:px-5">
         {/* Success Icon Animation */}
         <motion.div
           initial={{ scale: 0, rotate: -180 }}
@@ -59,9 +59,9 @@ const SuccessClient: FC<Props> = () => {
               transition={t({ delay: 0.3, duration: 0.5 })}
               className="absolute inset-0 rounded-full bg-primary/20 blur-2xl"
             />
-            
+
             {/* Success checkmark circle */}
-            <div className="relative flex h-[12vw] w-[12vw] md:h-24 md:w-24 items-center justify-center rounded-full border-[0.4vw] md:border-2 border-primary bg-bg-2/50 backdrop-blur-sm">
+            <div className="relative flex h-[12vw] w-[12vw] items-center justify-center rounded-full border-[0.4vw] border-primary bg-bg-2/50 backdrop-blur-sm md:h-24 md:w-24 md:border-2">
               <motion.svg
                 initial={{ pathLength: 0 }}
                 animate={{ pathLength: 1 }}
@@ -88,10 +88,8 @@ const SuccessClient: FC<Props> = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={t({ delay: 0.8, duration: 0.5 })}
         >
-          <h1 className="mb-[1.5vw] md:mb-4 text-[4.5vw] md:text-[9vw] font-bold text-primary">
-            Thank You!
-          </h1>
-          <h2 className="mb-[1vw] md:mb-3 text-[2.5vw] md:text-[5.5vw] font-medium text-text-1">
+          <h1 className="mb-[1.5vw] text-[4.5vw] font-bold text-primary md:mb-4 md:text-[9vw]">Thank You!</h1>
+          <h2 className="mb-[1vw] text-[2.5vw] font-medium text-text-1 md:mb-3 md:text-[5.5vw]">
             Your Request Has Been Received
           </h2>
         </motion.div>
@@ -101,15 +99,15 @@ const SuccessClient: FC<Props> = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={t({ delay: 1, duration: 0.5 })}
-          className="mb-[3vw] md:mb-8 max-w-[55vw] md:max-w-full"
+          className="mb-[3vw] max-w-[55vw] md:mb-8 md:max-w-full"
         >
-          <p className="mb-[1.5vw] md:mb-4 text-[1.4vw] md:text-[3.8vw] leading-[1.6] text-text-1/90">
+          <p className="mb-[1.5vw] text-[1.4vw] leading-[1.6] text-text-1/90 md:mb-4 md:text-[3.8vw]">
             We truly appreciate you taking the time to reach out to us. Your project details have been successfully
             submitted, and our team is excited to review them.
           </p>
-          <p className="text-[1.2vw] md:text-[3.5vw] leading-[1.6] text-text-1/70">
-            We&rsquo;ll get back to you within <span className="font-semibold text-primary">24&ndash;48 hours</span> to discuss
-            your project in detail and explore how we can bring your vision to life.
+          <p className="text-[1.2vw] leading-[1.6] text-text-1/70 md:text-[3.5vw]">
+            We&rsquo;ll get back to you within <span className="font-semibold text-primary">24&ndash;48 hours</span> to
+            discuss your project in detail and explore how we can bring your vision to life.
           </p>
         </motion.div>
 
@@ -118,12 +116,12 @@ const SuccessClient: FC<Props> = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={t({ delay: 1.2, duration: 0.5 })}
-          className="mb-[3vw] md:mb-8 w-full max-w-[60vw] md:max-w-full"
+          className="mb-[3vw] w-full max-w-[60vw] md:mb-8 md:max-w-full"
         >
-          <h3 className="mb-[1.5vw] md:mb-5 text-[1.8vw] md:text-[5vw] font-semibold text-primary">
+          <h3 className="mb-[1.5vw] text-[1.8vw] font-semibold text-primary md:mb-5 md:text-[5vw]">
             What Happens Next?
           </h3>
-          <div className="grid grid-cols-3 md:grid-cols-1 gap-[2vw] md:gap-4">
+          <div className="grid grid-cols-3 gap-[2vw] md:grid-cols-1 md:gap-4">
             {[
               {
                 step: '01',
@@ -146,15 +144,13 @@ const SuccessClient: FC<Props> = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={t({ delay: 1.4 + index * 0.1, duration: 0.4 })}
-                className="rounded-[0.5vw] md:rounded-xl border border-stroke bg-bg-2/50 p-[1.5vw] md:p-5 backdrop-blur-sm text-left md:text-left"
+                className="rounded-[0.5vw] border border-stroke bg-bg-2/50 p-[1.5vw] text-left backdrop-blur-sm md:rounded-xl md:p-5 md:text-left"
               >
-                <div className="mb-[0.5vw] md:mb-2 text-[2vw] md:text-[6vw] font-bold text-primary/50">
-                  {item.step}
-                </div>
-                <h4 className="mb-[0.3vw] md:mb-1 text-[1.2vw] md:text-[4vw] font-semibold text-text-1">
+                <div className="mb-[0.5vw] text-[2vw] font-bold text-primary/50 md:mb-2 md:text-[6vw]">{item.step}</div>
+                <h4 className="mb-[0.3vw] text-[1.2vw] font-semibold text-text-1 md:mb-1 md:text-[4vw]">
                   {item.title}
                 </h4>
-                <p className="text-[0.9vw] md:text-[3.2vw] leading-[1.5] text-text-1/70">{item.description}</p>
+                <p className="text-[0.9vw] leading-[1.5] text-text-1/70 md:text-[3.2vw]">{item.description}</p>
               </motion.div>
             ))}
           </div>
@@ -165,14 +161,14 @@ const SuccessClient: FC<Props> = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={t({ delay: 1.7, duration: 0.5 })}
-          className="mb-[3vw] md:mb-8 rounded-[0.5vw] md:rounded-xl border border-stroke bg-bg-2/30 p-[2vw] md:p-5 backdrop-blur-sm w-full max-w-[60vw] md:max-w-full"
+          className="mb-[3vw] w-full max-w-[60vw] rounded-[0.5vw] border border-stroke bg-bg-2/30 p-[2vw] backdrop-blur-sm md:mb-8 md:max-w-full md:rounded-xl md:p-5"
         >
-          <p className="mb-[0.8vw] md:mb-3 text-[1.1vw] md:text-[3.5vw] text-text-1/80">
+          <p className="mb-[0.8vw] text-[1.1vw] text-text-1/80 md:mb-3 md:text-[3.5vw]">
             Need immediate assistance? Feel free to reach out directly:
           </p>
           <a
             href="mailto:hi@rrg.com.np"
-            className="inline-flex items-center gap-[0.5vw] md:gap-2 text-[1.3vw] md:text-[4vw] font-medium text-primary hover:text-primary/80 transition"
+            className="inline-flex items-center gap-[0.5vw] text-[1.3vw] font-medium text-primary transition hover:text-primary/80 md:gap-2 md:text-[4vw]"
           >
             <svg
               className="h-[1.5vw] w-[1.5vw] md:h-5 md:w-5"
@@ -205,7 +201,7 @@ const SuccessClient: FC<Props> = () => {
             classes="px-[3vw] md:px-10 py-[1.2vw] md:py-4 min-h-[4vw] md:min-h-[12vw] text-[1.1vw] md:text-[3.5vw] bg-bg-1 hover:bg-bg-1/80"
             btnClasses=""
           />
-          <p className="text-[1vw] md:text-[3.2vw] text-text-1/50 mb-2">
+          <p className="mb-2 text-[1vw] text-text-1/50 md:text-[3.2vw]">
             Redirecting in <span className="font-semibold text-primary">{countdown}</span> seconds…
           </p>
         </motion.div>
@@ -216,11 +212,11 @@ const SuccessClient: FC<Props> = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={t({ delay: 2, duration: 0.5 })}
-        className="mt-auto flex justify-between border-t border-t-gray-800 px-[5vw] md:px-6 py-[1.8vw] md:py-5 text-[1.6vw] md:text-[3.2vw] md:flex-col md:gap-3"
+        className="mt-auto flex justify-between border-t border-t-gray-800 px-[5vw] py-[1.8vw] text-[1.6vw] md:flex-col md:gap-3 md:px-6 md:py-5 md:text-[3.2vw]"
       >
         <div>
           © 2026.{' '}
-          <a href="https://rrg.com.np/" target="_blank" rel="noreferrer" className="hover:text-primary transition">
+          <a href="https://rrg.com.np/" target="_blank" rel="noreferrer" className="transition hover:text-primary">
             RRG Tech
           </a>
         </div>
@@ -230,7 +226,7 @@ const SuccessClient: FC<Props> = () => {
               href="https://www.facebook.com/rrg.com.np"
               target="_blank"
               rel="noreferrer"
-              className="hover:text-primary transition"
+              className="transition hover:text-primary"
             >
               Facebook
             </a>
@@ -240,7 +236,7 @@ const SuccessClient: FC<Props> = () => {
               href="https://www.linkedin.com/company/rrgnepal/"
               target="_blank"
               rel="noreferrer"
-              className="hover:text-primary transition"
+              className="transition hover:text-primary"
             >
               LinkedIn
             </a>
@@ -250,7 +246,7 @@ const SuccessClient: FC<Props> = () => {
               href="https://github.com/orgs/RRG-NP/dashboard"
               target="_blank"
               rel="noreferrer"
-              className="hover:text-primary transition"
+              className="transition hover:text-primary"
             >
               GitHub
             </a>

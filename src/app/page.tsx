@@ -31,13 +31,13 @@ export default function Home() {
     setIsPointerDevice(query.matches);
   }, []);
 
-  // Fill reached 100% — reveal the page so it fades in behind the splash.
+  // Fill reached 100% - reveal the page so it fades in behind the splash.
   const handleReveal = useCallback(() => {
     sessionStorage.setItem(STORAGE_KEY, '1');
     setHeroReady(true);
   }, []);
 
-  // Splash has fully animated out — remove it from the DOM.
+  // Splash has fully animated out - remove it from the DOM.
   const handleSplashDone = useCallback(() => {
     setShowSplash(false);
   }, []);

@@ -17,16 +17,16 @@ For years, React Native had a quiet bottleneck most of us learned to ignore: the
 
 ## What the New Architecture actually changes
 
-The old model kept JavaScript and native in two separate worlds connected by a single async channel. That channel was fine for most screens and miserable for anything chatty — gestures, animations, or a list firing native calls on every frame.
+The old model kept JavaScript and native in two separate worlds connected by a single async channel. That channel was fine for most screens and miserable for anything chatty - gestures, animations, or a list firing native calls on every frame.
 
 The New Architecture replaces it with a few pieces working together:
 
-- **JSI (JavaScript Interface)** — a C++ layer that lets JavaScript hold a direct reference to a native object and call its methods synchronously, no serialization.
-- **TurboModules** — native modules loaded lazily and called over JSI, so startup doesn't pay for modules a screen never touches.
-- **Fabric** — the new renderer, which finally makes React's concurrent features (Suspense, transitions) behave the way they do on the web.
-- **Codegen** — generates typed native interfaces from your TypeScript specs, so a mismatch fails at build time instead of crashing a user's phone.
+- **JSI (JavaScript Interface)** - a C++ layer that lets JavaScript hold a direct reference to a native object and call its methods synchronously, no serialization.
+- **TurboModules** - native modules loaded lazily and called over JSI, so startup doesn't pay for modules a screen never touches.
+- **Fabric** - the new renderer, which finally makes React's concurrent features (Suspense, transitions) behave the way they do on the web.
+- **Codegen** - generates typed native interfaces from your TypeScript specs, so a mismatch fails at build time instead of crashing a user's phone.
 
-As of React Native 0.76 this stopped being opt-in. The New Architecture is the default now, which reframes the whole question — you're not deciding *whether* to adopt it, only *when*.
+As of React Native 0.76 this stopped being opt-in. The New Architecture is the default now, which reframes the whole question - you're not deciding *whether* to adopt it, only *when*.
 
 ## Where the rewrite paid off
 
@@ -35,7 +35,7 @@ Our app had a gesture-heavy screen: a draggable canvas talking to a native modul
 Startup also improved, mostly because TurboModules stopped eagerly initializing modules we only used on two screens. Not dramatic, but measurable.
 
 <Note>
-The biggest gains showed up exactly where the bridge was the bottleneck — frequent JS-to-native calls. Screens that were just rendering React components and fetching data barely changed.
+The biggest gains showed up exactly where the bridge was the bottleneck - frequent JS-to-native calls. Screens that were just rendering React components and fetching data barely changed.
 </Note>
 
 ## Where it cost us
@@ -46,13 +46,13 @@ The migration tax was real. Our own native modules had to be rewritten as TurboM
 Before committing, audit your dependencies. One unmaintained native library with no New Architecture support can hold an entire migration hostage. Check each one *before* you start, not after.
 </Warning>
 
-Build complexity went up too. More C++ in the pipeline means longer clean builds and error messages that assume you know how codegen wires things together. Nothing unsolvable — just a steeper week than we'd planned for.
+Build complexity went up too. More C++ in the pipeline means longer clean builds and error messages that assume you know how codegen wires things together. Nothing unsolvable - just a steeper week than we'd planned for.
 
 ## So, was it worth it?
 
-For our gesture-heavy app, yes. For a colleague's mostly-static CRUD app, the migration itself would never have paid for itself on performance alone. The lesson echoes one I keep relearning: the best wins often come from removing a bottleneck, not adding cleverness — the same thing happened when [I cut our LCP in half by deleting code](/blog/i-cut-our-lcp-in-half-by-deleting-code-not-adding-it).
+For our gesture-heavy app, yes. For a colleague's mostly-static CRUD app, the migration itself would never have paid for itself on performance alone. The lesson echoes one I keep relearning: the best wins often come from removing a bottleneck, not adding cleverness - the same thing happened when [I cut our LCP in half by deleting code](/blog/i-cut-our-lcp-in-half-by-deleting-code-not-adding-it).
 
-My advice: if you're starting fresh, take the New Architecture without hesitation. If you have a stable app, migrate when you hit a bridge bottleneck or when a dependency forces it — but don't rewrite a calm app just to be current. And as with [knowing which effects you actually need in React](/blog/why-i-stopped-reaching-for-useeffect-in-react), the skill is telling the cases that matter from the ones that don't.
+My advice: if you're starting fresh, take the New Architecture without hesitation. If you have a stable app, migrate when you hit a bridge bottleneck or when a dependency forces it - but don't rewrite a calm app just to be current. And as with [knowing which effects you actually need in React](/blog/why-i-stopped-reaching-for-useeffect-in-react), the skill is telling the cases that matter from the ones that don't.
 
 ## Frequently Asked Questions
 
@@ -62,10 +62,10 @@ It's already deprecated and disabled by default from React Native 0.76 onward. N
 
 ### Do I have to rewrite all my native modules?
 
-Only the ones you maintain yourself, and the interop layer keeps many older modules working during the transition. Audit your dependencies first — an unmaintained native library is the most common thing that blocks a migration.
+Only the ones you maintain yourself, and the interop layer keeps many older modules working during the transition. Audit your dependencies first - an unmaintained native library is the most common thing that blocks a migration.
 
 ### Will the New Architecture make my app faster automatically?
 
-Not on its own. The gains concentrate in code that talks to native frequently — gestures, animations, custom modules. A screen that just renders components and fetches data sees little difference.
+Not on its own. The gains concentrate in code that talks to native frequently - gestures, animations, custom modules. A screen that just renders components and fetches data sees little difference.
 
 If you're weighing a migration like this and want a partner who's already felt the sharp edges, [get in touch](/book).

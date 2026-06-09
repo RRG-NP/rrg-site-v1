@@ -30,7 +30,7 @@ export default function BlogLayout({ children }: { children: React.ReactNode }) 
           <div>
             <p className="text-lg font-bold text-text-1">{siteConfig.name}</p>
             <p className="mt-1 text-sm text-text-1/50">
-              Notes on building for the web — from the team at {siteConfig.name}.
+              Notes on building for the web - from the team at {siteConfig.name}.
             </p>
           </div>
 

@@ -1,5 +1,5 @@
 /*
- * RRG Tech service worker — conservative caching for installability + offline.
+ * RRG Tech service worker - conservative caching for installability + offline.
  *
  * Strategy (chosen to never serve stale content):
  *   - Navigations (HTML)      → network-first, fall back to cache, then /offline.html

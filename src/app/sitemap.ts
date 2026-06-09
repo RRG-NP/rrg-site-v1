@@ -2,7 +2,7 @@ import type { MetadataRoute } from 'next';
 import { getAllPosts } from '@/lib/blog';
 import { siteConfig } from '@/lib/site';
 
-/** Dynamic sitemap — automatically includes every published post. */
+/** Dynamic sitemap - automatically includes every published post. */
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
 

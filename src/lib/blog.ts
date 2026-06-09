@@ -9,7 +9,7 @@ export type TocHeading = {
   slug: string;
 };
 
-/** Lightweight post shape for cards/lists — excludes the heavy compiled MDX body. */
+/** Lightweight post shape for cards/lists - excludes the heavy compiled MDX body. */
 export type PostSummary = Pick<
   Blog,
   | 'slug'

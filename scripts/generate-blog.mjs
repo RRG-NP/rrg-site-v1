@@ -12,7 +12,7 @@
  *      today's date) and an outline placeholder.
  *   4. Prints next steps.
  *
- * It does NOT write the article prose — that is the agent's job, following
+ * It does NOT write the article prose - that is the agent's job, following
  * prompts/blog-generator.md and docs/blog-writing-guide.md. It NEVER sets
  * `published: true` and never commits or deploys. Drafts are excluded from the
  * listing, sitemap, RSS, and static generation until you publish them.
@@ -83,7 +83,7 @@ if (!slug) {
 const filePath = path.join(BLOG_DIR, `${slug}.mdx`);
 if (fs.existsSync(filePath)) {
   fail(
-    `content/blogs/${slug}.mdx already exists. The filename is the public URL — ` +
+    `content/blogs/${slug}.mdx already exists. The filename is the public URL - ` +
       `pick a different topic or edit the existing draft.`,
   );
 }
@@ -91,7 +91,7 @@ if (fs.existsSync(filePath)) {
 // ── Build the draft ──────────────────────────────────────────────────────────
 const frontmatter = `---
 title: ${title}
-description: TODO — one benefit-led sentence, 120–160 characters, used as the meta description.
+description: TODO - one benefit-led sentence, 120–160 characters, used as the meta description.
 date: ${today()}
 published: ${publish ? 'true' : 'false'}
 featured: false
@@ -106,21 +106,21 @@ author: Rohan Gautam
 const body = `
 
 {/*
-  SCAFFOLD — fill this in by following prompts/blog-generator.md and
+  SCAFFOLD - fill this in by following prompts/blog-generator.md and
   docs/blog-writing-guide.md, then run:  npm run validate-blog -- ${slug}
 
   Reminders:
   - Body starts at "##" (the title above is the H1). Use only "##" and "###".
-  - Voice: first-person singular — a 27-year-old Nepali software engineer with 6+ years'
+  - Voice: first-person singular - a 27-year-old Nepali software engineer with 6+ years'
     experience sharing lessons from real work. Practical, honest, friendly, no AI slop.
   - Length: ~500–1000 words (a 2–5 minute read), one core idea, no filler.
   - Allowed components: <Note> <Info> <Tip> <Warning> <BlogImage src alt>.
   - Links and code blocks are plain markdown; tag every code fence with a language.
   - Replace the TODO description/tags/category in the frontmatter above.
-  - published is set to ${publish ? 'true (publish-ready — review before merging)' : 'false (draft — flip to true to publish)'}.
+  - published is set to ${publish ? 'true (publish-ready - review before merging)' : 'false (draft - flip to true to publish)'}.
 */}
 
-Intro hook — replace with one or two sentences stating the core idea. No "in this article".
+Intro hook - replace with one or two sentences stating the core idea. No "in this article".
 
 ## First section
 
@@ -157,7 +157,7 @@ console.log(`
 ✓ Created: content/blogs/${slug}.mdx
   Title:    ${title}
   Slug/URL: /blog/${slug}
-  Status:   published: ${publish ? 'true   (publish-ready — review before merging)' : 'false  (draft — not listed, not in sitemap, not deployed)'}
+  Status:   published: ${publish ? 'true   (publish-ready - review before merging)' : 'false  (draft - not listed, not in sitemap, not deployed)'}
 
 Next steps:
   1. Have an agent fill the body using prompts/blog-generator.md

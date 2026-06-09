@@ -137,7 +137,7 @@ export default function BlogIndex({ posts, featured, tags }: BlogIndexProps) {
         )}
       </div>
 
-      {/* Featured hero — only when browsing the full list */}
+      {/* Featured hero - only when browsing the full list */}
       {!isFiltering && featured && <FeaturedPost post={featured} />}
 
       {/* Results */}

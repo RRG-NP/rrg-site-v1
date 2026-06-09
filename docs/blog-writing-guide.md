@@ -1,7 +1,7 @@
 # Blog Writing Guide
 
 > The authoring rules for the RRG Tech blog. These are derived from the repository's
-> actual schema, rendering code, and existing posts — not from generic blogging advice.
+> actual schema, rendering code, and existing posts - not from generic blogging advice.
 > For the underlying architecture, see [`blog-automation-analysis.md`](./blog-automation-analysis.md).
 
 A post is one MDX file at `content/blogs/<slug>.mdx`. The **filename is the URL**
@@ -17,11 +17,11 @@ missing; the rest are strongly recommended for a quality post.
 ```yaml
 ---
 title: Building with the Next.js App Router          # required
-description: >-                                       # required — 120–160 chars, one benefit-led sentence
+description: >-                                       # required - 120–160 chars, one benefit-led sentence
   Server components, streaming, and metadata done right. A pragmatic tour of the
   patterns we reach for on every App Router project.
-date: 2026-05-10                                      # required — YYYY-MM-DD
-updated: 2026-05-15                                   # optional — set when you materially revise
+date: 2026-05-10                                      # required - YYYY-MM-DD
+updated: 2026-05-15                                   # optional - set when you materially revise
 published: false                                      # false while drafting; true to publish
 featured: false                                       # true only for a flagship post
 category: Engineering                                 # one of the established categories
@@ -30,7 +30,7 @@ tags:                                                 # 3–6 tags from the shar
   - React
   - Performance
 author: RRG Tech                                      # defaults to "RRG Tech"
-# Optional SEO overrides — usually omit; the defaults are good:
+# Optional SEO overrides - usually omit; the defaults are good:
 # seoTitle: ...
 # seoDescription: ...
 # coverImage: /images/blog/<slug>.jpg
@@ -40,11 +40,11 @@ author: RRG Tech                                      # defaults to "RRG Tech"
 
 Rules:
 
-- **Do not** add a `slug` field — the slug is the filename.
-- **Do not** add computed fields (`url`, `readingTime`, `wordCount`, `headings`) — Contentlayer derives them.
+- **Do not** add a `slug` field - the slug is the filename.
+- **Do not** add computed fields (`url`, `readingTime`, `wordCount`, `headings`) - Contentlayer derives them.
 - `date` must be `YYYY-MM-DD`. `published: false` is the default draft state and keeps the post
   out of listings, sitemap, RSS, related posts, and static generation.
-- `featured: true` promotes the post into the featured slot — use sparingly (≈ one at a time).
+- `featured: true` promotes the post into the featured slot - use sparingly (≈ one at a time).
 
 **Established categories** (keep this set small; pick one): `Engineering`, `Design`,
 `Announcements`. Add a new category only when a post genuinely doesn't fit.
@@ -62,16 +62,16 @@ Rules:
 | `title`          | ≤ **60 characters**. Specific and descriptive; sentence case.                         |
 | `description`    | **120–160 characters**, one complete benefit-led sentence. Doubles as the meta description and on-page sub-headline. |
 | `tags`           | **3–6**, reused from the vocabulary above. They become `keywords` and drive related posts. |
-| `category`       | Set it — it becomes `articleSection` in structured data and shows on the OG card.     |
+| `category`       | Set it - it becomes `articleSection` in structured data and shows on the OG card.     |
 | `seoTitle` / `seoDescription` | Optional overrides. Only add when the on-page title/description aren't ideal for search. |
 | `canonicalUrl`   | Only when the post is republished from another canonical source.                      |
-| `coverImage`     | Optional. **Not needed for the social card** — that's auto-generated per post.        |
+| `coverImage`     | Optional. **Not needed for the social card** - that's auto-generated per post.        |
 
-You never write OG images, JSON-LD, sitemap entries, or canonical tags by hand — the
+You never write OG images, JSON-LD, sitemap entries, or canonical tags by hand - the
 framework generates all of them from frontmatter (see the analysis doc, §5). Just fill the
 frontmatter well.
 
-**SEO supports readability — never the reverse.** Priority order: (1) helpful content,
+**SEO supports readability - never the reverse.** Priority order: (1) helpful content,
 (2) human readability, (3) search optimization. No keyword stuffing; write the title,
 description, and headings for a person first.
 
@@ -91,7 +91,7 @@ or no prior knowledge** of the topic. Assume a smart reader skimming on a coffee
 
 ### Reading time & length
 
-Target **2–5 minutes** — usually **500–1000 words**.
+Target **2–5 minutes** - usually **500–1000 words**.
 
 - Focus on **one core idea**. Cut filler; every section must earn its place.
 - Don't pad to hit a length. A tight 600-word post beats a baggy 1,200-word one.
@@ -100,16 +100,16 @@ Target **2–5 minutes** — usually **500–1000 words**.
 
 Write as **one person**: a 27-year-old Nepali software engineer with 6+ years of
 professional experience. Practical, curious, honest, experienced, self-aware, friendly,
-direct, occasionally opinionated — never arrogant.
+direct, occasionally opinionated - never arrogant.
 
-> **Note — this supersedes the older "we" convention.** The three legacy posts used a
+> **Note - this supersedes the older "we" convention.** The three legacy posts used a
 > first-person-plural team voice. New posts use a **first-person individual** voice. The
 > author shares lessons from real work, not textbook rules:
 >
 > - Good: "I've shipped this in production," "I've watched this fail," "here's what I learned."
 > - Avoid: "According to best practices…", faceless passive voice.
 
-Keep paragraphs short (2–4 sentences), words plain, and open with the substance — no
+Keep paragraphs short (2–4 sentences), words plain, and open with the substance - no
 throat-clearing. Show, don't just tell: back a claim with a code sample, a quick comparison,
 or a real wrong-way/right-way contrast. (The `author` frontmatter can stay `RRG Tech` or be
 a person's name; it doesn't change the writing voice.)
@@ -120,7 +120,7 @@ a person's name; it doesn't change the writing voice.)
 
 ### Tone
 
-Conversational, human, thoughtful, genuine — smart but approachable, like a real engineer
+Conversational, human, thoughtful, genuine - smart but approachable, like a real engineer
 sharing what they've learned. Confident, not boastful. Light, dry asides are fine. **Avoid**
 corporate/marketing language, buzzwords, overly formal prose, clickbait, and exclamation
 marks.
@@ -140,7 +140,7 @@ Also avoid:
   they genuinely fit.
 - Anything that reads like it was filled into a template.
 
-`npm run validate-blog` flags these phrases as warnings — clear them before publishing.
+`npm run validate-blog` flags these phrases as warnings - clear them before publishing.
 
 ### Authenticity
 
@@ -148,7 +148,7 @@ Include real-world observations, practical examples, your own reasoning, and hon
 tradeoffs. When you discuss a tool/framework, cover **why you'd use it, when it works well,
 when it doesn't, and the common mistakes**. No blind praise.
 
-### Creativity — find an angle
+### Creativity - find an angle
 
 Every post needs a unique angle, not just a concept dump. Pick one: a lesson learned, a
 mistake made, a surprising discovery, an unpopular opinion, a practical shortcut, a
@@ -169,17 +169,17 @@ everyday analogies over abstract description.
 
 Pick the type that fits the idea before you write; each has a natural shape.
 
-- **How-to** — Intro (hook · the problem · why it matters) → step-by-step walkthrough →
+- **How-to** - Intro (hook · the problem · why it matters) → step-by-step walkthrough →
   conclusion (recap · lesson learned · a practical next step).
-- **Explainer** — Intro (hook · why it matters) → concepts explained simply with examples
+- **Explainer** - Intro (hook · why it matters) → concepts explained simply with examples
   tied to real life → conclusion (key takeaway · what to explore next).
-- **Opinion / thought-leadership** — Intro (clear viewpoint · why it matters) → arguments,
+- **Opinion / thought-leadership** - Intro (clear viewpoint · why it matters) → arguments,
   examples, tradeoffs, counterpoints → conclusion (final perspective · invite discussion).
-- **Listicle** — Intro (why the list matters) → items (each with explanation, a practical
+- **Listicle** - Intro (why the list matters) → items (each with explanation, a practical
   example, and a personal insight where possible) → conclusion (favorite takeaway · a reader
   action).
 
-These map onto the heading rules below — the intro is prose before the first `##`, each
+These map onto the heading rules below - the intro is prose before the first `##`, each
 phase/step/concept/item is an `##` (or `###`) section.
 
 ---
@@ -187,7 +187,7 @@ phase/step/concept/item is an `##` (or `###`) section.
 ## 5. Heading structure
 
 - The `title` frontmatter **is the page `<h1>`**. **Never write an `#` H1 in the body.**
-- **Body starts at `##` (H2).** Use **only `##` and `###`** — the table of contents parses
+- **Body starts at `##` (H2).** Use **only `##` and `###`** - the table of contents parses
   H2/H3 only, so `####` (H4) will render but vanish from the TOC. Don't skip levels (no H3
   before its parent H2).
 - Headings are **sentence case** and declarative/verb-led:
@@ -203,17 +203,17 @@ phase/step/concept/item is an `##` (or `###`) section.
   post](/blog/building-with-the-nextjs-app-router)`. The link handler turns `/…` into a
   prefetched `next/link` automatically.
 - **Link to the `/book` page once** as the closing CTA (see §10).
-- **Cross-link 1–3 related posts** where genuinely relevant. Don't over-link — related posts
+- **Cross-link 1–3 related posts** where genuinely relevant. Don't over-link - related posts
   are also surfaced automatically by shared tags/category.
 - For in-page jumps use `#heading-slug` anchors (slugs match the heading text).
-- External links open in a safe new tab automatically — just write a normal markdown link.
+- External links open in a safe new tab automatically - just write a normal markdown link.
 - **Every internal `/blog/<slug>` link must resolve to a real file.** The validator checks this.
 
 ---
 
 ## 7. Image usage rules
 
-- Prefer markdown images `![alt text](/images/blog/<file>.png)` — they're rendered through
+- Prefer markdown images `![alt text](/images/blog/<file>.png)` - they're rendered through
   the optimized `BlogImage`. Use `<BlogImage>` directly when you need explicit
   `width`/`height` (intrinsic sizing) or a `className`.
 - **`alt` is mandatory.** Describe the image's *purpose*. Use `alt=""` **only** for purely
@@ -222,14 +222,14 @@ phase/step/concept/item is an `##` (or `###`) section.
   (`/images/blog/...`). Run `npm run optimize-images` style conversion where it helps.
 - Without `width`/`height`, `BlogImage` fills a 16:9 frame (no layout shift). Provide both
   dimensions for non-16:9 images to avoid cropping.
-- `coverImage` (frontmatter) is the hero/JSON-LD image and is optional — the social share
+- `coverImage` (frontmatter) is the hero/JSON-LD image and is optional - the social share
   card is generated automatically and does not require it.
 
 ---
 
 ## 8. MDX component usage rules
 
-Allowed components (the **complete** set — anything else fails to compile or renders an
+Allowed components (the **complete** set - anything else fails to compile or renders an
 undefined tag):
 
 | Component     | When to use                                              |
@@ -243,9 +243,9 @@ undefined tag):
 
 Rules:
 
-- Use **1–3 callouts** per post, where they add value — don't decorate every section.
+- Use **1–3 callouts** per post, where they add value - don't decorate every section.
 - All four callouts accept an optional `title`; default labels are the type name.
-- Callout content is markdown — keep it to a sentence or two.
+- Callout content is markdown - keep it to a sentence or two.
 - **Links and code blocks use plain markdown**, not components. Always tag code fences with
   a language (` ```tsx `, ` ```ts `, ` ```css `, ` ```html `, ` ```bash `). Untagged code
   falls back to plaintext.
@@ -267,7 +267,7 @@ export default async function Dashboard() {
 ```
 
 <Warning>
-A `'use client'` directive is contagious downward — every imported component becomes
+A `'use client'` directive is contagious downward - every imported component becomes
 client code too.
 </Warning>
 ```
@@ -276,7 +276,7 @@ client code too.
 
 ## 9. FAQ section
 
-End substantive posts with an FAQ — it improves SEO (a `FAQPage` JSON-LD block is generated
+End substantive posts with an FAQ - it improves SEO (a `FAQPage` JSON-LD block is generated
 automatically from this section) and answers common reader questions.
 
 - Add a single H2 titled exactly **`## Frequently Asked Questions`**.
@@ -290,7 +290,7 @@ automatically from this section) and answers common reader questions.
 
 ### Do I need a database to run this blog?
 
-No. Posts are MDX files in the repo, compiled at build time by Contentlayer — there's no
+No. Posts are MDX files in the repo, compiled at build time by Contentlayer - there's no
 database or admin panel.
 
 ### How long until a new post goes live?
@@ -304,7 +304,7 @@ redeploy.
 ## 10. Closing CTA
 
 Finish with one conversational CTA linking to `/book`, in the final paragraph (the FAQ, if
-present, comes before it or after — keep the CTA as the last line). Match the house style:
+present, comes before it or after - keep the CTA as the last line). Match the house style:
 
 > If you're building something ambitious and want a partner who sweats these details,
 > [get in touch](/book).
@@ -332,7 +332,7 @@ Before setting `published: true`, confirm:
 - [ ] `npm run validate-blog -- <slug>` passes with no errors.
 - [ ] Previewed with `npm run dev`.
 
-**Voice & substance** — answer honestly; if any is "no", revise before saving:
+**Voice & substance** - answer honestly; if any is "no", revise before saving:
 
 - [ ] Does this sound like a real engineer wrote it (first-person, lived experience)?
 - [ ] Would I personally publish this? Does it sound human?
@@ -340,7 +340,7 @@ Before setting `published: true`, confirm:
 - [ ] Is every section useful, with no filler? One core idea?
 - [ ] Can a non-expert follow it, with jargon explained?
 - [ ] Would someone finish it in under 5 minutes (~500–1000 words)?
-- [ ] Does it offer a unique angle (lesson, mistake, opinion, comparison) — worth reading
+- [ ] Does it offer a unique angle (lesson, mistake, opinion, comparison) - worth reading
       even for someone who knows the topic?
 - [ ] Honest tradeoffs included, not blind praise?
 

@@ -17,14 +17,14 @@ author: Rohan Gautam
 The App Router changed how we structure Next.js apps. After shipping several
 production sites on it, these are the patterns we keep coming back to.
 
-## Server components are the default — keep it that way
+## Server components are the default - keep it that way
 
 The biggest mental shift is that components render on the server unless you opt out.
 Push `'use client'` as far down the tree as possible so the interactive bits are
 small islands in an otherwise static page.
 
 ```tsx
-// app/dashboard/page.tsx — a Server Component, no client JS shipped.
+// app/dashboard/page.tsx - a Server Component, no client JS shipped.
 import { getStats } from '@/lib/stats';
 import { LiveChart } from './live-chart'; // 'use client' lives here, not here.
 

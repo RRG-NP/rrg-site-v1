@@ -52,7 +52,7 @@ published post via `generateStaticParams`, with `revalidate = 3600` (ISR) and
 
 ### Content architecture
 
-Content is **file-based and Git-versioned** — no CMS, no database. MDX files live under
+Content is **file-based and Git-versioned** - no CMS, no database. MDX files live under
 `content/blogs/`. Contentlayer reads them at build time, validates frontmatter against a
 typed schema, computes derived fields, and emits a typed module (`contentlayer/generated`)
 that the app imports. The data flow:
@@ -90,14 +90,14 @@ Current posts (3):
 
 - **Document type:** `Blog`, `filePathPattern: 'blogs/**/*.mdx'`, `contentType: 'mdx'`.
 - **Content root:** `contentDirPath: 'content'`.
-- **Remark plugins:** `remark-gfm` (GitHub-flavored markdown — tables, task lists,
+- **Remark plugins:** `remark-gfm` (GitHub-flavored markdown - tables, task lists,
   strikethrough, autolinks).
 - **Rehype plugins (in order):**
-  1. `rehype-slug` — adds `id`s to headings.
-  2. `rehype-accessible-emojis` — wraps emoji with accessible markup.
-  3. `rehype-pretty-code` — Shiki syntax highlighting, theme `github-dark-dimmed`,
+  1. `rehype-slug` - adds `id`s to headings.
+  2. `rehype-accessible-emojis` - wraps emoji with accessible markup.
+  3. `rehype-pretty-code` - Shiki syntax highlighting, theme `github-dark-dimmed`,
      `keepBackground: false` (the surface is painted by `blog.scss`), `defaultLang: 'plaintext'`.
-  4. `rehype-autolink-headings` — `behavior: 'wrap'`, class `heading-anchor`,
+  4. `rehype-autolink-headings` - `behavior: 'wrap'`, class `heading-anchor`,
      `ariaLabel: 'Link to this section'`.
 
 ### Frontmatter schema
@@ -106,21 +106,21 @@ Defined in `contentlayer.config.ts`. **Required fields fail the build if missing
 
 | Field           | Type       | Required | Default      | Notes                                            |
 | --------------- | ---------- | -------- | ------------ | ------------------------------------------------ |
-| `title`         | string     | **Yes**  | —            | Rendered as the page `<h1>`.                     |
-| `description`   | string     | **Yes**  | —            | Sub-headline + meta description fallback.        |
-| `date`          | date (ISO) | **Yes**  | —            | `YYYY-MM-DD`. Drives ordering & `publishedTime`. |
-| `updated`       | date       | No       | —            | Sets `dateModified` / `modifiedTime`.            |
+| `title`         | string     | **Yes**  | -            | Rendered as the page `<h1>`.                     |
+| `description`   | string     | **Yes**  | -            | Sub-headline + meta description fallback.        |
+| `date`          | date (ISO) | **Yes**  | -            | `YYYY-MM-DD`. Drives ordering & `publishedTime`. |
+| `updated`       | date       | No       | -            | Sets `dateModified` / `modifiedTime`.            |
 | `published`     | boolean    | No       | `true`       | `false` ⇒ excluded everywhere. **Drafts.**       |
 | `featured`      | boolean    | No       | `false`      | Surfaces the post in the featured slot.          |
 | `tags`          | string[]   | No       | `[]`         | Keywords + related-post scoring + tag filter.    |
-| `category`      | string     | No       | —            | Single section label (e.g. `Engineering`).       |
-| `coverImage`    | string     | No       | —            | Path under `/public`. Used as hero + JSON-LD.    |
+| `category`      | string     | No       | -            | Single section label (e.g. `Engineering`).       |
+| `coverImage`    | string     | No       | -            | Path under `/public`. Used as hero + JSON-LD.    |
 | `author`        | string     | No       | `'RRG Tech'` | Byline.                                          |
-| `seoTitle`      | string     | No       | —            | Overrides `<title>` (else `title`).              |
-| `seoDescription`| string     | No       | —            | Overrides meta description (else `description`). |
-| `canonicalUrl`  | string     | No       | —            | Overrides canonical (else the post's own URL).   |
+| `seoTitle`      | string     | No       | -            | Overrides `<title>` (else `title`).              |
+| `seoDescription`| string     | No       | -            | Overrides meta description (else `description`). |
+| `canonicalUrl`  | string     | No       | -            | Overrides canonical (else the post's own URL).   |
 
-**Computed fields** (do not write these by hand — Contentlayer derives them):
+**Computed fields** (do not write these by hand - Contentlayer derives them):
 
 | Field         | Source                                                            |
 | ------------- | ----------------------------------------------------------------- |
@@ -138,7 +138,7 @@ navigation. See the writing guide for the recommended baseline.
 
 ### Slug generation
 
-Slugs come **only from the filename** — there is no `slug` frontmatter field:
+Slugs come **only from the filename** - there is no `slug` frontmatter field:
 
 ```ts
 slug: doc._raw.flattenedPath.replace(/^blogs\//, '')   // blogs/my-post.mdx → my-post
@@ -162,7 +162,7 @@ a file changes its public URL (and would need a redirect if the old URL was live
 | `toSummary(post)`         | Strips the heavy compiled body for card/list views.           |
 
 Unpublished posts are filtered out at the `getAllPosts` layer, so a draft
-(`published: false`) is safe to commit — it never appears in lists, the sitemap, the RSS
+(`published: false`) is safe to commit - it never appears in lists, the sitemap, the RSS
 feed, related posts, or `generateStaticParams`.
 
 ---
@@ -178,14 +178,14 @@ rendering code.
 > **Forward-looking note:** the three legacy posts use the first-person-plural "we" team
 > voice described below. The **current writing standard** (see
 > [`blog-writing-guide.md`](./blog-writing-guide.md) §3–4) is a **first-person individual**
-> persona — a 28-year-old Nepali software engineer sharing lessons from real work — written
+> persona - a 28-year-old Nepali software engineer sharing lessons from real work - written
 > for a broad audience, 500–1000 words, with strict anti-AI-slop rules. New posts follow the
 > guide; the observations below document the existing corpus.
 
 - **First-person plural ("we").** The blog speaks as the RRG Tech team: "these are the
   patterns we keep coming back to," "we hold ourselves to a simple standard."
 - **Pragmatic and opinionated**, grounded in real project experience. Takes a position
-  ("Server components are the default — keep it that way") rather than hedging.
+  ("Server components are the default - keep it that way") rather than hedging.
 - **Concise and direct.** Short paragraphs (2–4 sentences), plain language, minimal
   throat-clearing. Concrete over abstract.
 - **Teaching tone.** Show the wrong way, then the right way (`<div onClick>` vs `<button>`;
@@ -201,11 +201,11 @@ longer how-to/pillar posts are reasonable but should stay this dense and skimmab
 
 - The **`title` frontmatter renders as the only `<h1>`.** Body content must **start at
   `<h2>`** (`##`).
-- Body headings use **`##` (H2) and `###` (H3) only** — this matters because the
+- Body headings use **`##` (H2) and `###` (H3) only** - this matters because the
   table-of-contents (`extractHeadings`) parses **only H2 and H3**. An `<h4>` (`####`) will
   render but never appear in the TOC.
 - Headings are **sentence-case and verb-led / declarative**: "Server components are the
-  default — keep it that way", "Focus is not optional", "Images need real alt text".
+  default - keep it that way", "Focus is not optional", "Images need real alt text".
 - Posts typically have **3–5 H2 sections** and frequently close with a short
   checklist section and a one-paragraph wrap-up.
 
@@ -216,7 +216,7 @@ longer how-to/pillar posts are reasonable but should stay this dense and skimmab
   through a plain anchor, and external `http(s)` links through a safe new tab
   (`target="_blank" rel="noopener noreferrer"`).
 - The dominant internal link today is the **`/book` CTA**. Cross-links between posts
-  (`/blog/<slug>`) are encouraged where relevant — `getRelatedPosts` also surfaces related
+  (`/blog/<slug>`) are encouraged where relevant - `getRelatedPosts` also surfaces related
   content automatically via shared tags/category, so manual links should be intentional,
   not exhaustive.
 
@@ -234,7 +234,7 @@ longer how-to/pillar posts are reasonable but should stay this dense and skimmab
 
 - Most posts rely on `title` + `description` for SEO. The flagship post
   (`welcome-to-the-rrg-tech-blog`) additionally sets `seoTitle`, `seoDescription`,
-  `coverImage`, and `featured: true` — the template for a high-value post.
+  `coverImage`, and `featured: true` - the template for a high-value post.
 - `description` is a complete, benefit-led sentence (~140–155 chars) that doubles as the
   meta description and the on-page sub-headline.
 - 3–4 `tags` per post, drawn from a small shared vocabulary (e.g. `Web Development`,
@@ -253,7 +253,7 @@ Fenced code blocks with a language tag (`tsx`, `ts`, `html`, `css`), GFM **table
 
 The component map passed to compiled MDX lives in
 `src/components/blog/mdx/mdx-components.tsx`. Block-level typography (headings, paragraphs,
-lists, tables, blockquotes) is **not** componentized — it's styled globally by the
+lists, tables, blockquotes) is **not** componentized - it's styled globally by the
 `.prose-rrg` rules in `src/shared/styles/blog.scss`. The map only overrides elements that
 need behavior, plus the authoring components.
 
@@ -265,7 +265,7 @@ need behavior, plus the authoring components.
 | `img`   | `MdxImage`  | Delegates to `BlogImage` (so even plain markdown images get optimized).                        |
 | `pre`   | `CodeBlock` | Wraps fenced code with a copy-to-clipboard button. `'use client'`.                             |
 
-Because of these, you get optimized links/images/code **for free** from standard markdown —
+Because of these, you get optimized links/images/code **for free** from standard markdown -
 prefer plain markdown links and fenced code over hand-writing components.
 
 ### Authoring components (use directly in MDX)
@@ -279,7 +279,7 @@ prefer plain markdown links and fenced code over hand-writing components.
 | `<Warning>`   | `title?`                                       | Caution / gotcha (amber, alert-triangle icon).                |
 | `<BlogImage>` | `src` (req), `alt` (req), `width?`, `height?`, `className?` | Optimized `next/image`. With `width`+`height` uses intrinsic size; otherwise fills a 16:9 frame (no CLS). |
 
-> `<Info>` is exported in code as `Info_` but **registered in MDX as `Info`** — author it
+> `<Info>` is exported in code as `Info_` but **registered in MDX as `Info`** - author it
 > as `<Info>`.
 
 ### Usage examples
@@ -322,8 +322,8 @@ See our [booking page](/book) or the [App Router post](/blog/building-with-the-n
   - `<Note>` for an aside or context.
   - `<Info>` for neutral supplementary detail.
 - **Use `<BlogImage>` for every content image** (or just markdown `![]()`, which becomes
-  `BlogImage`). **`alt` is mandatory** — empty string only for decorative images.
-- **Don't** invent components that aren't in the map — MDX will fail to compile or render a
+  `BlogImage`). **`alt` is mandatory** - empty string only for decorative images.
+- **Don't** invent components that aren't in the map - MDX will fail to compile or render a
   literal undefined tag. The full allowed set is: `Callout`, `Note`, `Info`, `Tip`,
   `Warning`, `BlogImage` (plus standard markdown/GFM).
 
@@ -352,7 +352,7 @@ Single source of identity is `src/lib/site.ts` (`siteConfig`: name, URL
 - Per-post OG block built in `buildPostMetadata` (`type: 'article'`, `publishedTime`,
   `modifiedTime`, `authors`, `tags`).
 - **Per-post social image** is generated at request/build time by
-  `src/app/blog/[slug]/opengraph-image.tsx` using `ImageResponse` (Satori) — a branded
+  `src/app/blog/[slug]/opengraph-image.tsx` using `ImageResponse` (Satori) - a branded
   1200×630 card (logo, category, title, reading time, domain). Because the file convention
   supplies the image, `buildPostMetadata` deliberately **omits** `images` to avoid emitting
   it twice. **You do not need to create OG images for posts.**
@@ -364,7 +364,7 @@ Single source of identity is `src/lib/site.ts` (`siteConfig`: name, URL
 | `Organization` / service| `src/components/StructuredData/OrganizationJsonLd.tsx`      | root `layout.tsx`                   |
 | `BlogPosting`           | `buildArticleJsonLd(post)` (`src/lib/seo.ts`)               | `blog/[slug]/page.tsx`              |
 | `BreadcrumbList`        | `buildBreadcrumbJsonLd(items)` (`src/lib/seo.ts`)           | `blog/[slug]/page.tsx`              |
-| `FAQPage`               | `buildFaqJsonLd(faqs)` — **added by this workflow**          | `blog/[slug]/page.tsx` (if FAQ present) |
+| `FAQPage`               | `buildFaqJsonLd(faqs)` - **added by this workflow**          | `blog/[slug]/page.tsx` (if FAQ present) |
 
 `BlogPosting` includes headline, description, image (`coverImage || siteConfig.ogImage`),
 `datePublished`/`dateModified`, author + publisher orgs, `mainEntityOfPage`, `keywords`, and
