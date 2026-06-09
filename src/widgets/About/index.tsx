@@ -119,11 +119,9 @@ const Index: FC<Props> = () => {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
-          // Start when section top enters viewport at 80%
-          start: isMobile ? 'top 80%' : 'top 65%',
-          // End when section center reaches middle of viewport — all lines done by then
-          end: isMobile ? 'center 40%' : 'center 50%',
-          scrub: isMobile ? true : 1.5,
+          start: isMobile ? 'top 80%' : 'top 75%',
+          end: isMobile ? '+=80%' : '+=65%',
+          scrub: isMobile ? true : 0.5,
           invalidateOnRefresh: true,
         },
       });
