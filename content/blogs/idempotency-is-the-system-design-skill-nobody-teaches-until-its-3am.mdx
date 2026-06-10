@@ -1,0 +1,93 @@
+---
+title: "Idempotency: the skill nobody teaches until it's 3am"
+description: A retried payment double-charged our customers at 3am. Idempotency keys fixed it, and now I add one to every write endpoint before I ship it.
+date: 2026-06-10
+published: true
+featured: false
+category: Engineering
+tags:
+  - System Design
+  - APIs
+  - Backend
+  - Reliability
+author: Rohan Gautam
+---
+
+The worst bug I ever shipped didn't crash anything. It charged forty customers twice, quietly, while everyone slept. My phone started buzzing around 3am with refund requests, and that night taught me a word no tutorial had bothered to mention: idempotency.
+
+## What idempotency actually means
+
+An operation is idempotent if running it twice has the same effect as running it once. Reading a row is idempotent. Setting a flag to `true` is idempotent. Charging a card is very much not - do it twice and the customer pays twice.
+
+The trouble is that the network loves to do things twice. A request times out, a mobile client retries, a load balancer replays, a queue redelivers. You didn't write a bug. The internet just did what it always does, and your endpoint happily ran the same charge again.
+
+<Note>
+Idempotency is about the *effect*, not the response. The second call can return "already done" - it just must not perform the action a second time.
+</Note>
+
+## The 3am version of the story
+
+Our checkout called the payment provider, then wrote a row to our database. One night the provider got slow. Our HTTP client hit its timeout and retried automatically. The first call had actually succeeded - we just never heard back in time. So we charged the card, timed out, and charged it again.
+
+Here's the shape of the code that betrayed me:
+
+```ts
+async function checkout(cart) {
+  const charge = await payments.charge(cart.total); // retried on timeout
+  await db.orders.insert({ cartId: cart.id, charge });
+  return charge;
+}
+```
+
+Nothing here is wrong in isolation. It only breaks when `charge` runs twice, which is exactly what a retry does.
+
+## The fix is a key, not a lock
+
+My first instinct was to reach for a database lock or a "have we charged this cart already?" check. Both kind of work, both are fragile under concurrency. The clean answer is an **idempotency key**: a unique id the *client* generates once per intended action and sends with every retry of that same action.
+
+The server stores the key the first time it sees it, along with the result. If the same key shows up again, you skip the work and return the stored result.
+
+```ts
+async function checkout(cart, idempotencyKey) {
+  const existing = await db.idempotency.find(idempotencyKey);
+  if (existing) return existing.result; // already done - return, don't redo
+
+  const charge = await payments.charge(cart.total, { idempotencyKey });
+  const order = await db.orders.insert({ cartId: cart.id, charge });
+
+  await db.idempotency.insert({ key: idempotencyKey, result: order });
+  return order;
+}
+```
+
+Two details matter more than the code. First, the key has to come from the client and survive retries - if you generate it on the server per request, every retry gets a fresh key and you're back where you started. Second, good payment providers accept an idempotency key of their own, so even your call to *them* is safe. Use it.
+
+<Tip>
+Use a UUID generated once when the user taps "Pay", stored with the in-flight request. Every retry of that tap reuses the same key.
+</Tip>
+
+## Where this bites in normal apps
+
+This isn't just a payments problem. Any write that costs something when repeated needs the same treatment: sending an email, creating a record, deducting inventory, posting to a webhook. If you build APIs as thin wrappers over your tables - the trap I wrote about in [The End of CRUD Apps](/blog/the-end-of-crud-apps-what-developers-should-build-instead) - every `POST` is a candidate for an accidental double.
+
+A quick mental checklist before I ship any write endpoint: what happens if this runs twice? If the answer is "bad things", it needs a key. Even in a [Next.js route handler](/blog/building-with-the-nextjs-app-router), the same rule holds - the handler is just another endpoint the network can call twice.
+
+<Warning>
+A "check if it exists, then insert" guard without a unique constraint is a race, not a fix. Two requests can both pass the check before either inserts. Put a unique index on the idempotency key and let the database enforce it.
+</Warning>
+
+## Frequently Asked Questions
+
+### Is idempotency the same as a database transaction?
+
+No. A transaction keeps a single operation atomic. Idempotency makes the *same operation repeated* safe. You often need both - a transaction so the write and the key are stored together, and a key so retries don't redo the work.
+
+### Which HTTP methods should be idempotent?
+
+By spec, `GET`, `PUT`, and `DELETE` are meant to be idempotent; `POST` is not. Since most "do something" actions are `POST`, that's exactly where you add an idempotency key yourself.
+
+### Where do I store the keys, and for how long?
+
+A simple table keyed by the idempotency value works well, with the stored result and a created-at timestamp. Expire them after a day or two - long enough to outlast any realistic retry, short enough that the table stays small.
+
+Idempotency is one of those ideas that sounds academic until a retry storm turns it into a refund spreadsheet. Now it's the first question I ask of any endpoint that changes something. If you're building something where a double-charge would ruin someone's night and want a partner who sweats these details, [get in touch](/book).
