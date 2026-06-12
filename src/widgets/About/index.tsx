@@ -142,13 +142,14 @@ const Index: FC<Props> = () => {
   return (
     <section id="about" className="relative z-[2] bg-bg-1 py-[6vw] md:py-10">
       <SectionOpacity classes="z-2">
-        <div className="px-[6vw] pt-[3vw] md:px-6 md:pt-8 md:text-center">
-          <SectionEyebrow label="Who we are" classes="mb-[1.2vw] md:mb-3" />
-          <SectionTitle title="ABOUT." classes="z-10" />
-        </div>
-        <div className="relative self-start px-[6vw] pb-[5vw] pt-[3vw] md:px-6 md:pb-10 md:pt-6">
+        <div className="relative px-[6vw] pb-[5vw] pt-[3vw] md:px-6 md:pb-10 md:pt-8">
           <div className="flex space-x-[5vw] md:flex-col md:items-center md:gap-6 md:space-x-0">
-            <div ref={sectionRef} className={`relative ${pClasses}`}>
+            <div className="grow-[4] basis-0 md:w-full">
+              <div className="md:text-center">
+                <SectionEyebrow label="Who we are" classes="mb-[1.2vw] md:mb-3" />
+                <SectionTitle title="ABOUT." classes="z-10" />
+              </div>
+              <div ref={sectionRef} className={`relative mt-[3vw] md:mt-6 ${pClasses}`}>
               {/* Layer 1 - dim base text, drives layout */}
               <p ref={dimRef} className="text-white/25">
                 {DESCRIPTION}
@@ -192,9 +193,10 @@ const Index: FC<Props> = () => {
                   </p>
                 </div>
               ))}
+              </div>
             </div>
 
-            <div className="group/img relative h-[20vw] w-[30vw] grow-[3] basis-0 md:h-[56vw] md:w-full md:max-w-[92%] md:basis-[initial]">
+            <div className="group/img relative min-h-[20vw] w-[30vw] grow-[3] basis-0 self-stretch md:h-[56vw] md:min-h-0 md:w-full md:max-w-[92%] md:basis-[initial] md:self-auto">
               {/* Offset frame — echoes the outlined type treatment used across sections */}
               <span
                 aria-hidden

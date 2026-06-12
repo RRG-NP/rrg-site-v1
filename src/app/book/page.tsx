@@ -53,30 +53,32 @@ const Index = () => {
 
       <div className="relative mx-auto grid max-w-[86vw] grid-cols-[34vw_minmax(0,1fr)] gap-[5vw] md:max-w-full md:gap-10 md:px-5 tab:max-w-[92vw] tab:grid-cols-1 tab:gap-12">
         <aside className="h-fit self-start lg:sticky lg:top-[5vw]">
-          <Link
-            href="/"
-            className="group inline-flex items-center gap-2 text-[0.85vw] font-semibold uppercase tracking-[0.2em] text-text-1/50 transition-colors duration-300 hover:text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary md:text-xs tab:text-xs"
-          >
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              aria-hidden="true"
-              className="transition-transform duration-300 group-hover:-translate-x-1"
+          <div className="mb-[2.5vw] md:mb-7 tab:mb-8">
+            <Link
+              href="/"
+              className="group inline-flex items-center gap-2 text-[0.85vw] font-semibold uppercase tracking-[0.2em] text-text-1/50 transition-colors duration-300 hover:text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary md:text-xs tab:text-xs"
             >
-              <path
-                d="M19 12H5m0 0l6-6m-6 6l6 6"
-                stroke="currentColor"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            Back
-          </Link>
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden="true"
+                className="transition-transform duration-300 group-hover:-translate-x-1"
+              >
+                <path
+                  d="M19 12H5m0 0l6-6m-6 6l6 6"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              Back
+            </Link>
+          </div>
 
-          <SectionEyebrow label="Start a project" classes="mb-[1.2vw] mt-[2.5vw] md:mb-3 md:mt-7 tab:mt-8" />
+          <SectionEyebrow label="Start a project" classes="mb-[1.2vw] md:mb-3" />
           <h1 className="text-[3.4vw] font-black leading-[1.05] tracking-tight md:text-[8.5vw] tab:text-4xl">
             Tell us about your{' '}
             <span className="bg-gradient-to-b from-white via-white to-primary bg-clip-text text-transparent">
