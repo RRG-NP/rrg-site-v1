@@ -3,8 +3,8 @@ export default function BlogLoading() {
   return (
     <div className="mx-auto max-w-6xl px-5 pb-24 pt-28 sm:px-8 lg:pt-32">
       <div className="mb-12 max-w-2xl animate-pulse">
-        <div className="mb-4 h-4 w-40 rounded bg-bg-2" />
-        <div className="mb-3 h-10 w-72 rounded bg-bg-2" />
+        <div className="mb-5 h-7 w-44 rounded-full bg-bg-2" />
+        <div className="mb-3 h-12 w-72 rounded bg-bg-2" />
         <div className="h-5 w-full max-w-md rounded bg-bg-2" />
       </div>
 

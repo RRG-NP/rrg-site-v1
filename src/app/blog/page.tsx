@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
 import BlogIndex from '@/components/blog/BlogIndex';
+import SectionEyebrow from '@/components/ui/SectionEyebrow';
 import { getAllPosts, getAllTags, getFeaturedPosts, toSummary } from '@/lib/blog';
 import { siteConfig } from '@/lib/site';
 
@@ -65,13 +66,22 @@ export default function BlogPage() {
   const tags = getAllTags().map((t) => t.tag);
 
   return (
-    <div className="mx-auto max-w-6xl px-5 pb-24 pt-28 sm:px-8 lg:pt-32">
-      <header className="mb-12 max-w-2xl">
-        <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-primary">The RRG Tech Blog</p>
-        <h1 className="text-4xl font-extrabold leading-tight text-text-1 sm:text-5xl">Insights & ideas</h1>
-        <p className="mt-4 text-lg text-text-1/60">
+    <div className="relative mx-auto max-w-6xl px-5 pb-24 pt-28 sm:px-8 lg:pt-32">
+      {/* Ambient glow, echoing the homepage hero */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-[6vw] right-0 h-[28vw] w-[28vw] rounded-full bg-primary/[0.05] blur-[120px]"
+      />
+
+      <header className="relative mb-12 max-w-2xl">
+        <SectionEyebrow label="The RRG Tech Blog" classes="mb-5" />
+        <h1 className="text-4xl font-black leading-[1.05] tracking-tight text-text-1 sm:text-5xl">
+          Insights &amp;{' '}
+          <span className="bg-gradient-to-b from-white via-white to-primary bg-clip-text text-transparent">ideas</span>
+        </h1>
+        <p className="mt-5 text-lg leading-relaxed text-text-1/60">
           Practical, opinionated writing on web and mobile development, AI for developers, performance enhancement, and
-          system architecture - grounded in the work we ship.
+          system architecture — grounded in the work we ship.
         </p>
       </header>
 

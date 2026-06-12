@@ -24,17 +24,17 @@ export default function BlogCard({ post, className }: { post: PostSummary; class
           <CardImage
             src={cover}
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 380px"
-            className="object-fill group-hover:scale-105"
+            className="group-hover:scale-105"
           />
         </div>
         <div className="flex flex-1 flex-col gap-3 p-5">
           {post.category && (
-            <span className="text-xs font-semibold uppercase tracking-wider text-primary">{post.category}</span>
+            <span className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">{post.category}</span>
           )}
-          {/* <h3 className="text-lg font-bold leading-snug text-text-1 transition-colors group-hover:text-primary">
+          <h3 className="text-lg font-bold leading-snug tracking-tight text-text-1 transition-colors group-hover:text-primary">
             {post.title}
-          </h3> */}
-          <p className="line-clamp-2 text-sm text-text-1/60">{post.description}</p>
+          </h3>
+          <p className="line-clamp-2 text-sm leading-relaxed text-text-1/55">{post.description}</p>
           <PostMeta date={post.date} readingTime={post.readingTime} className="mt-auto pt-2" />
         </div>
       </Link>
