@@ -6,15 +6,9 @@ import { motion, useReducedMotion } from 'framer-motion';
 
 import SectionEyebrow from '@/components/ui/SectionEyebrow';
 import SectionOpacity from '@/components/ui/SectionOpacity';
-import { siteConfig } from '@/lib/site';
+import SiteFooter from '@/components/SiteFooter';
 
 const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
-
-const SOCIAL_LINKS = [
-  { title: 'Facebook', href: siteConfig.social.facebook },
-  { title: 'LinkedIn', href: siteConfig.social.linkedin },
-  { title: 'GitHub', href: siteConfig.social.github },
-];
 
 interface Props {}
 
@@ -117,23 +111,7 @@ const Index: FC<Props> = () => {
           </motion.div>
         </div>
 
-        <footer className="flex justify-between border-t border-gray-1/60 px-[5vw] py-[1.8vw] text-[1.1vw] text-text-1/60 md:flex-col md:gap-4 md:px-6 md:py-5 md:text-[3.2vw] tab:text-[0.85rem]">
-          <div>
-            © 2026.{' '}
-            <a href="https://rrg.com.np/" target="_blank" rel="noreferrer" className="transition hover:text-primary">
-              RRG Tech
-            </a>
-          </div>
-          <ul className="flex space-x-[3vw] md:space-x-6">
-            {SOCIAL_LINKS.map((link) => (
-              <li key={link.title}>
-                <a href={link.href} target="_blank" rel="noreferrer" className="transition hover:text-primary">
-                  {link.title}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </footer>
+        <SiteFooter />
       </SectionOpacity>
     </section>
   );

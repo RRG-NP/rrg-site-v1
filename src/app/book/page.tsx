@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 import BookForm from '@/widgets/BookForm';
+import Navigation from '@/widgets/Navigation';
+import SiteFooter from '@/components/SiteFooter';
 import SectionEyebrow from '@/components/ui/SectionEyebrow';
 import { siteConfig } from '@/lib/site';
 
@@ -40,18 +42,21 @@ const NEXT_STEPS = [
 
 const Index = () => {
   return (
-    <section className="relative z-[5000] min-h-screen w-full overflow-hidden bg-bg-1 py-[5vw] md:py-12">
-      {/* Ambient glows */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -top-[8vw] right-[8vw] h-[30vw] w-[30vw] rounded-full bg-primary/[0.05] blur-[120px]"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute bottom-0 left-0 h-[26vw] w-[26vw] rounded-full bg-stroke/20 blur-[120px]"
-      />
+    <div className="relative z-[5000] flex min-h-screen w-full flex-col bg-bg-1">
+      <Navigation />
 
-      <div className="relative mx-auto grid max-w-[86vw] grid-cols-[34vw_minmax(0,1fr)] gap-[5vw] md:max-w-full md:gap-10 md:px-5 tab:max-w-[92vw] tab:grid-cols-1 tab:gap-12">
+      <section className="relative w-full grow overflow-hidden pb-[6vw] pt-[10vw] md:pb-12 md:pt-28 tab:pt-32">
+        {/* Ambient glows */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -top-[8vw] right-[8vw] h-[30vw] w-[30vw] rounded-full bg-primary/[0.05] blur-[120px]"
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute bottom-0 left-0 h-[26vw] w-[26vw] rounded-full bg-stroke/20 blur-[120px]"
+        />
+
+        <div className="relative mx-auto grid max-w-[86vw] grid-cols-[34vw_minmax(0,1fr)] gap-[5vw] md:max-w-full md:gap-10 md:px-5 tab:max-w-[92vw] tab:grid-cols-1 tab:gap-12">
         <aside className="h-fit self-start lg:sticky lg:top-[5vw]">
           <div className="mb-[2.5vw] md:mb-7 tab:mb-8">
             <Link
@@ -118,9 +123,12 @@ const Index = () => {
           </div>
         </aside>
 
-        <BookForm />
-      </div>
-    </section>
+          <BookForm />
+        </div>
+      </section>
+
+      <SiteFooter />
+    </div>
   );
 };
 export default Index;
