@@ -30,7 +30,7 @@ const Index: FC<Props> = () => {
       {/* Ambient glow behind the closing statement */}
       <div
         aria-hidden
-        className="pointer-events-none absolute left-1/2 top-1/2 h-[40vw] w-[60vw] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/[0.06] blur-[60px] md:h-[90vw] md:w-[120vw] md:blur-[130px]"
+        className="pointer-events-none absolute left-1/2 top-1/2 h-[40vw] w-[60vw] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/[0.06] blur-[130px] md:h-[90vw] md:w-[120vw] md:blur-[60px]"
       />
 
       <SectionOpacity classes="flex flex-col justify-center h-screen">
@@ -90,7 +90,7 @@ const Index: FC<Props> = () => {
                 aria-hidden
                 className="absolute inset-[-1000%] animate-[spin_2.5s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#CCC2DC_0%,#4A4458_50%,#CCC2DC_100%)] motion-reduce:animate-none"
               />
-              <span className="relative inline-flex w-full items-center justify-center gap-[0.7em] rounded-full bg-bg-1 px-[2.8em] py-[1em] text-[clamp(0.8rem,1vw,1rem)] font-semibold uppercase tracking-[0.12em] text-text-1 backdrop-blur-3xl transition-colors duration-300 group-hover:bg-bg-2 group-hover:text-primary md:text-[3.5vw]">
+              <span className="relative inline-flex w-full items-center justify-center gap-[0.7em] rounded-full bg-bg-1 px-[2.8em] py-[1em] text-[clamp(0.8rem,1vw,1rem)] font-semibold uppercase tracking-[0.12em] text-text-1 backdrop-blur-3xl transition-colors duration-300 group-hover:bg-bg-2 group-hover:text-primary md:backdrop-blur-none md:text-[3.5vw]">
                 Start a project
                 <svg
                   viewBox="0 0 24 24"
