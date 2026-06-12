@@ -6,6 +6,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import SectionTitle from '@/components/ui/SectionTitle';
+import SectionEyebrow from '@/components/ui/SectionEyebrow';
 import SectionOpacity from '@/components/ui/SectionOpacity';
 
 const DESCRIPTION =
@@ -141,7 +142,10 @@ const Index: FC<Props> = () => {
   return (
     <section id="about" className="relative z-[2] bg-bg-1 py-[6vw] md:py-10">
       <SectionOpacity classes="z-2">
-        <SectionTitle title="ABOUT." classes="px-[6vw] md:px-6 pt-[3vw] md:pt-8 z-10" />
+        <div className="px-[6vw] pt-[3vw] md:px-6 md:pt-8 md:text-center">
+          <SectionEyebrow label="Who we are" classes="mb-[1.2vw] md:mb-3" />
+          <SectionTitle title="ABOUT." classes="z-10" />
+        </div>
         <div className="relative self-start px-[6vw] pb-[5vw] pt-[3vw] md:px-6 md:pb-10 md:pt-6">
           <div className="flex space-x-[5vw] md:flex-col md:items-center md:gap-6 md:space-x-0">
             <div ref={sectionRef} className={`relative ${pClasses}`}>
@@ -190,15 +194,22 @@ const Index: FC<Props> = () => {
               ))}
             </div>
 
-            <div className="relative h-[20vw] w-[30vw] grow-[3] basis-0 bg-bg-2 md:h-[56vw] md:w-full md:max-w-[92%] md:basis-[initial] md:text-center">
-              <Image
-                src="/images/hands_v2.webp"
-                alt="Team collaboration - hands working together"
-                fill
-                sizes="(max-width: 600px) 92vw, 30vw"
-                className="rounded-[0.125vw] object-cover transition hover:brightness-110 md:rounded-sm"
-                priority
+            <div className="group/img relative h-[20vw] w-[30vw] grow-[3] basis-0 md:h-[56vw] md:w-full md:max-w-[92%] md:basis-[initial]">
+              {/* Offset frame — echoes the outlined type treatment used across sections */}
+              <span
+                aria-hidden
+                className="pointer-events-none absolute -inset-[0.8vw] rounded-[0.4vw] border border-stroke/40 transition-colors duration-500 group-hover/img:border-primary/40 md:-inset-2 md:rounded-md"
               />
+              <div className="relative h-full w-full overflow-hidden rounded-[0.25vw] bg-bg-2 md:rounded-sm">
+                <Image
+                  src="/images/hands_v2.webp"
+                  alt="Team collaboration - hands working together"
+                  fill
+                  sizes="(max-width: 600px) 92vw, 30vw"
+                  className="object-cover transition duration-700 ease-out group-hover/img:scale-[1.04] group-hover/img:brightness-110"
+                  priority
+                />
+              </div>
             </div>
           </div>
         </div>

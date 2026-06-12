@@ -4,10 +4,15 @@ import { FC, FormEvent, useState } from 'react';
 
 import { BOOK_FORM_DEFAULT_STATE, INPUT_FIELDS, RADIO_FIELDS } from '@/data';
 
-import Button from '@/components/ui/Button';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/RadioGroup';
 
-interface Props { }
+const INPUT_CLASSES =
+  'w-full appearance-none rounded-[0.35vw] border border-stroke/60 bg-white/[0.03] px-[1vw] text-text-1 transition-colors duration-200 placeholder:text-text-1/30 hover:border-stroke focus-visible:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 md:rounded-md md:px-3.5 md:text-sm tab:text-sm';
+
+const CHIP_CLASSES =
+  'inline-block cursor-pointer select-none rounded-full border border-stroke/60 bg-white/[0.03] px-[1.2vw] py-[0.45vw] text-[1vw] font-medium text-text-1/60 transition-colors duration-200 hover:border-stroke hover:text-text-1/85 peer-focus-visible:ring-2 peer-focus-visible:ring-primary/60 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-bg-1 peer-data-[state=checked]:border-primary/80 peer-data-[state=checked]:bg-primary/15 peer-data-[state=checked]:text-primary md:px-4 md:py-1.5 md:text-sm tab:px-3.5 tab:py-1.5 tab:text-sm';
+
+interface Props {}
 
 const Index: FC<Props> = () => {
   const [form, setForm] = useState(BOOK_FORM_DEFAULT_STATE);
@@ -54,102 +59,98 @@ const Index: FC<Props> = () => {
   };
 
   return (
-    <div className="mx-auto max-w-[70vw] md:max-w-[92vw] px-[4vw] md:px-4">
-      <div className="relative">
-        <button
-          className="group absolute left-0 top-[25%] md:-top-[20%] z-10 box-content rounded-full bg-stone-800 p-[0.5vw] md:p-2 hover:bg-stone-800"
-          onClick={() => push('/')}
-          aria-label="Go back to homepage"
-          type="button"
-        >
-          <svg
-            focusable="false"
-            className="h-[1.5vw] w-[1.5vw] md:h-6 md:w-6 fill-stone-400 transition group-hover:fill-stone-300"
-            viewBox="0 0 24 24"
+    <form className="w-full" onSubmit={handleSubmit}>
+      <div className="grid grid-cols-2 gap-x-[3vw] gap-y-[2.4vw] tab:grid-cols-1 tab:gap-y-8 md:gap-y-7">
+        {RADIO_FIELDS.map((item) => (
+          <RadioGroup
+            onValueChange={(value) => setForm((prev) => ({ ...prev, [item.formKey]: value }))}
+            key={item.title}
+            className="block w-full"
+            required={true}
           >
-            <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20z"></path>
-          </svg>
-        </button>
-        <h1 className="mb-[1.75vw] md:text-[7vw] md:mb-6 text-center text-[3.5vw] font-bold leading-[100%]">Request form</h1>
-      </div>
-      <form className="flex h-full flex-col items-center mt-10" onSubmit={handleSubmit}>
-        <div className="flex flex-wrap md:gap-y-7">
-          {RADIO_FIELDS.map((item) => (
-            <RadioGroup
-              onValueChange={(value) => setForm((prev) => ({ ...prev, [item.formKey]: value }))}
-              key={item.title}
-              className={`mb-[1.75vw] md:mb-0 inline-block w-[calc(50%-1.75vw)] md:w-full ${item.classes} md:mr-0`}
-              required={true}
-            >
-              <h4 className="mb-[0.2vw] md:mb-3 text-[1.3vw] md:text-base font-medium">{item.title}</h4>
+            <h4 className="mb-[0.8vw] text-[1.15vw] font-medium text-text-1/85 md:mb-3 md:text-base tab:text-[0.95rem]">
+              {item.title}
+            </h4>
+            <div className="flex flex-wrap gap-[0.6vw] md:gap-2 tab:gap-2">
               {item.radioArray.map((radio) => (
-                <div key={radio.value} className="flex items-center space-x-[0.65vw] md:space-x-3 md:py-0.5 font-[400]">
-                  <RadioGroupItem value={radio.value} id={radio.name} required={true} />
-                  <label htmlFor={radio.name} className="text-[1vw] md:text-sm leading-[1.75vw] md:leading-7 cursor-pointer">
+                <div key={radio.value} className="relative">
+                  <RadioGroupItem
+                    value={radio.value}
+                    id={radio.name}
+                    required={true}
+                    className="peer pointer-events-none absolute h-px w-px opacity-0"
+                  />
+                  <label htmlFor={radio.name} className={CHIP_CLASSES}>
                     {radio.name}
                   </label>
                 </div>
               ))}
-            </RadioGroup>
-          ))}
-
-          <div className="w-full space-y-[2vw] md:space-y-4 text-[1.1vw] md:mt-2">
-            {INPUT_FIELDS.map((item) => (
-              <div key={item.label} className={`w-full ${item.classes} md:!w-full md:!mr-0`}>
-                <label htmlFor={item.label} className="leading-[1.5] mb-[0.4vw] md:mb-1.5 text-[1.2vw] md:text-sm inline-block">
-                  {item.label}
-                </label>
-                <input
-                  onChange={({ target: { name, value } }) => setForm((prev) => ({ ...prev, [name]: value }))}
-                  type={item.type || 'text'}
-                  name={item.name}
-                  id={item.label}
-                  autoComplete={item.autoComplete}
-                  inputMode={item.inputMode}
-                  spellCheck={item.spellCheck}
-                  className="h-[3vw] md:h-11 w-full appearance-none rounded-[0.25vw] md:rounded border-[0.125vw] border-primary/80 bg-transparent px-[1vw] md:px-3 py-[0.8vw] md:py-2.5 md:text-sm focus-visible:outline-none focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/50"
-                  required={item.required}
-                />
-              </div>
-            ))}
-            <div className="w-full">
-              <label className="leading-[1.5] mb-[0.4vw] md:mb-1.5 text-[1.2vw] md:text-sm inline-block" htmlFor="message">
-                Tell us about your project
-              </label>
-              <textarea
-                minLength={20}
-                maxLength={500}
-                onChange={({ target: { name, value } }) => setForm((prev) => ({ ...prev, [name]: value }))}
-                id="message"
-                name="message"
-                className="min-h-[10vw] md:min-h-[40vw] w-full resize-none border-[0.125vw] rounded-[0.125vw] text-[1.2vw] md:text-sm border-primary/80 bg-transparent px-[0.8vw] md:px-3 py-[0.6vw] md:py-2.5 focus-visible:outline-none focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/50"
-              />
             </div>
-          </div>
+          </RadioGroup>
+        ))}
+      </div>
 
-          {/* Error Message */}
-          <div aria-live="polite" className="w-full">
-            {submitStatus && submitStatus.type === 'error' && (
-              <div
-                role="alert"
-                className="mb-[2vw] md:mb-4 w-full rounded-[0.5vw] md:rounded-lg p-[1.5vw] md:p-3 text-center text-[1.2vw] md:text-sm bg-red-500/20 text-red-300 border border-red-500/50"
-              >
-                {submitStatus.message}
-              </div>
-            )}
+      <div className="mt-[2.8vw] w-full space-y-[1.8vw] md:mt-8 md:space-y-4 tab:mt-9 tab:space-y-5">
+        {INPUT_FIELDS.map((item) => (
+          <div key={item.label} className={`w-full ${item.classes} md:!mr-0 md:!w-full`}>
+            <label
+              htmlFor={item.label}
+              className="mb-[0.4vw] inline-block text-[1vw] font-medium leading-[1.5] text-text-1/70 md:mb-1.5 md:text-sm tab:text-[0.85rem]"
+            >
+              {item.label}
+            </label>
+            <input
+              onChange={({ target: { name, value } }) => setForm((prev) => ({ ...prev, [name]: value }))}
+              type={item.type || 'text'}
+              name={item.name}
+              id={item.label}
+              autoComplete={item.autoComplete}
+              inputMode={item.inputMode}
+              spellCheck={item.spellCheck}
+              className={`h-[3.2vw] md:h-12 tab:h-11 ${INPUT_CLASSES}`}
+              required={item.required}
+            />
           </div>
-
-          <Button
-            title={isSubmitting ? 'Submitting…' : 'Submit'}
-            type="submit"
-            classes={`py-[1.2vw] md:py-3.5 px-[5vw] md:px-10 text-[1.1vw] md:text-sm ${isSubmitting ? 'bg-bg-1/50 cursor-not-allowed' : 'bg-bg-1/90 hover:bg-bg-1/80'
-              }`}
-            btnClasses="p-[0.2vw] md:p-1 capitalize self-start mt-[2.5vw] md:mt-7"
-            disabled={isSubmitting}
+        ))}
+        <div className="w-full">
+          <label
+            className="mb-[0.4vw] inline-block text-[1vw] font-medium leading-[1.5] text-text-1/70 md:mb-1.5 md:text-sm tab:text-[0.85rem]"
+            htmlFor="message"
+          >
+            Tell us about your project
+          </label>
+          <textarea
+            minLength={20}
+            maxLength={500}
+            onChange={({ target: { name, value } }) => setForm((prev) => ({ ...prev, [name]: value }))}
+            id="message"
+            name="message"
+            placeholder="Goals, timeline, links — anything that helps us understand."
+            className={`min-h-[10vw] resize-none py-[0.6vw] text-[1.1vw] md:min-h-[40vw] md:py-2.5 tab:min-h-[160px] tab:py-2.5 ${INPUT_CLASSES}`}
           />
         </div>
-      </form>
-    </div>
+      </div>
+
+      {/* Error Message */}
+      <div aria-live="polite" className="w-full">
+        {submitStatus && submitStatus.type === 'error' && (
+          <div
+            role="alert"
+            className="mt-[2vw] w-full rounded-[0.5vw] border border-red-500/50 bg-red-500/20 p-[1.5vw] text-center text-[1.2vw] text-red-300 md:mt-4 md:rounded-lg md:p-3 md:text-sm tab:text-sm"
+          >
+            {submitStatus.message}
+          </div>
+        )}
+      </div>
+
+      <button
+        type="submit"
+        disabled={isSubmitting}
+        className="mt-[2.5vw] inline-flex items-center justify-center rounded-full bg-primary px-[3em] py-[1em] text-[clamp(0.8rem,1vw,1rem)] font-semibold uppercase tracking-[0.12em] text-bg-1 transition duration-300 hover:-translate-y-[2px] hover:bg-text-1 hover:shadow-[0_0_50px_rgba(204,194,220,0.3)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-1 active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0 disabled:hover:bg-primary disabled:hover:shadow-none md:mt-7 md:w-full"
+      >
+        {isSubmitting ? 'Submitting…' : 'Send request'}
+      </button>
+    </form>
   );
 };
 export default Index;
