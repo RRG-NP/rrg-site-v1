@@ -97,7 +97,7 @@ const Navigation: FC<Props> = ({ logoVisible = true, burgerVisible = true }) => 
           aria-label={isActive ? 'Close navigation menu' : 'Open navigation menu'}
           aria-expanded={isActive}
           aria-controls="sidebar-menu"
-          className="flex h-9 w-9 sm:h-11 sm:w-11 md:h-10 md:w-10 lg:h-16 lg:w-16 cursor-pointer items-center justify-center rounded-full bg-stone-400"
+          className="flex h-11 w-11 lg:h-16 lg:w-16 cursor-pointer items-center justify-center rounded-full bg-stone-400"
         >
           <div className={`burger ${isActive ? 'burgerActive' : ''}`} />
         </button>

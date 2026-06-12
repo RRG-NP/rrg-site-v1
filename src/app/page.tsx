@@ -8,7 +8,8 @@ import Services from '@/widgets/Services';
 import Approach from '@/widgets/Approach';
 import CallToAction from '@/widgets/CallToAction';
 import ShadowCursor from '@/components/ui/ShadowCursor';
-import SplashScreen, { STORAGE_KEY } from '@/components/ui/SplashScreen';
+import SplashScreen from '@/components/ui/SplashScreen';
+import { SPLASH_STORAGE_KEY } from '@/shared/utils';
 
 const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
@@ -18,8 +19,7 @@ export default function Home() {
   const [isPointerDevice, setIsPointerDevice] = useState(false);
 
   useIsomorphicLayoutEffect(() => {
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    if (isMobile || sessionStorage.getItem(STORAGE_KEY)) {
+    if (sessionStorage.getItem(SPLASH_STORAGE_KEY)) {
       setShowSplash(false);
       setHeroReady(true);
     }
@@ -33,7 +33,7 @@ export default function Home() {
 
   // Fill reached 100% - reveal the page so it fades in behind the splash.
   const handleReveal = useCallback(() => {
-    sessionStorage.setItem(STORAGE_KEY, '1');
+    sessionStorage.setItem(SPLASH_STORAGE_KEY, '1');
     setHeroReady(true);
   }, []);
 

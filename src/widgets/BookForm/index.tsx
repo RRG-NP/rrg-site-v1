@@ -7,7 +7,7 @@ import { BOOK_FORM_DEFAULT_STATE, INPUT_FIELDS, RADIO_FIELDS } from '@/data';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/RadioGroup';
 
 const INPUT_CLASSES =
-  'w-full appearance-none rounded-[0.35vw] border border-stroke/60 bg-white/[0.03] px-[1vw] text-text-1 transition-colors duration-200 placeholder:text-text-1/30 hover:border-stroke focus-visible:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 md:rounded-md md:px-3.5 md:text-sm tab:text-sm';
+  'w-full appearance-none rounded-[0.35vw] border border-stroke/60 bg-white/[0.03] px-[1vw] text-text-1 transition-colors duration-200 placeholder:text-text-1/30 hover:border-stroke focus-visible:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 md:rounded-md md:px-3.5 md:text-base tab:text-sm';
 
 const CHIP_CLASSES =
   'inline-block cursor-pointer select-none rounded-full border border-stroke/60 bg-white/[0.03] px-[1.2vw] py-[0.45vw] text-[1vw] font-medium text-text-1/60 transition-colors duration-200 hover:border-stroke hover:text-text-1/85 peer-focus-visible:ring-2 peer-focus-visible:ring-primary/60 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-bg-1 peer-data-[state=checked]:border-primary/80 peer-data-[state=checked]:bg-primary/15 peer-data-[state=checked]:text-primary md:px-4 md:py-1.5 md:text-sm tab:px-3.5 tab:py-1.5 tab:text-sm';

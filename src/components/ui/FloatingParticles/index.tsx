@@ -2,6 +2,8 @@
 import { motion, useReducedMotion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 
+import { MOBILE_BREAKPOINT } from '@/shared/utils';
+
 interface Particle {
   id: number;
   x: number;
@@ -17,7 +19,7 @@ export default function FloatingParticles() {
   const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
-    const isMobile = window.innerWidth <= 768;
+    const isMobile = window.innerWidth <= MOBILE_BREAKPOINT;
     if (prefersReducedMotion || isMobile) {
       setParticles([]);
       return;

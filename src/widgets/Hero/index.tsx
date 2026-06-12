@@ -3,6 +3,7 @@ import { useRef, useEffect, useState, type MouseEvent as ReactMouseEvent } from 
 import { useScroll, useTransform, motion, useSpring, useReducedMotion, type Variants } from 'framer-motion';
 import GridPattern from '@/components/ui/GridPattern';
 import FloatingParticles from '@/components/ui/FloatingParticles';
+import { MOBILE_BREAKPOINT } from '@/shared/utils';
 
 interface HeroProps {
   ready?: boolean;
@@ -33,7 +34,7 @@ const Hero = ({ ready = true }: HeroProps) => {
   });
 
   useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth <= 768);
+    const check = () => setIsMobile(window.innerWidth <= MOBILE_BREAKPOINT);
     check();
     window.addEventListener('resize', check);
     return () => window.removeEventListener('resize', check);

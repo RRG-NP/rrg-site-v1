@@ -8,6 +8,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import SectionTitle from '@/components/ui/SectionTitle';
 import SectionEyebrow from '@/components/ui/SectionEyebrow';
 import SectionOpacity from '@/components/ui/SectionOpacity';
+import { MOBILE_MEDIA_QUERY } from '@/shared/utils';
 
 const DESCRIPTION =
   'We are a young, close-knit team of like-minded people ready to help brands prosper in the digital world.';
@@ -30,7 +31,7 @@ const Index: FC<Props> = () => {
   const [staticReveal, setStaticReveal] = useState(false);
 
   const shouldReveal = () =>
-    !window.matchMedia('(max-width: 768px)').matches && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    !window.matchMedia(MOBILE_MEDIA_QUERY).matches && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const measureLines = () => {
     const p = dimRef.current;
@@ -97,7 +98,7 @@ const Index: FC<Props> = () => {
 
     gsap.registerPlugin(ScrollTrigger);
 
-    const isMobile = window.innerWidth < 768;
+    const isMobile = window.matchMedia(MOBILE_MEDIA_QUERY).matches;
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const ctx = gsap.context(() => {

@@ -3,9 +3,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { motion, useAnimationControls } from 'framer-motion';
 
-/** Session flag so the splash only plays once per browser session. */
-export const STORAGE_KEY = 'rrg_loader_shown';
-
 const LOGO_SRC = '/images/rrg-white.png';
 const FILL_DURATION = 2800; // ms for the 0 -> 100 fill
 const GREY = '#6b6b75'; // unfilled (grey) logo colour
@@ -95,7 +92,7 @@ export default function SplashScreen({ onReveal, onDone }: Props) {
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     const html = document.documentElement;
     const prevOverflow = html.style.overflow;
-    if (!isMobile) html.style.overflow = 'hidden';
+    html.style.overflow = 'hidden';
 
     // Size: ~46% of the smaller viewport edge, capped; backing store oversampled
     // so the logo stays crisp when it scales up during the reveal.
@@ -175,7 +172,7 @@ export default function SplashScreen({ onReveal, onDone }: Props) {
     return () => {
       cancelled = true;
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      if (!isMobile) html.style.overflow = prevOverflow;
+      html.style.overflow = prevOverflow;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -184,7 +181,7 @@ export default function SplashScreen({ onReveal, onDone }: Props) {
     <motion.div
       initial={{ opacity: 1 }}
       animate={overlayControls}
-      className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden bg-black"
+      className="fixed inset-0 z-[9999] flex touch-none items-center justify-center overflow-hidden bg-black"
       role="progressbar"
       aria-label="Loading site"
       aria-valuemin={0}
@@ -194,8 +191,12 @@ export default function SplashScreen({ onReveal, onDone }: Props) {
       {/* Soft radial glow for depth */}
       <div className="pointer-events-none absolute inset-0 bg-gradient-radial from-white/[0.05] via-transparent to-transparent" />
 
-      <motion.div initial={{ scale: 1 }} animate={logoControls} className="will-change-transform">
-        <canvas ref={canvasRef} aria-hidden="true" />
+      <motion.div
+        initial={{ scale: 1 }}
+        animate={logoControls}
+        className="grid place-items-center will-change-transform"
+      >
+        <canvas ref={canvasRef} aria-hidden="true" className="col-start-1 row-start-1" />
       </motion.div>
 
       {/* Bottom caption: LOADING + counter + thin progress line */}

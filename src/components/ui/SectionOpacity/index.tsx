@@ -1,7 +1,7 @@
 import { FC, ReactNode, useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
-import { cn } from '@/shared/utils';
+import { cn, MOBILE_MEDIA_QUERY } from '@/shared/utils';
 
 interface Props {
   children: ReactNode;
@@ -28,7 +28,7 @@ const Index: FC<Props> = ({ children, classes, offset }) => {
   const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const isMobile = window.matchMedia(MOBILE_MEDIA_QUERY).matches;
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     setEnabled(!isMobile && !prefersReducedMotion);
   }, []);
