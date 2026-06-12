@@ -98,7 +98,7 @@ export default function BlogIndex({ posts, featured, tags }: BlogIndexProps) {
             }}
             placeholder="Search articles…"
             aria-label="Search articles"
-            className="w-full rounded-full border border-gray-1 bg-bg-2/40 py-3 pl-12 pr-4 text-text-1 transition-colors placeholder:text-text-1/40 focus:border-primary/60 focus:outline-none focus:ring-1 focus:ring-primary"
+            className="w-full rounded-full border border-stroke/60 bg-white/[0.03] py-3 pl-12 pr-4 text-text-1 transition-colors placeholder:text-text-1/30 hover:border-stroke focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/40"
           />
         </div>
 
@@ -166,7 +166,7 @@ export default function BlogIndex({ posts, featured, tags }: BlogIndexProps) {
               <button
                 type="button"
                 onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
-                className="rounded-full border border-stroke px-6 py-2.5 text-sm font-medium text-text-1 transition-colors hover:border-primary hover:text-primary focus:outline-none focus-visible:ring-1 focus-visible:ring-primary"
+                className="rounded-full border border-stroke px-7 py-3 text-xs font-semibold uppercase tracking-[0.14em] text-text-1/80 transition-colors duration-300 hover:border-primary/70 hover:text-text-1 focus:outline-none focus-visible:ring-1 focus-visible:ring-primary"
               >
                 Load more
               </button>
@@ -181,7 +181,7 @@ export default function BlogIndex({ posts, featured, tags }: BlogIndexProps) {
             <button
               type="button"
               onClick={clearFilters}
-              className="mt-5 rounded-full border border-stroke px-5 py-2 text-sm font-medium text-text-1 transition-colors hover:border-primary hover:text-primary focus:outline-none focus-visible:ring-1 focus-visible:ring-primary"
+              className="mt-5 rounded-full border border-stroke px-6 py-2.5 text-xs font-semibold uppercase tracking-[0.14em] text-text-1/80 transition-colors duration-300 hover:border-primary/70 hover:text-text-1 focus:outline-none focus-visible:ring-1 focus-visible:ring-primary"
             >
               Clear filters
             </button>

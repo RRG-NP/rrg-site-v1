@@ -1,4 +1,9 @@
+'use client';
+
 import { FC, SVGProps } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
+
+const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
 interface Step {
   icon: FC<SVGProps<SVGSVGElement>>;
@@ -11,6 +16,18 @@ interface Props {
 }
 
 const ProcessTimeline: FC<Props> = ({ steps }) => {
+  const prefersReducedMotion = useReducedMotion();
+
+  const reveal = (i: number) =>
+    prefersReducedMotion
+      ? {}
+      : {
+          initial: { opacity: 0, y: 32 },
+          whileInView: { opacity: 1, y: 0 },
+          viewport: { once: true, margin: '-50px' },
+          transition: { duration: 0.8, delay: Math.min(i * 0.06, 0.24), ease: EASE },
+        };
+
   return (
     <ol className="relative mx-auto max-w-[78vw] tab:max-w-full">
       {steps.map((step, i) => {
@@ -18,15 +35,16 @@ const ProcessTimeline: FC<Props> = ({ steps }) => {
         const isLast = i === steps.length - 1;
 
         return (
-          <li
+          <motion.li
             key={step.title}
+            {...reveal(i)}
             className="group relative flex items-start gap-[2.5vw] pb-[3.2vw] last:pb-0 md:gap-[5vw] md:pb-[10vw] tab:gap-7 tab:pb-11"
           >
             {/* Connecting spine to the next badge */}
             {!isLast && (
               <span
                 aria-hidden
-                className="pointer-events-none absolute bottom-0 left-[1.85vw] top-[3.7vw] w-px -translate-x-1/2 bg-gradient-to-b from-stroke/70 via-gray-1/60 to-gray-1/20 md:left-[6.5vw] md:top-[13vw] tab:left-7 tab:top-14"
+                className="pointer-events-none absolute bottom-0 left-[1.85vw] top-[3.7vw] w-px -translate-x-1/2 bg-gradient-to-b from-primary/35 via-stroke/50 to-stroke/10 md:left-[6.5vw] md:top-[13vw] tab:left-7 tab:top-14"
               />
             )}
 
@@ -54,7 +72,7 @@ const ProcessTimeline: FC<Props> = ({ steps }) => {
                 <step.icon className="h-[2.4vw] w-[2.4vw] tab:h-7 tab:w-7" />
               </span>
             </div>
-          </li>
+          </motion.li>
         );
       })}
     </ol>
