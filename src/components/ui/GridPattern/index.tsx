@@ -1,10 +1,19 @@
 'use client';
 import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
+import { MOBILE_BREAKPOINT } from '@/shared/utils';
 
 export default function GridPattern() {
   const containerRef = useRef(null);
   const prefersReducedMotion = useReducedMotion();
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth <= MOBILE_BREAKPOINT);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -13,7 +22,10 @@ export default function GridPattern() {
 
   const opacity = useTransform(scrollYProgress, [0, 0.5], [0.3, 0]);
   const scale = useTransform(scrollYProgress, [0, 0.5], [1, 1.2]);
-  const style = prefersReducedMotion ? { opacity: 0.3 } : { opacity, scale };
+  // On mobile, the scroll-linked scale/opacity promotes a full-screen GPU layer
+  // that contributes to iOS dropping the page to black mid-scroll. Render it
+  // static there; keep the parallax fade on desktop.
+  const style = prefersReducedMotion || isMobile ? { opacity: 0.3 } : { opacity, scale };
 
   return (
     <div ref={containerRef} className="absolute inset-0 overflow-hidden">

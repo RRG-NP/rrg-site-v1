@@ -30,7 +30,7 @@ const Index: FC<Props> = () => {
       {/* Ambient glow behind the closing statement */}
       <div
         aria-hidden
-        className="pointer-events-none absolute left-1/2 top-1/2 h-[40vw] w-[60vw] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/[0.06] blur-[130px] md:h-[90vw] md:w-[120vw]"
+        className="pointer-events-none absolute left-1/2 top-1/2 h-[40vw] w-[60vw] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/[0.06] blur-[60px] md:h-[90vw] md:w-[120vw] md:blur-[130px]"
       />
 
       <SectionOpacity classes="flex flex-col justify-center h-screen">

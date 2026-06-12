@@ -114,7 +114,7 @@ const Hero = ({ ready = true }: HeroProps) => {
           {/* Soft halo behind the headline (replaces per-letter text-shadow, which the reveal masks would clip) */}
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute left-1/2 top-[42%] -z-10 h-[26vw] w-[58vw] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/[0.08] blur-[110px] md:h-[64vw] md:w-[92vw]"
+            className="pointer-events-none absolute left-1/2 top-[42%] -z-10 h-[26vw] w-[58vw] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/[0.08] blur-[60px] md:h-[64vw] md:w-[92vw] md:blur-[110px]"
           />
 
           <div style={depth(40)}>
@@ -148,7 +148,7 @@ const Hero = ({ ready = true }: HeroProps) => {
                       variants={letterVariants}
                       initial={false}
                       animate={ready ? 'visible' : 'hidden'}
-                      className={`inline-block will-change-transform ${
+                      className={`inline-block lg:will-change-transform ${
                         word.outline
                           ? 'text-transparent transition-colors duration-700 group-hover/outline:text-primary/80'
                           : 'bg-gradient-to-b from-white via-white to-primary bg-clip-text text-transparent'
@@ -211,12 +211,15 @@ const Hero = ({ ready = true }: HeroProps) => {
           </div>
         </motion.div>
 
-        <div className="pointer-events-none absolute left-1/4 top-1/4 h-96 w-96 rounded-full bg-primary/[0.06] blur-[120px] md:hidden" />
-        <div className="pointer-events-none absolute bottom-1/4 right-1/4 h-96 w-96 rounded-full bg-stroke/30 blur-[120px] md:hidden" />
+        {/* Decorative glow blobs - desktop only. On mobile these added two full
+            large blur layers to a black section, blowing iOS's compositing-layer
+            budget and causing the page to flash black while scrolling. */}
+        <div className="pointer-events-none absolute left-1/4 top-1/4 hidden h-96 w-96 rounded-full bg-primary/[0.06] blur-[120px] lg:block" />
+        <div className="pointer-events-none absolute bottom-1/4 right-1/4 hidden h-96 w-96 rounded-full bg-stroke/30 blur-[120px] lg:block" />
       </div>
 
-      {/* Horizon glow peeking over the section divider */}
-      <div className="pointer-events-none absolute bottom-0 left-1/2 z-[25] h-[24vw] w-[90vw] -translate-x-1/2 translate-y-1/2 rounded-full bg-primary/[0.07] blur-[100px]" />
+      {/* Horizon glow peeking over the section divider (lighter blur on mobile to ease iOS rasterization) */}
+      <div className="pointer-events-none absolute bottom-0 left-1/2 z-[25] h-[24vw] w-[90vw] -translate-x-1/2 translate-y-1/2 rounded-full bg-primary/[0.07] blur-[55px] md:blur-[100px]" />
 
       <div className="absolute -bottom-2 left-0 right-0 z-30 h-24 md:h-32 lg:h-48">
         <svg
