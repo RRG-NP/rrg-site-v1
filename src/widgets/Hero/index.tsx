@@ -114,13 +114,13 @@ const Hero = ({ ready = true }: HeroProps) => {
           {/* Soft halo behind the headline (replaces per-letter text-shadow, which the reveal masks would clip) */}
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute left-1/2 top-[42%] -z-10 h-[26vw] w-[58vw] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/[0.08] blur-[60px] md:h-[64vw] md:w-[92vw] md:blur-[110px]"
+            className="pointer-events-none absolute left-1/2 top-[42%] -z-10 h-[26vw] w-[58vw] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/[0.08] blur-[110px] md:h-[64vw] md:w-[92vw] md:blur-[60px]"
           />
 
           <div style={depth(40)}>
             <motion.div
               {...fadeUp(0.05)}
-              className="mb-[2.4vw] flex items-center gap-2.5 rounded-full border border-stroke/60 bg-white/[0.04] px-[clamp(1rem,1.3vw,1.5rem)] py-[clamp(0.45rem,0.6vw,0.7rem)] md:mb-7 md:backdrop-blur-md"
+              className="mb-[2.4vw] flex items-center gap-2.5 rounded-full border border-stroke/60 bg-white/[0.04] px-[clamp(1rem,1.3vw,1.5rem)] py-[clamp(0.45rem,0.6vw,0.7rem)] backdrop-blur-md md:mb-7 md:backdrop-blur-none"
             >
               <span className="-mr-[0.28em] text-[clamp(0.6rem,0.8vw,0.75rem)] font-semibold uppercase tracking-[0.28em] text-text-1/70">
                 Creative Digital Agency in Kathmandu
@@ -211,15 +211,13 @@ const Hero = ({ ready = true }: HeroProps) => {
           </div>
         </motion.div>
 
-        {/* Decorative glow blobs - desktop only. On mobile these added two full
-            large blur layers to a black section, blowing iOS's compositing-layer
-            budget and causing the page to flash black while scrolling. */}
-        <div className="pointer-events-none absolute left-1/4 top-1/4 hidden h-96 w-96 rounded-full bg-primary/[0.06] blur-[120px] lg:block" />
-        <div className="pointer-events-none absolute bottom-1/4 right-1/4 hidden h-96 w-96 rounded-full bg-stroke/30 blur-[120px] lg:block" />
+        {/* Decorative glow blobs - desktop only (md: is max-width in this config, so md:hidden = hidden on phones) */}
+        <div className="pointer-events-none absolute left-1/4 top-1/4 h-96 w-96 rounded-full bg-primary/[0.06] blur-[120px] md:hidden" />
+        <div className="pointer-events-none absolute bottom-1/4 right-1/4 h-96 w-96 rounded-full bg-stroke/30 blur-[120px] md:hidden" />
       </div>
 
       {/* Horizon glow peeking over the section divider (lighter blur on mobile to ease iOS rasterization) */}
-      <div className="pointer-events-none absolute bottom-0 left-1/2 z-[25] h-[24vw] w-[90vw] -translate-x-1/2 translate-y-1/2 rounded-full bg-primary/[0.07] blur-[55px] md:blur-[100px]" />
+      <div className="pointer-events-none absolute bottom-0 left-1/2 z-[25] h-[24vw] w-[90vw] -translate-x-1/2 translate-y-1/2 rounded-full bg-primary/[0.07] blur-[100px] md:blur-[55px]" />
 
       <div className="absolute -bottom-2 left-0 right-0 z-30 h-24 md:h-32 lg:h-48">
         <svg
