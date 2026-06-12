@@ -107,10 +107,7 @@ const Hero = ({ ready = true }: HeroProps) => {
             opacity: scrollOpacity,
             scale: scrollScale,
             y: scrollY,
-            rotateX,
-            rotateY,
-            transformStyle: 'preserve-3d',
-            perspective: 1000,
+            ...(isMobile ? {} : { rotateX, rotateY, transformStyle: 'preserve-3d' as const, perspective: 1000 }),
           }}
           className="relative z-20 mx-auto flex max-w-7xl flex-col items-center justify-center px-4 md:px-6"
         >

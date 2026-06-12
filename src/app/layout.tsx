@@ -28,7 +28,7 @@ export default function RootLayout({
       <body className={montserrat.className} suppressHydrationWarning>
         <script
           dangerouslySetInnerHTML={{
-            __html: `try{sessionStorage.getItem('${SPLASH_STORAGE_KEY}')||document.documentElement.setAttribute('data-splash-init','')}catch(e){document.documentElement.setAttribute('data-splash-init','')}`,
+            __html: `try{sessionStorage.getItem('${SPLASH_STORAGE_KEY}')||document.documentElement.classList.add('splash-pending')}catch(e){document.documentElement.classList.add('splash-pending')}`,
           }}
         />
         <SmoothScroll>
