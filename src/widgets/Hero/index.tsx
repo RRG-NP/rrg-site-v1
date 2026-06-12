@@ -73,7 +73,7 @@ const Hero = ({ ready = true }: HeroProps) => {
 
   // Shared entrance for the eyebrow / tagline / CTA blocks, staggered by delay.
   const fadeUp = (delay: number) => ({
-    initial: prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 28 },
+    initial: false as const,
     animate: ready ? { opacity: 1, y: 0 } : prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 28 },
     transition: { duration: prefersReducedMotion ? 0.35 : 0.95, delay: prefersReducedMotion ? 0 : delay, ease: EASE },
   });
@@ -149,7 +149,7 @@ const Hero = ({ ready = true }: HeroProps) => {
                       key={`${word.text}-${i}`}
                       custom={letterIndex++}
                       variants={letterVariants}
-                      initial="hidden"
+                      initial={false}
                       animate={ready ? 'visible' : 'hidden'}
                       className={`inline-block will-change-transform ${
                         word.outline
@@ -239,7 +239,7 @@ const Hero = ({ ready = true }: HeroProps) => {
         style={{ bottom: 'clamp(5rem, 11vw, 9rem)' }}
       >
         <motion.div
-          initial={{ opacity: 0, y: 8 }}
+          initial={false}
           animate={ready ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
           transition={{ duration: 0.7, delay: 1.0, ease: EASE }}
         >
@@ -262,7 +262,7 @@ const Hero = ({ ready = true }: HeroProps) => {
         </motion.div>
 
         <motion.div
-          initial={{ scaleX: 0, opacity: 0 }}
+          initial={false}
           animate={ready ? { scaleX: 1, opacity: 1 } : { scaleX: 0, opacity: 0 }}
           transition={{ duration: 1.9, delay: 1.05, ease: EASE }}
           className="mt-2 h-px w-16 origin-center bg-gradient-to-r from-transparent via-primary/40 to-transparent md:w-24 lg:w-36"

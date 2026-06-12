@@ -22,6 +22,18 @@ html {
   color-scheme: dark;
 }
 
+#splash-precover {
+  display: none;
+}
+
+html.splash-pending #splash-precover {
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: 9998; // just below the SplashScreen overlay (z-9999)
+  background: #000;
+}
+
 // Hide the page scrollbar everywhere (scrolling still works) - Firefox, old Edge/IE, and WebKit/Blink.
 html,
 body {

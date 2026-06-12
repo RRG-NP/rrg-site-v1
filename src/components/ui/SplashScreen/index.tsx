@@ -179,6 +179,7 @@ export default function SplashScreen({ onReveal, onDone }: Props) {
 
   return (
     <motion.div
+      id="splash"
       initial={{ opacity: 1 }}
       animate={overlayControls}
       className="fixed inset-0 z-[9999] flex touch-none items-center justify-center overflow-hidden bg-black"

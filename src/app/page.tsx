@@ -14,14 +14,15 @@ import { SPLASH_STORAGE_KEY } from '@/shared/utils';
 const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
 export default function Home() {
-  const [showSplash, setShowSplash] = useState(true);
-  const [heroReady, setHeroReady] = useState(false);
+  const [showSplash, setShowSplash] = useState(false);
+  const [heroReady, setHeroReady] = useState(true);
   const [isPointerDevice, setIsPointerDevice] = useState(false);
 
   useIsomorphicLayoutEffect(() => {
-    if (sessionStorage.getItem(SPLASH_STORAGE_KEY)) {
-      setShowSplash(false);
-      setHeroReady(true);
+    if (!sessionStorage.getItem(SPLASH_STORAGE_KEY)) {
+      setShowSplash(true);
+      setHeroReady(false);
+      document.documentElement.classList.remove('splash-pending');
     }
   }, []);
 
@@ -51,6 +52,7 @@ export default function Home() {
       <Approach />
       <CallToAction />
       {isPointerDevice && <ShadowCursor />}
+      <div id="splash-precover" aria-hidden="true" />
       {showSplash && <SplashScreen onReveal={handleReveal} onDone={handleSplashDone} />}
     </>
   );
