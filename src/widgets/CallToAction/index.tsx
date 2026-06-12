@@ -89,9 +89,30 @@ const Index: FC<Props> = () => {
           <motion.div {...reveal(0.32)}>
             <Link
               href="/book"
-              className="mt-[2.2vw] inline-flex items-center justify-center rounded-full bg-primary px-[2.8em] py-[1em] text-[clamp(0.8rem,1vw,1rem)] font-semibold uppercase tracking-[0.12em] text-bg-1 transition duration-300 hover:-translate-y-[2px] hover:bg-text-1 hover:shadow-[0_0_50px_rgba(204,194,220,0.35)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-1 active:translate-y-0 md:mt-7 md:w-[80vw] md:text-[3.5vw]"
+              className="group relative mt-[2.2vw] inline-flex overflow-hidden rounded-full p-[2px] transition-shadow duration-500 hover:shadow-[0_0_45px_rgba(204,194,220,0.25)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-1 md:mt-7 md:w-[80vw]"
             >
-              Start a project
+              {/* Rotating conic border — the site's signature button ring */}
+              <span
+                aria-hidden
+                className="absolute inset-[-1000%] animate-[spin_2.5s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#CCC2DC_0%,#4A4458_50%,#CCC2DC_100%)] motion-reduce:animate-none"
+              />
+              <span className="relative inline-flex w-full items-center justify-center gap-[0.7em] rounded-full bg-bg-1 px-[2.8em] py-[1em] text-[clamp(0.8rem,1vw,1rem)] font-semibold uppercase tracking-[0.12em] text-text-1 backdrop-blur-3xl transition-colors duration-300 group-hover:bg-bg-2 group-hover:text-primary md:text-[3.5vw]">
+                Start a project
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  aria-hidden="true"
+                  className="h-[1em] w-[1em] transition-transform duration-300 group-hover:-translate-y-[2px] group-hover:translate-x-[2px]"
+                >
+                  <path
+                    d="M7 17L17 7M17 7H8m9 0v9"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </span>
             </Link>
           </motion.div>
         </div>
