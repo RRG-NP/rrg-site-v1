@@ -120,7 +120,7 @@ const Hero = ({ ready = true }: HeroProps) => {
           <div style={depth(40)}>
             <motion.div
               {...fadeUp(0.05)}
-              className="mb-[2.4vw] flex items-center gap-2.5 rounded-full border border-stroke/60 bg-white/[0.04] px-[clamp(1rem,1.3vw,1.5rem)] py-[clamp(0.45rem,0.6vw,0.7rem)] backdrop-blur-md md:mb-7"
+              className="mb-[2.4vw] flex items-center gap-2.5 rounded-full border border-stroke/60 bg-white/[0.04] px-[clamp(1rem,1.3vw,1.5rem)] py-[clamp(0.45rem,0.6vw,0.7rem)] md:mb-7 md:backdrop-blur-md"
             >
               <span className="-mr-[0.28em] text-[clamp(0.6rem,0.8vw,0.75rem)] font-semibold uppercase tracking-[0.28em] text-text-1/70">
                 Creative Digital Agency in Kathmandu
