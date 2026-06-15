@@ -1,0 +1,96 @@
+---
+title: AI wrote 80% of my feature. The other 20% was the hard part
+description: I used an AI assistant to build a file upload feature. Most of it worked. The parts that didn't reveal exactly where human judgment still can't be skipped.
+date: 2026-06-15
+published: true
+featured: false
+category: Engineering
+tags:
+  - Web Development
+  - Next.js
+  - React
+author: Rohan Gautam
+---
+
+Last month I gave Claude a task: build a drag-and-drop file upload with a preview, client-side validation, and an API route to handle the actual upload. The kind of feature I've written a half-dozen times and still find tedious. I expected to spend half a day on it. Instead, the first working version took about 90 minutes - most of which was reading and adjusting the output, not writing.
+
+I merged most of it. Then I deleted one function and rewrote two others. Here's what those were and why.
+
+## What AI got right
+
+The component structure, JSX, and state management were clean. The drag-and-drop logic worked. Client-side validation - checking file type and rejecting anything over a size limit - passed on the first try. The API route boilerplate in Next.js, including stream parsing, was solid. Honestly, it was probably cleaner than what I'd have written quickly under time pressure. The happy path worked end-to-end.
+
+This part I merged essentially as-is. It was boilerplate - important boilerplate, but boilerplate. The kind of code that has a known right answer and where pattern-matching beats creativity.
+
+## The first problem: errors that looked handled
+
+The API route had a `try/catch` block around the upload. It looked fine. But inside the catch, it returned a generic 500 with `{ error: 'Upload failed' }` regardless of what actually went wrong.
+
+The issue surfaced when I tested with a file slightly above the server's body limit. The server responded with a 413. My catch block turned that into a 500. The frontend showed "something went wrong" instead of "file too large." A user would have no idea why their upload failed.
+
+The fix was straightforward:
+
+```ts
+} catch (err) {
+  const status = err?.status ?? err?.statusCode ?? 500;
+  const message =
+    status === 413
+      ? 'File is too large for the server to accept.'
+      : 'Upload failed. Try again.';
+  return NextResponse.json({ error: message }, { status });
+}
+```
+
+I would have caught this only by testing unhappy paths deliberately - which I did because I know to look for them, not because the generated code flagged the gap.
+
+## The second problem: a memory leak with no symptoms
+
+The preview logic used `URL.createObjectURL()` to generate a local URL for the selected image. Correct. But there was no `URL.revokeObjectURL()` call when the component unmounted or when the user replaced the file.
+
+Each time a user changed their selection, the old blob URL stayed allocated. On a short session it doesn't matter. On an admin panel where someone might spend an hour uploading assets, it accumulates.
+
+<Note>
+`URL.createObjectURL()` allocates memory that the browser won't free on its own. Always clean it up with `URL.revokeObjectURL()` in the same component's effect cleanup.
+</Note>
+
+The AI generated the creation and skipped the exit. That pattern - writing the path forward, omitting the cleanup - showed up in both of the first two bugs.
+
+## The third problem: a constant it couldn't know
+
+Client-side validation rejected files above 5MB. Reasonable. Common across the internet.
+
+Our upload server was configured with a 2MB body limit.
+
+The AI had no way to know that. It picked a sensible default. I should have passed the constraint when I wrote the prompt - and I didn't, because I wasn't thinking about it at the time. When I tested on a 3MB file, the client accepted it and the server rejected it with a cryptic error. Classic split-validation bug, entirely my fault.
+
+## What these three have in common
+
+None of the broken code *looked* broken. The error handler handled errors. The preview generated previews. The validation validated. What was wrong was invisible without context: what status codes the server actually returns, that object URLs need cleanup, what the body limit is set to.
+
+AI code is good at structure - the shape of the solution. It's bad at invisible context - the constraints, configs, and failure modes that only exist in your specific deployment. That's not a knock against it. Training on public code can't teach it what your infrastructure is configured to do.
+
+I've started thinking about AI output the way I think about a thoughtful junior engineer's PR: the structure is probably right, the logic usually correct, but I'll interrogate every error case and every hardcoded constant. Not because I distrust the code, but because that's where my context matters and theirs doesn't. The same instinct that pushes me to [write useEffect only for external systems](/blog/why-i-stopped-reaching-for-useeffect-in-react) applies here - know *why* a pattern exists before you accept it.
+
+There's a related lesson I keep relearning: sometimes the right move is deletion, not optimization. Two of my three fixes were cuts, not additions. I wrote about that in [the LCP piece](/blog/i-cut-our-lcp-in-half-by-deleting-code-not-adding-it) - the same instinct applies to AI-generated code.
+
+My output now is probably 60% AI, 40% me - not because the tools got worse, but because I got better at specifying the constraints they can't guess.
+
+## Frequently Asked Questions
+
+### Does this mean AI coding tools aren't worth using?
+
+Not at all - I shipped that feature faster than I would have without them. The point is that faster scaffolding doesn't remove the need for judgment about edge cases and context-specific constraints. It shifts where your attention should go.
+
+### What kinds of code should I always review closely?
+
+Error handling, cleanup logic, and anything that depends on your specific infrastructure configuration. These require context the AI doesn't have unless you give it explicitly in the prompt.
+
+### How do I catch the problems AI-generated code introduces?
+
+Test unhappy paths deliberately: empty input, oversized input, network failure, unexpected status codes. AI code tends to be optimized for the happy path. Your job is to stress the edges.
+
+### Should I give the AI more context upfront?
+
+Yes - and that's where I failed on the third bug. If you pass the file size limit, the auth requirements, and the error contract in the initial prompt, you get fewer surprises. Think of it as writing a spec for someone who can't ask follow-up questions.
+
+If you're building something ambitious and want a partner who sweats these details, [get in touch](/book).
