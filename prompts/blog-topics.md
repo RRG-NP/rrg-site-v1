@@ -17,11 +17,11 @@ text, so edit wording before it's used, not after.
 - [x] The New Architecture in React Native: was the rewrite worth it for us?
 - [x] What I wish I knew before freelancing as a developer from Nepal
 - [x] Idempotency is the system design skill nobody teaches until it's 3am
+- [x] I let AI write 80% of a feature - here's the 20% I had to throw away
+- [ ] Rate limiting explained without the scary math (and without taking you down)
 - [ ] Expo vs bare React Native: the choice I regret and the one I don't
 - [ ] I profiled 40 React apps and the same five mistakes killed every one
-- [ ] Rate limiting explained without the scary math (and without taking you down)
 - [ ] Caching is easy until it isn't: the production cache bug that humbled me
-- [ ] I let AI write 80% of a feature - here's the 20% I had to throw away
 - [ ] The AI coding workflow that finally made me faster, not just busier
 - [ ] Stop pasting your whole codebase into the chat box - do this instead
 - [ ] Reading other people's code is a skill - here's how I actually practice it
