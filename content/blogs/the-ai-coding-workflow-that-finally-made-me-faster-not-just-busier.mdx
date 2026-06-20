@@ -1,0 +1,80 @@
+---
+title: The AI workflow that made me faster, not just busy
+description: AI made me feel 20% faster while I was actually slower. Here is the workflow change that turned generated code into real shipping speed.
+date: 2026-06-20
+published: true
+featured: false
+category: Engineering
+tags:
+  - Web Development
+  - Next.js
+  - React
+author: Rohan Gautam
+---
+
+For about six months, AI made me feel like the fastest engineer I'd ever been. I was accepting suggestions all day, opening more pull requests than my teammates, closing tickets in a blur. Then I looked at my actual cycle time over a quarter and it had barely moved. I was busier, not faster.
+
+That gap is not just me. A 2025 METR study put experienced developers on real tasks in their own repos and found they were 19% slower with AI tools enabled - while believing they were 20% faster. A 19-point swing in the wrong direction, hidden behind a feeling of speed. That feeling is the trap.
+
+## Busy is not the same as fast
+
+Here is the thing nobody tells you when you turn on an AI assistant: it makes the cheap part of the job cheaper and the expensive part more expensive. Writing the first draft of code was never my bottleneck. Reading code, holding context, and being sure it is correct - that was always the slow part.
+
+The industry numbers say the same. Faros AI's 2025 data showed teams generating 98% more pull requests, with review time up 91% and PR size up 51%. Worse, 31% of PRs started merging with no review at all. That is not a team getting faster. That is a team moving the work downstream and calling it progress.
+
+<Note>
+Throughput is how much you produce. Cycle time is how long an idea takes to reach production. AI can spike the first while quietly stretching the second.
+</Note>
+
+## The change: shrink the prompt, not the thinking
+
+What turned it around was boring. I stopped asking the AI to "build the feature" and started giving it one small, fully specified job at a time.
+
+A vague prompt produces a large, plausible diff that I then have to reverse-engineer to trust. A tight prompt produces a small diff I can verify at a glance. The work is the same size either way - I just moved my thinking to the front, where it is cheap, instead of the review, where it is expensive.
+
+```ts
+// Vague: I now have to audit 200 lines and guess the assumptions
+"build a rate limiter for the API"
+
+// Specced: I can read the result in 30 seconds
+"add a sliding-window rate limiter, 100 req/min per API key,
+ return 429 with a Retry-After header, reject when Redis is down"
+```
+
+The second prompt took me two minutes to write. It saved twenty minutes of squinting at code that looked right. I learned this the hard way on a file upload feature where [the last 20% was all the hard part](/blog/i-let-ai-write-80-of-a-feature-heres-the-20-i-had-to-throw-away) - the edge cases the AI could not guess because I never told it the constraints.
+
+## Review the diff like you wrote it
+
+The second habit: I treat every generated diff as if I will defend it in code review, because I will. If I cannot explain why a line is there, it does not get merged. Not "the AI added it" - I have to know why.
+
+This sounds slow. It is faster. The 91% review-time blowup happens when people skim large AI diffs, miss a bug, and pay for it in production a week later. A small diff you actually understand never enters that loop.
+
+<Tip>
+If a generated change is too big to review carefully, that is a signal the prompt was too big. Split the task, not your attention.
+</Tip>
+
+## Let the AI delete, not just add
+
+The habit that surprised me most: AI is great at subtraction, and almost nobody uses it that way. I point it at a function and ask what is redundant, what the standard library already does, what can be inlined. Some of my best speedups came from cutting code, the same lesson I hit when [I halved our LCP by deleting code, not adding it](/blog/i-cut-our-lcp-in-half-by-deleting-code-not-adding-it).
+
+Generating more is the default mode of these tools. Steering them toward less is where the real leverage hides, because every line you do not ship is a line you never have to review, test, or debug.
+
+## Frequently Asked Questions
+
+### Does this mean AI coding tools slow you down?
+
+Not inherently. The METR slowdown shows up when you let the tool generate large, loosely specified diffs that cost more to review than they saved to write. Used on small, well-specified tasks with real review, the same tools genuinely speed you up.
+
+### How do I measure whether AI is actually helping me?
+
+Look at cycle time - how long a change takes from start to merged and deployed - not how many suggestions you accept or how many PRs you open. Throughput can rise while cycle time gets worse, which is exactly the trap.
+
+### What is the single biggest workflow change to make?
+
+Spend more time writing a precise prompt and less time reviewing a vague output. Move your thinking to the front of the task, where it is cheap, instead of the end, where verifying a big diff is expensive.
+
+### Should junior developers use AI differently?
+
+Yes. The 2025 DORA report found AI amplifies what a team already has - strong habits get stronger, weak ones get worse. If you cannot yet tell correct code from plausible code, lean harder on small diffs and careful review, not bigger prompts.
+
+The tools did not make me faster. Changing how I used them did - smaller asks, honest review, and a willingness to delete. If you're building something ambitious and want a partner who sweats these details, [get in touch](/book).

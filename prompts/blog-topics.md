@@ -19,8 +19,8 @@ text, so edit wording before it's used, not after.
 - [x] Idempotency is the system design skill nobody teaches until it's 3am
 - [x] I let AI write 80% of a feature - here's the 20% I had to throw away
 - [x] Rate limiting explained without the scary math (and without taking you down)
-- [x] Caching is easy until it isn't: the production cache bug that humbled me
-- [ ] The AI coding workflow that finally made me faster, not just busier
+- [] Caching is easy until it isn't: the production cache bug that humbled me
+- [x] The AI coding workflow that finally made me faster, not just busier
 - [ ] Stop pasting your whole codebase into the chat box - do this instead
 - [ ] The underrated power of a good loading state - and how it tricks the brain
 - [ ] Migrating a legacy app without the big-bang rewrite that kills morale
