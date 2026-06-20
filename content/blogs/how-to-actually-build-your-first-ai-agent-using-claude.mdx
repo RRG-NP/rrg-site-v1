@@ -1,0 +1,121 @@
+---
+title: How to build your first AI agent with Claude
+description: An AI agent is just a loop - a model, a few tools, and a stop condition. Here is how I built my first one with Claude and when it is worth it.
+date: 2026-06-20
+published: true
+featured: false
+category: Engineering
+tags:
+  - AI
+  - Agents
+  - Claude
+  - Web Development
+author: Rohan Gautam
+---
+
+The first time I tried to build an "AI agent," I started by picking a framework. That was the mistake. An agent is not a framework, a vector database, or a graph of nodes. It is a loop: the model asks to run a tool, your code runs it, you hand back the result, and you repeat until the model says it is done. Once that clicked, my first working agent was about forty lines.
+
+## An agent is a loop, not a framework
+
+Here is the whole idea in one piece of code. You give Claude some tools, and when it asks to use one, you run it and feed the answer back.
+
+```ts
+import Anthropic from '@anthropic-ai/sdk';
+
+const client = new Anthropic();
+
+const tools = [
+  {
+    name: 'get_order_status',
+    description: 'Look up the status of an order by its ID.',
+    input_schema: {
+      type: 'object',
+      properties: { orderId: { type: 'string' } },
+      required: ['orderId'],
+    },
+  },
+];
+
+let messages = [{ role: 'user', content: 'Where is order A1024?' }];
+
+while (true) {
+  const res = await client.messages.create({
+    model: 'claude-opus-4-8',
+    max_tokens: 1024,
+    tools,
+    messages,
+  });
+
+  messages.push({ role: 'assistant', content: res.content });
+  if (res.stop_reason !== 'tool_use') break;
+
+  const results = [];
+  for (const block of res.content) {
+    if (block.type === 'tool_use') {
+      const data = await runTool(block.name, block.input);
+      results.push({ type: 'tool_result', tool_use_id: block.id, content: data });
+    }
+  }
+  messages.push({ role: 'user', content: results });
+}
+```
+
+That `while` loop is the agent. Claude decides what to do; your `runTool` does it. There is no hidden magic, and you can read every step. The SDK even ships a tool runner that writes this loop for you, but write it by hand once - you will understand what every "agent platform" is doing underneath.
+
+<Tip>
+Reach for a framework only after a plain loop hurts. For a first agent, the loop above plus two or three tools will take you further than any starter template.
+</Tip>
+
+## Your tools are the actual product
+
+The model is the commodity part. Swapping Claude for another model is a one-line change. The part that decides whether your agent is useful or useless is the set of tools you give it, and that is all your code.
+
+So I treat tool design as the real work. Three rules I have learned the hard way:
+
+- **Keep each tool small and single-purpose.** `get_order_status` beats one giant `do_everything` tool. The model picks small tools more reliably.
+- **Write the description for the model, not for yourself.** Say when to call it, not just what it does: "Call this when the user asks where an order is." On recent Claude models that one sentence noticeably improves how often the right tool fires.
+- **Gate anything you cannot undo.** A `send_refund` tool should ask for confirmation before it runs. The model will eventually call a tool at the wrong moment, so the guardrail lives in your code, not in your prompt.
+
+This is the same lesson I keep relearning with AI: the generated part is cheap, and the surrounding judgment is where the value sits. I wrote about that tradeoff in [the AI coding workflow that finally made me faster](/blog/the-ai-coding-workflow-that-finally-made-me-faster-not-just-busier).
+
+## Decide if you even need an agent
+
+Here is the unpopular opinion: most tasks people call "agents" should not be agents. An agent is for open-ended work where you cannot list the steps in advance - "investigate this bug," "plan this trip." If you can write the steps down, you do not need a loop that decides them at runtime.
+
+| What you need | Reach for |
+| --- | --- |
+| Classify, summarize, extract, answer | One Claude API call |
+| Fixed multi-step pipeline you control | A workflow: call, then call, then call |
+| Open-ended task, steps unknown up front | An agent loop |
+
+The agent is the most expensive and least predictable of the three. It costs more tokens, runs slower, and can wander. Use it only when the task genuinely earns it, and make sure errors are catchable - an agent let loose on irreversible actions with no review is how a demo becomes an incident.
+
+<Warning>
+Before you build an agent, ask: can I catch and recover from its mistakes? If a wrong step deletes data, sends money, or emails a customer with no checkpoint, you are not ready to hand the loop to a model yet.
+</Warning>
+
+## Start smaller than you think
+
+My advice for a first agent: one real task, two or three tools, the plain loop above, and a hard cap on how many times the loop can run. Get that working end to end before you add memory, sub-agents, or retrieval. Each of those is worth adding later - once you have felt the basic loop succeed and fail a few times and know exactly what you are buying.
+
+The same restraint that helps everywhere with AI applies here. Smaller scope, fewer moving parts, more things you actually understand - that is also the theme of [what developers should build instead of more CRUD apps](/blog/the-end-of-crud-apps-what-developers-should-build-instead).
+
+## Frequently Asked Questions
+
+### Do I need LangChain or a similar framework to build an agent?
+
+No. The core loop is a few dozen lines against the Claude API, as shown above. Frameworks add structure for memory, retries, and orchestration, but you should only adopt one after a plain loop becomes painful, not before.
+
+### Which Claude model should I use for a first agent?
+
+Start with a capable general model such as `claude-opus-4-8` so tool selection is reliable while you learn. Once it works, you can test a cheaper, faster model and keep it only if quality holds for your tools.
+
+### How do I stop my agent from looping forever?
+
+Cap the number of iterations and break out when the model stops asking for tools (its `stop_reason` is no longer `tool_use`). A simple counter that ends the loop after, say, ten turns saves you from runaway cost while you are still experimenting.
+
+### What is the difference between an agent and a single API call?
+
+A single call answers once. An agent runs a loop where the model can call tools, see the results, and decide its next step until the task is done. If you can write the steps down in advance, you want a single call or a fixed workflow, not an agent.
+
+Building your first agent is less about AI and more about good engineering: small tools, clear boundaries, and knowing when not to use one. If you are building something ambitious with AI and want a partner who sweats these details, [get in touch](/book).
