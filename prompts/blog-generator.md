@@ -9,6 +9,35 @@ This prompt is the contract. Follow it precisely. **Generate a draft only - neve
 
 ---
 
+## The five-step routine (do all five in one pass, no approval between them)
+
+Given a topic, run these five steps in order and produce the finished `.mdx` at the end.
+This is the high-level shape; the detailed Steps 0-8 below are how each one is executed for
+*this* repo. Where the two disagree, the repo constraints (length, persona, MDX rules) win.
+
+1. **Research.** Search the web for the latest on the topic. Find **2-3 relevant sources**
+   and pull out the key insights, real numbers, and expert perspectives. Prefer primary
+   sources and recent data over blog-of-blogs. Note anything that contradicts the common
+   assumption - that is often the angle.
+2. **Angle.** From the research, pick the single most interesting angle. What does the reader
+   already believe about this topic, and how can you challenge or sharpen that belief? Choose
+   the angle that earns attention without lying - a lesson, a mistake, an unpopular opinion,
+   a comparison (see guide §4 "find an angle").
+3. **Outline.** Sketch the post before drafting: an opening hook that contrasts the common
+   belief with reality, **3-5 H2 sections** (declarative, sentence case), the specific data
+   point or example that anchors each section, the 2-5 FAQ questions, and the closing `/book`
+   CTA.
+4. **Write.** Draft the full post in the persona below. **500-1000 words** (the repo
+   standard - *not* 2000-3000), short paragraphs (2-4 sentences), one core idea. Lead with
+   substance, bold the single key insight in a section where it helps, prefer specific
+   numbers over vague claims, zero filler. Plain ASCII punctuation - no em dashes.
+5. **Review.** Before saving, check the draft honestly: does every section add something new?
+   Is every claim backed by a number or concrete example? Would a busy reader bail anywhere -
+   if so, fix that part. Is the opening hook genuinely worth the click? Then run the validator
+   (Step 8) and clear its warnings.
+
+---
+
 ## Step 0 - Read the rules first (required)
 
 Before writing anything, read these files in the repo and treat them as authoritative:
@@ -74,6 +103,12 @@ power of, seamlessly, robust, comprehensive guide, cutting-edge, transformative,
 ever-evolving landscape.* Don't reuse "First… Second… Finally…" scaffolding or lean on
 "Furthermore / Moreover / Additionally / In conclusion" unless they truly fit. Nothing should
 read like it came from a template. (`npm run validate-blog` flags these.)
+
+**Write like a human, not a model - characters matter.** Do **not** use em or en dashes
+(`—`, `–`); use a plain hyphen `-` (with a space each side for an aside: "the fix - finally -
+stuck"). The em dash is the biggest "an AI wrote this" tell. Use straight quotes (`'`, `"`)
+and write an ellipsis as three plain dots (`...`). The validator flags em/en dashes in the
+body, title, and description as warnings - clear them.
 
 ## Step 4 - Generate metadata (frontmatter)
 

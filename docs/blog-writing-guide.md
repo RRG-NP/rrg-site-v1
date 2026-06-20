@@ -142,6 +142,20 @@ Also avoid:
 
 `npm run validate-blog` flags these phrases as warnings - clear them before publishing.
 
+### Punctuation & characters (write like a human, not a model)
+
+Models reach for typography people rarely type by hand. Keep the prose plain ASCII:
+
+- **No em or en dashes (`—`, `–`). Use a plain hyphen `-`** - with a space on each side when
+  you want an aside ("the fix - finally - stuck"). This is the single biggest "an AI wrote
+  this" tell, so it's the one to get right.
+- Don't just swap the character and keep the rhythm. If every other sentence still has a
+  dash-clause interruption, vary the sentence shape instead.
+- Prefer straight quotes (`'`, `"`) and write an ellipsis as three plain dots (`...`).
+
+`npm run validate-blog` flags em/en dashes (in the body, title, and description) as a
+warning - clear them before publishing.
+
 ### Authenticity
 
 Include real-world observations, practical examples, your own reasoning, and honest

@@ -304,6 +304,23 @@ function validateFile(filePath, knownSlugs) {
     }
   }
 
+  // AI typography: em/en dashes read as machine-written. House style is a plain hyphen "-".
+  const proseChars = stripCode(body);
+  const emDashes = (proseChars.match(/—/g) || []).length;
+  const enDashes = (proseChars.match(/–/g) || []).length;
+  if (emDashes + enDashes > 0) {
+    const parts = [];
+    if (emDashes) parts.push(`${emDashes} em dash${emDashes > 1 ? 'es' : ''} (—)`);
+    if (enDashes) parts.push(`${enDashes} en dash${enDashes > 1 ? 'es' : ''} (–)`);
+    warnings.push(`${parts.join(' and ')} in the body - replace with a plain hyphen "-" (guide §4).`);
+  }
+  // Same check on reader-facing frontmatter.
+  for (const field of ['title', 'description']) {
+    if (typeof data[field] === 'string' && /[—–]/.test(data[field])) {
+      warnings.push(`${field} contains an em/en dash - replace with a plain hyphen "-" (guide §4).`);
+    }
+  }
+
   // 7. FAQ
   const faqIdx = body.search(/^##\s+Frequently Asked Questions\s*$/m);
   if (faqIdx === -1) {

@@ -28,13 +28,19 @@ post).
    Note the printed slug as `$SLUG` and the file `content/blogs/$SLUG.mdx`.
 
 4. **Write the article.** Open `content/blogs/$SLUG.mdx` and write the full post by following
-   `prompts/blog-generator.md` and `docs/blog-writing-guide.md` exactly:
+   the **five-step routine** in `prompts/blog-generator.md` (research → angle → outline →
+   write → review) and `docs/blog-writing-guide.md` exactly:
+   - **Research first:** search the web for 2-3 current sources; pull real numbers and the
+     angle (what the reader believes vs. reality) before drafting.
    - Refine the scaffolded `title` into a clean, ≤60-char headline (sentence case).
    - Replace the TODO `description` (120–160 chars) and `tags` (3–6 from the vocabulary);
      pick the right `category`.
    - First-person engineer persona, 500–1000 words, one core idea, no AI-slop phrases.
+   - **Plain ASCII punctuation - no em or en dashes (`—`/`–`); use a hyphen `-`.**
    - Use allowed MDX components only; FAQ section; 1–3 real internal links to existing posts;
      one closing `/book` CTA.
+   - **Review pass:** every section adds something, every claim has a number/example, the hook
+     earns the click; cut anything a busy reader would bail on.
    - Leave `published: true` (already set by `--publish`).
 
 5. **Validate - this is the gate.**
