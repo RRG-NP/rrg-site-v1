@@ -1,6 +1,6 @@
 ---
 title: Rate limiting without the scary math
-description: Most rate-limiting tutorials lead with algorithms. The useful part — what to return when a client hits the limit and how to avoid a retry storm — comes later.
+description: Most rate-limiting tutorials lead with algorithms. The useful part - what to return when a client hits the limit and how to avoid a retry storm - comes later.
 date: 2026-06-17
 published: true
 featured: false
@@ -18,9 +18,9 @@ The first time I added rate limiting to an API, I spent two hours comparing toke
 
 ## What rate limiting actually is
 
-A rate limit is a contract: you're allowed to make N requests in a given window, and anything beyond that gets turned away. The "why" is usually one of three things — protecting your server from a flood, preventing one user from starving out everyone else, or staying under the quota of an upstream API you're calling on their behalf.
+A rate limit is a contract: you're allowed to make N requests in a given window, and anything beyond that gets turned away. The "why" is usually one of three things - protecting your server from a flood, preventing one user from starving out everyone else, or staying under the quota of an upstream API you're calling on their behalf.
 
-What it isn't is a complete defense. A determined attacker with fifty machines can hit you within per-IP limits all day. Rate limiting raises the cost and gives you visibility, but it's a useful layer in a stack — not a silver bullet you add once and forget.
+What it isn't is a complete defense. A determined attacker with fifty machines can hit you within per-IP limits all day. Rate limiting raises the cost and gives you visibility, but it's a useful layer in a stack - not a silver bullet you add once and forget.
 
 ## The three algorithms (quickly)
 
@@ -32,7 +32,7 @@ Most explanations here turn into a lecture. I'll keep it short.
 
 **Token bucket** gives each client a bucket of tokens that refills at a fixed rate. A request costs a token. Quiet clients accumulate tokens and can fire short bursts. This is why you can send a small batch of charges to a payment API quickly but get slowed after a while.
 
-For a typical web service, a sliding window is the right mental model, and most libraries implement it. The algorithm you pick is rarely the constraint — the infrastructure behind it (Redis, an in-memory counter, a proxy layer) matters more.
+For a typical web service, a sliding window is the right mental model, and most libraries implement it. The algorithm you pick is rarely the constraint - the infrastructure behind it (Redis, an in-memory counter, a proxy layer) matters more.
 
 <Tip>
 Don't build the counting logic yourself. Upstash, Redis with `rate-limiter-flexible`, or nginx's `limit_req_zone` directive handles the math. Your job is picking the window size and the limit.
@@ -42,11 +42,11 @@ Don't build the counting logic yourself. Upstash, Redis with `rate-limiter-flexi
 
 Rate limiting can sit at several layers, and I usually use more than one:
 
-- **Reverse proxy or CDN** (nginx, Cloudflare) — stops traffic before it reaches your application. Good for raw floods and scrapers by IP.
-- **Middleware in your application** — runs after authentication, so you can enforce per-user or per-tenant quotas. This is where fairness lives.
-- **Individual route handlers** — useful for endpoints expensive enough to need their own budget separate from global limits.
+- **Reverse proxy or CDN** (nginx, Cloudflare) - stops traffic before it reaches your application. Good for raw floods and scrapers by IP.
+- **Middleware in your application** - runs after authentication, so you can enforce per-user or per-tenant quotas. This is where fairness lives.
+- **Individual route handlers** - useful for endpoints expensive enough to need their own budget separate from global limits.
 
-In a [Next.js App Router](/blog/building-with-the-nextjs-app-router) project, per-route limits sit naturally at the top of a route handler — a five-line check before the expensive work runs.
+In a [Next.js App Router](/blog/building-with-the-nextjs-app-router) project, per-route limits sit naturally at the top of a route handler - a five-line check before the expensive work runs.
 
 ## What to return when you say no
 
@@ -62,17 +62,17 @@ X-RateLimit-Reset: 1750166414
 
 `Retry-After` tells the client how many seconds to wait. Without it, a client that retries automatically has no idea when to come back, so it either backs off too long or hammers you immediately. Either way you've made the problem worse.
 
-Without these headers, a retry storm looks almost identical to the original flood — same request rate, same load, except now it's coming from clients that were trying to do the right thing. I ran into the same problem from the other side while adding [idempotency keys](/blog/idempotency-is-the-system-design-skill-nobody-teaches-until-its-3am) — the client behavior on failure matters just as much as the server-side logic.
+Without these headers, a retry storm looks almost identical to the original flood - same request rate, same load, except now it's coming from clients that were trying to do the right thing. I ran into the same problem from the other side while adding [idempotency keys](/blog/idempotency-is-the-system-design-skill-nobody-teaches-until-its-3am) - the client behavior on failure matters just as much as the server-side logic.
 
 <Warning>
-Never silently drop a request at a rate limit. A hung connection is worse than a clean 429 — the client times out and retries immediately, which reads as a new flood of requests and defeats the purpose of the limit.
+Never silently drop a request at a rate limit. A hung connection is worse than a clean 429 - the client times out and retries immediately, which reads as a new flood of requests and defeats the purpose of the limit.
 </Warning>
 
 ## Frequently Asked Questions
 
 ### What's a reasonable starting limit?
 
-It depends on what the endpoint does. A lightweight read might handle 200–1000 req/min per user without issue. An endpoint that sends an email or triggers a report might need a cap of 5–10 req/hour. Start conservative and raise based on real usage data — it's much easier to open a limit up than to lower one after clients have built around it.
+It depends on what the endpoint does. A lightweight read might handle 200-1000 req/min per user without issue. An endpoint that sends an email or triggers a report might need a cap of 5-10 req/hour. Start conservative and raise based on real usage data - it's much easier to open a limit up than to lower one after clients have built around it.
 
 ### Should I limit by IP or by authenticated user?
 
@@ -80,12 +80,12 @@ By authenticated user when possible. IP limits can block an entire office on a s
 
 ### Does rate limiting help with DDoS attacks?
 
-A little, but it's not designed for that. Rate limiting protects individual resources from being overwhelmed by normal traffic patterns. A real DDoS needs upstream mitigation — Cloudflare, AWS Shield, or a similar layer that absorbs or filters before requests reach your servers.
+A little, but it's not designed for that. Rate limiting protects individual resources from being overwhelmed by normal traffic patterns. A real DDoS needs upstream mitigation - Cloudflare, AWS Shield, or a similar layer that absorbs or filters before requests reach your servers.
 
 ### How do I test that my rate limiting actually works?
 
 Write a test that fires requests in a tight loop and asserts that the right ones come back `429` with the expected headers. Most rate-limiting libraries accept an in-memory store for testing so you don't need Redis running locally. It takes about ten minutes and is worth it before you ship.
 
-Rate limiting is mostly bookkeeping: count requests, return a clear error when the count is up, and tell the client when to try again. The algorithm is almost always a solved problem you can hand to a library. The part worth spending time on is the response — get that right and the rest takes care of itself.
+Rate limiting is mostly bookkeeping: count requests, return a clear error when the count is up, and tell the client when to try again. The algorithm is almost always a solved problem you can hand to a library. The part worth spending time on is the response - get that right and the rest takes care of itself.
 
 If you're building APIs that need to hold up under real traffic and want a partner who sweats these details, [get in touch](/book).

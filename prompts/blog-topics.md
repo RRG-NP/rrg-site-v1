@@ -19,11 +19,12 @@ text, so edit wording before it's used, not after.
 - [x] Idempotency is the system design skill nobody teaches until it's 3am
 - [x] I let AI write 80% of a feature - here's the 20% I had to throw away
 - [x] Rate limiting explained without the scary math (and without taking you down)
-- [ ] Expo vs bare React Native: the choice I regret and the one I don't
-- [ ] I profiled 40 React apps and the same five mistakes killed every one
-- [ ] Caching is easy until it isn't: the production cache bug that humbled me
+- [x] Caching is easy until it isn't: the production cache bug that humbled me
 - [ ] The AI coding workflow that finally made me faster, not just busier
 - [ ] Stop pasting your whole codebase into the chat box - do this instead
+- [ ] The underrated power of a good loading state - and how it tricks the brain
+- [ ] Migrating a legacy app without the big-bang rewrite that kills morale
+- [ ] I profiled 40 React apps and the same five mistakes killed every one
 - [ ] Reading other people's code is a skill - here's how I actually practice it
 - [ ] The 200ms that cost us 30% of signups: a web performance autopsy
 - [ ] Your site isn't slow - your JavaScript is lying to you about when it's ready
@@ -32,7 +33,6 @@ text, so edit wording before it's used, not after.
 - [ ] Images are still why your site feels slow in 2026 - here's the fix order
 - [ ] The real reason your JavaScript bundle is huge (it's not the library you think)
 - [ ] Shipping on a 3G connection: what actually moved my Web Vitals
-- [ ] The underrated power of a good loading state - and how it tricks the brain
 - [ ] React Native in production: the warnings nobody put in the docs
 - [ ] How I got React Native cold-start under one second
 - [ ] Why your React Native list scrolls like garbage, and the fix that stuck
@@ -63,5 +63,4 @@ text, so edit wording before it's used, not after.
 - [ ] Type safety is a tool, not a religion - where I draw the line
 - [ ] What "good enough" tests look like when you're not Google
 - [ ] Why I keep a decisions log in every project (and what goes in it)
-- [ ] Migrating a legacy app without the big-bang rewrite that kills morale
 - [ ] The git workflow that finally stuck for our small team

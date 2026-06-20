@@ -1,8 +1,8 @@
 # Daily blog routine
 
 This is the playbook the scheduled agent runs every morning. It generates one publish-ready
-post and opens a **PR for a human to merge** - it never merges or deploys itself. Merging the
-PR is what puts the post online (the site builds from `main`).
+post and **commits + pushes it directly to `main`** - no PR, no manual review. The site
+builds from `main` (ISR, hourly), so the post goes live within ~1 hour of the push.
 
 Work from the repo root. If any step fails, stop and report the failure (don't push a broken
 post).
@@ -55,33 +55,28 @@ post).
    node scripts/next-blog-topic.mjs --done "$TOPIC"
    ```
 
-7. **Branch, commit, push.** Use a unique, dated branch name:
+7. **Commit on `main`.** Stay on `main` (from step 1) - do **not** create a branch.
    ```bash
-   DATE=$(date +%Y-%m-%d)
-   git checkout -b "blog/$DATE-$SLUG"
    git add "content/blogs/$SLUG.mdx" prompts/blog-topics.md
    git commit -m "blog: $TITLE"
-   git push -u origin "blog/$DATE-$SLUG"
    ```
-   (`$TITLE` = the final title from the frontmatter.)
+   (`$TITLE` = the final title from the frontmatter.) **Do not add a `Co-Authored-By` or
+   "Generated with" trailer** - the commit is authored by the repo's configured git user
+   only.
 
-8. **Open a PR (do not merge).**
+8. **Push to `main`.**
    ```bash
-   gh pr create \
-     --title "blog: $TITLE" \
-     --body "Automated daily draft for $DATE. Topic: $TOPIC.
-
-   - Validated: \`npm run validate-blog -- $SLUG\` passed (0 errors).
-   - published: true - merging this PR puts it live at /blog/$SLUG.
-   - Please skim for voice and accuracy before merging." \
-     --base main
+   git push origin main
    ```
 
-9. **Report** the PR URL, the title, and the validator summary. Stop. A human reviews and
-   merges; Facebook sharing (when wired) fires on merge.
+9. **Report** the title, the file path, and the validator summary, and confirm the push to
+   `main`. The post goes live within ~1 hour (ISR); Facebook sharing (when wired) fires on
+   push.
 
 ## Guardrails
-- Never run `gh pr merge`, never push to `main`, never deploy.
+- Push to `main` is the publish step - that's expected. Never open a PR, never `git merge`
+  by hand, never deploy manually, never rewrite `main`'s history.
+- Commit as the repo's git user only - no `Co-Authored-By` / "Generated with" trailer.
 - One post per run. If the slug already exists, `generate-blog` will refuse - pick the next
   topic instead and report the skip.
 - If validation can't reach 0 errors after a couple of honest attempts, push nothing and
