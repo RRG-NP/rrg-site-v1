@@ -1,0 +1,77 @@
+---
+title: Stop pasting your whole codebase into the chat box
+description: Dumping every file into an AI prompt makes its answers worse, not better. Here is how curated context gets you faster, more accurate code.
+date: 2026-06-21
+published: true
+featured: false
+category: Engineering
+tags:
+  - Web Development
+  - Performance
+  - React
+author: Rohan Gautam
+---
+
+There is a habit I see in almost every developer who is new to coding with AI, and I had it too: when the model gives a wrong answer, paste in more code. The whole file. Then the imported files. Then, eventually, the entire repo. The logic feels right - the model can't see the code, so give it all the code. It is exactly backwards.
+
+## More context is not better context
+
+A bigger context window is not a bigger brain. Models have a well-documented weakness often called "lost in the middle": they reliably use information at the very start and very end of a long prompt, and quietly skip over what sits in between. A 2023 Stanford paper showed retrieval accuracy dropping sharply when the relevant fact was buried in the middle of a long context, even on models built to handle it.
+
+So when you paste 8,000 lines to answer a question about one function, you are not helping. You are hiding the 30 lines that matter inside 7,970 lines of noise, and asking the model to find them. It often won't.
+
+<Note>
+The context window is how much text a model can read at once. Filling it is easy. Filling it with only the relevant parts is the actual skill.
+</Note>
+
+## What dumping everything actually costs
+
+The damage is not just accuracy. Every token in that wall of code is a token you pay for and wait on. A massive prompt is slower to process, more expensive per call, and burns through your usable window so fast that the model "forgets" the start of your own conversation.
+
+I learned this the boring way - by watching a "quick" refactor session get slower and dumber as the chat went on, until I realised I had pasted the same three files four times. The model was drowning in stale copies of code I had already changed.
+
+<Warning>
+Pasting an old copy of a file you have since edited is worse than pasting nothing. The model now has two versions and no way to know which is real.
+</Warning>
+
+## Give it the smallest set that answers the question
+
+The fix is to act like a good code reviewer assigning a task. A reviewer does not hand you the whole repository - they point you at the two files and the one interface that matter. Do the same for the model.
+
+Before I ask anything, I figure out the minimum set: the function I am changing, the type it depends on, and the one place it is called. That is usually three short snippets, not three hundred files.
+
+```ts
+// Instead of pasting the whole service, give the shape and the target
+type Invoice = { id: string; total: number; status: 'paid' | 'open' }
+
+// This is the function I want changed - here is the one caller
+function markPaid(inv: Invoice) { /* ... */ }
+```
+
+If you use an agent-style tool that can read the repo itself (Cursor, Claude Code, and similar), the move changes slightly but the principle holds: reference the specific files by name instead of letting it grep the universe. Tell it `@auth/session.ts` and `@db/users.ts`, not "look at the auth stuff." You are still curating - you just do it by pointing instead of pasting.
+
+<Tip>
+A good rule: if you can't say in one sentence why a file is in the prompt, it shouldn't be in the prompt.
+</Tip>
+
+## Curate the prompt, not just the code
+
+This is the same lesson I keep relearning from a different angle. Shrinking the prompt to one well-specified job, which I wrote about in [the AI workflow that made me faster](/blog/the-ai-coding-workflow-that-finally-made-me-faster-not-just-busier), is really just context discipline applied to the request. Trimming the codebase you paste is context discipline applied to the input. Both come down to respecting the model's attention as a scarce resource instead of an infinite one.
+
+And when the model does produce a big confident answer off a giant prompt, that is exactly when I slow down to check it - because I have learned [which 20% of AI output to throw away](/blog/i-let-ai-write-80-of-a-feature-heres-the-20-i-had-to-throw-away). Less context in usually means less garbage to catch on the way out.
+
+## Frequently Asked Questions
+
+### Doesn't a bigger context window solve this?
+
+Not really. A larger window lets you fit more text, but models still attend unevenly across it, so buried details get missed. A focused 2,000-token prompt usually beats a sprawling 100,000-token one for a specific question.
+
+### How do I know which files to include?
+
+Start from the thing you are changing and add only what it directly touches: its types, its callers, and any config it reads. If you are adding a file just in case, leave it out - you can always add it when an answer proves you need it.
+
+### What about agent tools that read the whole repo for me?
+
+They help, but the principle is unchanged. Reference specific files by name so the tool pulls the right context instead of guessing, and keep an eye on what it actually loaded into the prompt.
+
+Pasting your whole codebase feels thorough, but it trades a sharp answer for a vague one and charges you extra for the privilege. Give the model the few things that matter and it will reward you with code you can actually trust. If you're building something ambitious and want a partner who sweats these details, [get in touch](/book).

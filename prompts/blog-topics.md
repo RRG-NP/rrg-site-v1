@@ -21,7 +21,7 @@ text, so edit wording before it's used, not after.
 - [x] Rate limiting explained without the scary math (and without taking you down)
 - [] Caching is easy until it isn't: the production cache bug that humbled me
 - [x] The AI coding workflow that finally made me faster, not just busier
-- [ ] Stop pasting your whole codebase into the chat box - do this instead
+- [x] Stop pasting your whole codebase into the chat box - do this instead
 - [ ] The underrated power of a good loading state - and how it tricks the brain
 - [ ] Migrating a legacy app without the big-bang rewrite that kills morale
 - [ ] I profiled 40 React apps and the same five mistakes killed every one
