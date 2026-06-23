@@ -1,0 +1,105 @@
+---
+title: A good loading state tricks the brain into waiting
+description: Perceived speed often matters more than real speed. Here's how skeletons, optimistic UI, and honest progress make a wait feel shorter than it is.
+date: 2026-06-23
+published: true
+featured: false
+category: Design
+tags:
+  - UX
+  - Design
+  - Performance
+  - React
+author: Rohan Gautam
+---
+
+A client once asked me to make their dashboard "feel faster" without touching the backend. The API was a fixed 1.2 seconds and there was no budget to optimize it. I shipped a change that made users rate the page as quicker anyway - and I never touched the request. All I changed was what the screen showed while they waited.
+
+## Waiting is a feeling, not a number
+
+People don't experience milliseconds. They experience uncertainty. A two-second wait where something is clearly happening feels shorter than a one-second wait staring at a frozen screen, wondering if their tap even registered.
+
+This isn't a hunch. Jakob Nielsen's old response-time research still holds: under 0.1s feels instant, up to 1s keeps a user's flow intact, and around 10s is the limit before attention wanders off entirely. The gap between those thresholds is where loading states do their work. You can't always shrink the actual wait, but you can almost always change how long it feels.
+
+<Note>
+Perceived performance is the wait the user feels. Actual performance is the wait the stopwatch measures. They are different numbers, and your users only ever rate the first one.
+</Note>
+
+## Skeletons beat spinners because they promise a shape
+
+The spinner is the lazy default. It says "something is happening" but nothing more - no hint of what's coming or how long it'll take. A skeleton screen, the grey placeholder blocks that mimic the final layout, does something cleverer: it tells the brain what's about to appear, so the real content feels like it's filling in a shape that was already there.
+
+```tsx
+function PostCard({ post }) {
+  if (!post) {
+    return (
+      <div className="card" aria-busy="true">
+        <div className="skeleton skeleton-title" />
+        <div className="skeleton skeleton-line" />
+        <div className="skeleton skeleton-line short" />
+      </div>
+    );
+  }
+  return (
+    <div className="card">
+      <h3>{post.title}</h3>
+      <p>{post.excerpt}</p>
+    </div>
+  );
+}
+```
+
+I've measured this with real users on a feed-heavy app. Swapping a centered spinner for layout-matched skeletons didn't change load time by a single millisecond, but the "the app got faster" comments showed up in feedback within a week. The skeleton sets an expectation, and meeting an expectation feels fast.
+
+## Optimistic UI is the strongest trick of all
+
+The best wait is the one the user never sees. With optimistic updates, you assume the action will succeed and update the screen immediately, then reconcile with the server in the background. Think of liking a post: the heart fills the instant you tap it, long before the request comes back.
+
+```tsx
+async function toggleLike(post) {
+  setLiked(true);            // update the UI now
+  try {
+    await api.like(post.id); // confirm in the background
+  } catch {
+    setLiked(false);         // roll back only if it actually failed
+  }
+}
+```
+
+The honest tradeoff: you're writing a small lie and betting it comes true. When the network fails, you have to roll back gracefully, and a sloppy rollback feels worse than an honest spinner ever would. So I only reach for optimistic UI on actions that almost always succeed and are cheap to undo - likes, toggles, reordering. For a payment or an irreversible delete, I let the user see the real wait. Lying about money is how you lose trust.
+
+<Warning>
+Don't fake progress you can't deliver. A progress bar that crawls to 90% and freezes is more frustrating than no bar at all - it promised a finish line and then lied about it.
+</Warning>
+
+## Match the cue to the wait
+
+Not every wait deserves the same treatment. A useful rule of thumb I keep coming back to:
+
+| Wait length | What to show |
+| --- | --- |
+| Under ~400ms | Nothing - showing a spinner that flashes for 200ms looks like a glitch |
+| 400ms to ~2s | A skeleton or inline spinner that matches the final layout |
+| Over ~2s | Determinate progress, a step indicator, or streamed partial content |
+
+That 400ms floor matters. A spinner that appears and vanishes faster than the eye settles reads as a flicker, not feedback. Sometimes the fastest-feeling option is to show nothing at all and let the result land.
+
+This is the same lesson I learned chasing Core Web Vitals in [cutting our LCP in half](/blog/i-cut-our-lcp-in-half-by-deleting-code-not-adding-it): the goal isn't a smaller number on a chart, it's a calmer experience for the person waiting. And if you go the skeleton or optimistic route, mark busy regions properly so screen readers keep up - something I covered in [designing accessible interfaces](/blog/designing-accessible-interfaces).
+
+## Frequently Asked Questions
+
+### Are skeleton screens always better than spinners?
+
+No. Skeletons shine when the final layout is predictable - a feed, a profile, a card grid. For a quick, unstructured action where you can't model the result, a small inline spinner is simpler and just as good.
+
+### Doesn't optimistic UI risk showing users the wrong state?
+
+It can, which is why it suits actions that almost always succeed and are easy to reverse, like a like or a toggle. For payments, deletions, or anything irreversible, show the real result and skip the optimism.
+
+### How long can a wait be before I need a progress indicator?
+
+Past roughly two seconds, a plain spinner stops reassuring people. Switch to determinate progress, a step indicator, or stream partial content so the user can see forward motion instead of an open-ended pause.
+
+A loading state isn't decoration you add at the end. It's part of the experience, and a thoughtful one can buy you a second of patience that no backend optimization could. The next time something feels slow, ask whether you need to make it faster or just make the wait honest.
+
+If you're building something ambitious and want a partner who sweats these details, [get in touch](/book).
