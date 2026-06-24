@@ -1,0 +1,93 @@
+---
+title: "Caching is easy until it isn't: the bug that humbled me"
+description: A cache keyed only by URL served one user another user's dashboard. Here is the production cache bug that taught me to respect the cache key.
+date: 2026-06-24
+published: true
+featured: false
+category: Engineering
+tags:
+  - Caching
+  - System Design
+  - Performance
+  - Backend
+  - Reliability
+author: Rohan Gautam
+---
+
+Adding a cache took me about twenty minutes. The bug it caused took me two days to understand and a year to stop being embarrassed about. One afternoon, a user opened their dashboard and saw someone else's name, someone else's invoices, someone else's everything.
+
+## The cache that looked perfect
+
+We had a slow endpoint. `/api/dashboard` joined four tables and took 600ms on a good day. Traffic was climbing, the database was sweating, and caching was the obvious fix. So I added an in-memory cache in front of it, keyed by the request path.
+
+```ts
+const cache = new Map();
+
+async function getDashboard(req) {
+  const key = req.path; // "/api/dashboard"
+  if (cache.has(key)) return cache.get(key);
+
+  const data = await buildDashboard(req.userId);
+  cache.set(key, data);
+  return data;
+}
+```
+
+It worked beautifully in testing. Response times dropped from 600ms to under 5ms. I shipped it on a Friday, which is its own kind of confession.
+
+## The key was a lie
+
+Here is the problem, and it is so obvious in hindsight that I still wince. Every logged-in user requests the exact same path: `/api/dashboard`. My key was `/api/dashboard`. So the first person to load the page after a cache miss filled the cache with *their* private data, and everyone after them got served that same response until it expired.
+
+In testing I was always the only user, so the key was unique enough by accident. In production, the moment two people hit the endpoint within the cache window, one of them leaked their account to the other.
+
+<Warning>
+A cache key must include every input that changes the output. For per-user data that means the user ID. Leave it out and you are not caching a response - you are broadcasting one user's private data to whoever asks next.
+</Warning>
+
+The fix was one line: put the user in the key.
+
+```ts
+const key = `dashboard:${req.userId}`;
+```
+
+That stopped the leak. But it left me with a worse question: what else was I caching wrong without anyone noticing?
+
+## Caching is a promise about freshness
+
+The thing nobody tells you is that a cache is a bet. You are betting that stale data is good enough for some window of time. The hard part was never storing the value - `Map.set` is easy. The hard part is two questions: what makes this value unique, and when does it stop being true?
+
+Get the first question wrong and you serve the wrong data, like I did. Get the second wrong and you serve old data: a user updates their profile, sees the old version, refreshes, still sees it, and files a bug you cannot reproduce because your own cache already expired by the time you look.
+
+<Tip>
+Before you cache anything, write down two sentences: "This value depends on X and Y" and "It is allowed to be stale for N seconds." If you cannot answer both, you are not ready to cache it yet.
+</Tip>
+
+This is the same family of pain as a retried request that runs twice - the network and the cache both happily do the wrong thing when you have not thought through the edges. I wrote about the request-retry version of this in [the post on idempotency](/blog/idempotency-is-the-system-design-skill-nobody-teaches-until-its-3am), and it is the same lesson wearing a different hat.
+
+## What I do now
+
+I stopped treating caching as a free speed-up I sprinkle on slow endpoints. Now I add it deliberately, and I keep a short ritual:
+
+- The key includes every input that changes the output - user, locale, role, version. When in doubt, add it to the key.
+- Per-user data never shares a cache entry with another user. Ever.
+- Every entry has a TTL. "Forever" is not a cache policy, it is a future incident.
+- I log cache hits and misses in staging so I can see what the key actually contains, not what I assume it contains.
+
+None of this is clever. It is just the boring discipline that the easy version skips. Caching genuinely is one of the highest-leverage things you can do for performance, the same way [deleting code cut our LCP in half](/blog/i-cut-our-lcp-in-half-by-deleting-code-not-adding-it). It just punishes carelessness faster than almost anything else in the stack.
+
+## Frequently Asked Questions
+
+### Why did the bug not show up in testing?
+
+I was the only active user in test, so the shared key never collided. The leak only appears when two different users hit the same cached path within the expiry window, which needs real concurrent traffic to reproduce.
+
+### What is the safest default for a cache key?
+
+Include every input that can change the response: the user or tenant ID, locale, role, and a version or feature flag if those affect output. It is far safer to over-specify the key than to share an entry that should have been private.
+
+### How do I pick a TTL?
+
+Start from how stale the data is allowed to be, not from performance. If a profile change must show within a minute, the TTL is under a minute; if a value rarely changes, minutes or hours are fine. Pair the TTL with explicit invalidation on writes when correctness matters.
+
+A cache is one of the few tools that can make your system dramatically faster and quietly, dangerously wrong at the same time. Treat the key and the TTL as the actual design work, not the afterthought. If you are building something where these details matter and want a partner who sweats them with you, [get in touch](/book).
