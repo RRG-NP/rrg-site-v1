@@ -23,7 +23,7 @@ text, so edit wording before it's used, not after.
 - [x] Stop pasting your whole codebase into the chat box - do this instead
 - [x] The underrated power of a good loading state - and how it tricks the brain
 - [x] Caching is easy until it isn't: the production cache bug that humbled me
-- [ ] Reading other people's code is a skill - here's how I actually practice it
+- [x] Reading other people's code is a skill - here's how I actually practice it
 - [ ] Migrating a legacy app without the big-bang rewrite that kills morale
 - [ ] I profiled 40 React apps and the same five mistakes killed every one
 - [ ] The 200ms that cost us 30% of signups: a web performance autopsy

@@ -1,0 +1,97 @@
+---
+title: Reading code is a skill - here's how I practice it
+description: We spend most of our day reading code, not writing it, yet nobody practices reading. Here's the deliberate routine I use to get through unfamiliar code fast.
+date: 2026-06-25
+published: true
+featured: false
+category: Engineering
+tags:
+  - Code Review
+  - Career
+  - Best Practices
+  - Web Development
+author: Rohan Gautam
+---
+
+I once spent two days "stuck" on a bug that turned out to be three lines I had read four times and never actually understood. I wasn't bad at coding. I was bad at reading.
+
+## We train the wrong half of the job
+
+Studies keep landing on the same number: developers spend somewhere between 58% and 70% of their time understanding existing code, not writing new lines. Reading is most of the job.
+
+Yet think about how we practice. LeetCode, side projects, tutorials, take-home tests - all of it trains writing. I have done hundreds of hours of that. I had done close to zero deliberate practice at reading someone else's code until a senior dev pointed out that my "I'll just rewrite it" instinct was usually me avoiding the harder skill.
+
+Reading code is trainable the same way writing is. You just have to treat it like a thing you do on purpose, not a chore you rush through on the way to typing.
+
+## Read with a goal, not from line one
+
+The mistake I made for years was opening a repo and reading top to bottom like a book. A real codebase is not a book. It is a city, and you do not understand a city by walking every street.
+
+Now I never open a file without a concrete question. "Where does a request to `/api/contact` actually send the email?" "What runs when this button is clicked?" A question turns an endless folder tree into a short path I can follow.
+
+<Tip>
+Before you read anything, write your question in one sentence. If you can't, you don't have a goal yet - you have anxiety. Find the goal first.
+</Tip>
+
+This is also how I survive AI-generated code. When a model hands me 200 lines, I don't read them as prose - I ask "what is the one thing that has to be true for this to work?" and check that first. I wrote more about that habit in [the 20% of AI code I had to throw away](/blog/i-let-ai-write-80-of-a-feature-heres-the-20-i-had-to-throw-away).
+
+## Run it before you read it
+
+The fastest way I know to understand code is to make it move. Get the project running, then trace one real path through it with a debugger or a few log lines.
+
+Set a breakpoint where the user does something. Step through. Watch the actual values, not the values you assume. Half the time the path you imagined and the path the program takes are different files entirely, and the debugger settles the argument in thirty seconds.
+
+```ts
+// Instead of staring at the function, watch it run.
+export async function sendContact(input: ContactInput) {
+  console.log('1. received', input);        // what came in?
+  const clean = sanitize(input);
+  console.log('2. after sanitize', clean);  // what changed?
+  const result = await transport.send(clean);
+  console.log('3. transport said', result); // what came back?
+  return result;
+}
+```
+
+Three temporary logs taught me more about that file than an hour of reading. Delete them after. They are scaffolding, not code you ship.
+
+## Practice on code that fights back
+
+You get better at reading by reading hard things, on purpose, when nothing is on fire.
+
+My routine: once a week I pick one dependency we actually use - the source of a small npm package, a chunk of the Next.js router, a utility I import without thinking - and I read it until I can explain one decision the author made. Why a `Map` and not an object here? Why this early return? I am not trying to understand the whole library. I am trying to understand one choice.
+
+Reviewing pull requests is the other gym. A PR is reading practice with stakes and a deadline, which is exactly why it works. When I review, I trace the change the same way I trace a bug - run it in my head, then for real if I'm unsure. It made me a faster reader more than any tutorial did, and it is a big part of [the AI workflow that made me faster, not just busy](/blog/the-ai-coding-workflow-that-finally-made-me-faster-not-just-busier).
+
+<Warning>
+"I'll just rewrite it" is usually a tell that you didn't read it. Sometimes a rewrite is right - but reach for it after you understand the original, not instead of understanding it.
+</Warning>
+
+## What my reading session actually looks like
+
+When I land in unfamiliar code, I run the same loop:
+
+1. Get it building and running locally. Don't read code you can't run.
+2. Read the README and skim the folder names - just enough to know the shape.
+3. Pick one concrete question.
+4. Find the entry point for that question (search, "go to definition", call hierarchy).
+5. Trace that one path - debugger or logs - watching real values.
+6. Write one sentence explaining what I learned.
+
+It is unglamorous and it is fast. Twenty focused minutes of this beats an afternoon of scrolling.
+
+## Frequently Asked Questions
+
+### How long should it take to feel productive in a new codebase?
+
+With a goal-first, run-it-first approach, days - not weeks. You are not trying to learn the whole system, only enough of one path to make a safe change. Productivity comes from depth on one thread, not breadth across all of them.
+
+### Is reading AI-generated code different from reading a human's?
+
+The technique is the same - find the one thing that must be true and verify it - but the stakes are higher. AI code is confident and plausible even when it is wrong, so you can't lean on "it looks reasonable." You have to actually trace it.
+
+### Do I really need a debugger, or are logs enough?
+
+Logs are enough surprisingly often, especially for tracing a single path. A debugger wins when you need to inspect state deep in a loop or follow a branch you can't predict. Use whichever gets you to real values fastest.
+
+Reading code well is quieter than writing it, but it is the skill that compounds - every system you ever touch was written by someone else. If you're building something ambitious and want a partner who sweats these details, [get in touch](/book).
