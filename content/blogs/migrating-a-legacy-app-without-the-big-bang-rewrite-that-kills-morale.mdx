@@ -1,0 +1,78 @@
+---
+title: Migrate a legacy app without a big-bang rewrite
+description: The big-bang rewrite feels heroic and almost always stalls. Here's the incremental approach I use to modernize a legacy app without killing the team.
+date: 2026-06-26
+published: true
+featured: false
+category: Engineering
+tags:
+  - Web Development
+  - Architecture
+  - Refactoring
+  - Performance
+author: Rohan Gautam
+---
+
+Every legacy app reaches a point where someone says the brave thing in a meeting: "Let's just rewrite it from scratch." I've said it myself. I've also watched two of those rewrites die slowly, eight months in, with a half-finished new system and an old one nobody was allowed to touch. The rewrite isn't usually wrong because the code is wrong. It's wrong because of what it does to the people maintaining it.
+
+## The big-bang rewrite is a morale problem first
+
+A from-scratch rewrite asks the team to freeze the old system, build a parallel one, and switch over in a single jump. On a slide it looks clean. In practice the old app keeps getting bug reports and the new app delivers nothing a user can see for months.
+
+That gap is where morale dies. The team works hard and ships nothing visible. Stakeholders get nervous and start asking why the "quick rewrite" is now two quarters late. Meanwhile every new feature request goes into the old codebase anyway, because the new one isn't ready, so you're maintaining two systems and shipping in neither.
+
+<Warning>
+The most dangerous moment is the cutover. A big-bang switch means all the risk lands on one day. If anything breaks, you can't tell whether it's a migration bug or a new-feature bug, because everything changed at once.
+</Warning>
+
+## Strangle the old system instead
+
+The pattern I reach for is the strangler fig, named after a vine that grows around a tree until the tree is gone but the shape remains. You route traffic through a thin layer in front of the old app, then move one route, one module, one page at a time to new code. The old system keeps running until the last piece is gone.
+
+The mechanism is usually a router or proxy that decides, per request, who handles it:
+
+```ts
+// A facade in front of the legacy app: new routes peel off one at a time
+function route(request: Request) {
+  if (MIGRATED_PATHS.has(request.path)) {
+    return newService.handle(request); // rewritten, in production
+  }
+  return legacyApp.handle(request);     // everything else, untouched
+}
+```
+
+Every time you migrate a path, you add it to that set and ship. The user sees a working app the whole way through. The team sees something land every week.
+
+<Tip>
+Start with a route that is low-risk but real - a settings page, an internal admin screen - not the checkout flow. You want to debug the migration plumbing where a mistake is cheap.
+</Tip>
+
+## Make the seams safe before you move anything
+
+The reason migrations leak bugs is shared state. The old and new code often touch the same database, the same cache, the same user session. If a write goes through new code one minute and old code the next, you need both paths to agree.
+
+This is where retry-safety matters more than people expect. When you run two systems against one database, requests get replayed, double-submitted, and routed both ways during a cutover. I've written before about why [idempotency is the system design skill nobody teaches until it's 3am](/blog/idempotency-is-the-system-design-skill-nobody-teaches-until-its-3am) - a migration is exactly the situation that punishes you for skipping it.
+
+Before moving a module, I also spend real time just reading the old one. Legacy code encodes years of bug fixes and edge cases that no spec wrote down. Rewriting it without understanding it means re-introducing every bug it already learned to handle, which is why [reading other people's code is a skill worth practicing](/blog/reading-other-peoples-code-is-a-skill-heres-how-i-actually-practice-it) deliberately before a migration, not during.
+
+## When a rewrite actually is the answer
+
+I'm not against rewrites everywhere. If the old stack is genuinely dead - a framework with no security patches, a language version you can't host anymore - incremental migration may be more expensive than starting clean. And a tiny app, a few thousand lines, is small enough that the big-bang risk is small too.
+
+The honest test is this: can you ship a visible improvement in the first two weeks? If yes, go incremental. If the architecture makes that impossible, that's the real signal a deeper rewrite is warranted - and the same logic applies to platform migrations, like deciding [whether a React Native rewrite is worth it](/blog/the-new-architecture-in-react-native-was-the-rewrite-worth-it-for-us). Choose the path that keeps the team shipping.
+
+## Frequently Asked Questions
+
+### What is the strangler fig pattern?
+
+It's an incremental migration approach where you put a routing layer in front of a legacy system and replace it one piece at a time. Each migrated route runs on new code while the rest stays on the old system, until the legacy app is fully "strangled" and removed.
+
+### How do I keep the old and new systems in sync during migration?
+
+Share the source of truth - usually the database - and make every write path idempotent so replays and double-routing during cutover don't corrupt data. Avoid duplicating state across the two systems; have them read and write the same records.
+
+### Isn't running two systems at once slower and more expensive?
+
+Temporarily, yes - you pay for the routing layer and some duplicated effort. But you trade that cost for far lower risk and continuous delivery, which is almost always cheaper than a multi-month rewrite that ships nothing until the end.
+
+A legacy migration is less about clever code and more about sequencing risk so the team can keep shipping and keep its nerve. If you're staring down a scary migration and want a partner who's done the incremental version before, [get in touch](/book).
