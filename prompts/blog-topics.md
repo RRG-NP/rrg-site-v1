@@ -25,42 +25,53 @@ text, so edit wording before it's used, not after.
 - [x] Caching is easy until it isn't: the production cache bug that humbled me
 - [x] Reading other people's code is a skill - here's how I actually practice it
 - [x] Migrating a legacy app without the big-bang rewrite that kills morale
-- [ ] I profiled 40 React apps and the same five mistakes killed every one
-- [ ] The 200ms that cost us 30% of signups: a web performance autopsy
-- [ ] Your site isn't slow - your JavaScript is lying to you about when it's ready
-- [ ] Lazy-loading everything made my site slower, and I should've seen it coming
-- [ ] The Core Web Vitals fixes that moved the needle (and the four that didn't)
-- [ ] Images are still why your site feels slow in 2026 - here's the fix order
-- [ ] The real reason your JavaScript bundle is huge (it's not the library you think)
-- [ ] Shipping on a 3G connection: what actually moved my Web Vitals
-- [ ] React Native in production: the warnings nobody put in the docs
-- [ ] How I got React Native cold-start under one second
-- [ ] Why your React Native list scrolls like garbage, and the fix that stuck
-- [ ] Push notifications in React Native nearly broke me - here's the playbook
-- [ ] Bridging native code without fear: a React Native survival guide
-- [ ] One codebase, two app stores: the mobile tradeoffs I underestimated
-- [ ] System design interviews lie to you - here's what real scaling looks like
-- [ ] We served a million users on one Postgres box before splitting anything
-- [ ] The message queue you don't need yet: system design for small team
-- [ ] How I'd design a URL shortener that survives the Hacker News front page
-- [ ] Eventual consistency cost me a weekend - what I'd check first now
-- [ ] The microservice split we should never have done - a monolith confession
-- [ ] When a monolith beats microservices for a team of four
-- [ ] Clean Architecture made our codebase worse before it made it better
-- [ ] Event-driven architecture: the good, the bad, and the pages at 3am
-- [ ] The case against premature abstraction, told through one painful PR
-- [ ] How I structure a Next.js project after six years of getting it wrong
-- [ ] Designing an API your future self won't curse you for
-- [ ] The boring database decisions that quietly saved us a full year
-- [ ] RAG is harder than the demos make it look: a field report
-- [ ] AI code review caught bugs I missed - and invented ones I never had
-- [ ] Building an AI feature without torching your token budget
-- [ ] Prompt engineering for code is real engineering, not vibes
-- [ ] Why I still read every line the AI writes, and why you should too
-- [ ] Error messages are UX: the rewrite that cut our support tickets in half
-- [ ] How I debug a problem I don't understand yet, step by step
-- [ ] Observability for people who just want to know what broke at 3am
-- [ ] Type safety is a tool, not a religion - where I draw the line
-- [ ] What "good enough" tests look like when you're not Google
-- [ ] Why I keep a decisions log in every project (and what goes in it)
-- [ ] The git workflow that finally stuck for our small team
+- [ ] Why SOLID principles are still the foundation for modern software architecture
+- [ ] Clean Architecture Isn't Dead—You're Probably Using It Wrong
+- [ ] The Single Responsibility Principle at Scale: Lessons from Real Systems
+- [ ] Why Senior Engineers Prefer Deleting Code Over Writing More
+- [ ] The Art of Building Software That Survives for 10+ Years
+- [ ] How to Refactor Legacy Code Without Freezing Feature Development
+- [ ] The Most Expensive Technical Debt Is the Debt You Don't See
+- [ ] Stop Chasing Design Patterns—Understand Design Principles Instead
+- [ ] Why Most Software Engineers Over-Engineer Their Systems
+- [ ] Building Software That Future You Won't Hate
+- [ ] Why Most Microservices Migrations Fail
+- [ ] The Monolith Comeback: Why Big Tech Is Moving Back
+- [ ] Designing APIs That Won't Need Version 2
+- [ ] Event-Driven Architecture Explained Without the Buzzwords
+- [ ] CQRS: When It Simplifies Your System—and When It Doesn't
+- [ ] Building Systems That Keep Working When Everything Goes Wrong
+- [ ] The Architecture Decisions That Cost Millions to Reverse
+- [ ] How Senior Engineers Evaluate Architectural Trade-offs
+- [ ] Horizontal vs Vertical Scaling: The Real Engineering Trade-offs
+- [ ] How to Design Systems That Are Easy to Change
+- [ ] PostgreSQL Features Every Senior Backend Engineer Should Know
+- [ ] Why Your Database Is Slower Than Your Code
+- [ ] Zero-Downtime Database Migrations: A Practical Guide
+- [ ] Cache Invalidation Isn't Hard If You Think About It Correctly
+- [ ] The Hidden Cost of Redis in Production
+- [ ] Optimizing SQL Queries Like Engineers at Scale
+- [ ] Database Indexes Explained with Real Production Examples
+- [ ] Event Sourcing: Powerful, Dangerous, or Both?
+- [ ] API Design Mistakes That Haunt Teams for Years
+- [ ] Building REST APIs That Scale Beyond MVP
+- [ ] GraphQL vs REST After Five Years in Production
+- [ ] Authentication Isn't Authorization: A Costly Mistake
+- [ ] Idempotency Keys: The Feature Every API Eventually Needs
+- [ ] Why CI/CD Pipelines Become Slower Over Time
+- [ ] Feature Flags Are More Powerful Than Most Teams Realize
+- [ ] Blue-Green vs Canary Deployments: Which Should You Choose?
+- [ ] Observability Is More Than Logs, Metrics, and Traces
+- [ ] The Production Incident That Changed How We Deploy Software
+- [ ] How Elite Engineering Teams Debug Production Issues
+- [ ] AI Won't Replace Software Engineers—But It Will Replace Certain Workflows
+- [ ] Building AI Features That Users Actually Find Useful
+- [ ] RAG Explained for Backend Engineers
+- [ ] AI Agents: Architecture Patterns That Actually Work
+- [ ] Prompt Engineering Is Not Software Engineering
+- [ ] How to Build Reliable AI Applications Instead of Cool Demos
+- [ ] LLM Context Windows Explained for System Designers
+- [ ] The Hidden Engineering Challenges of Shipping AI Products
+- [ ] Why Senior Engineers Spend More Time Reading Than Coding
+- [ ] Engineering Principles That Never Go Out of Style
+- [ ] What Separates a Senior Engineer from a Staff Engineer?
