@@ -25,7 +25,7 @@ text, so edit wording before it's used, not after.
 - [x] Caching is easy until it isn't: the production cache bug that humbled me
 - [x] Reading other people's code is a skill - here's how I actually practice it
 - [x] Migrating a legacy app without the big-bang rewrite that kills morale
-- [ ] Why SOLID principles are still the foundation for modern software architecture
+- [x] Why SOLID principles are still the foundation for modern software architecture
 - [ ] Clean Architecture Isn't Dead—You're Probably Using It Wrong
 - [ ] The Single Responsibility Principle at Scale: Lessons from Real Systems
 - [ ] Why Senior Engineers Prefer Deleting Code Over Writing More

@@ -1,0 +1,97 @@
+---
+title: SOLID still matters - but not the way you were taught
+description: After six years of shipping code, I stopped treating SOLID as five rules to memorize and started treating it as one idea about change. Here's what held up.
+date: 2026-06-27
+published: true
+featured: false
+category: Engineering
+tags:
+  - Architecture
+  - Best Practices
+  - Refactoring
+  - Web Development
+author: Rohan Gautam
+---
+
+When I first learned SOLID, I treated it like a checklist. Five principles, five boxes to tick, and somehow my code would become "clean." What actually happened was a mess of interfaces nobody needed and abstractions that hid the one thing I cared about.
+
+It took me a few years to see that SOLID was never five separate rules. It is one idea, repeated five ways: design so that change is cheap. Once I read it that way, the principles stopped being a school exam and started being useful.
+
+## SOLID is one idea wearing five hats
+
+Strip away the names and every letter is answering the same question: when requirements change - and they always do - how much of your code has to move?
+
+- **S**ingle Responsibility: a piece of code should have one reason to change.
+- **O**pen/Closed: add behavior by adding code, not by editing code that already works.
+- **L**iskov Substitution: a subtype should not surprise the code that uses it.
+- **I**nterface Segregation: don't force a caller to depend on methods it never calls.
+- **D**ependency Inversion: depend on a contract, not on a concrete thing.
+
+They overlap because they are facets of the same goal. That reframe matters because it tells you when to apply them: when something is likely to change. Not everywhere, not always.
+
+## The two that earn their keep
+
+In day-to-day work, two of the five do most of the heavy lifting for me: Single Responsibility and Dependency Inversion.
+
+Single Responsibility is the one I reach for first, and it has nothing to do with "a class should do one thing." That phrasing is too vague to be useful. The real test is reasons to change. If your billing logic and your email formatting live in the same function, a tweak to either one risks breaking the other. Split them, and each can change in peace.
+
+Dependency Inversion is what keeps that split honest. Here's a pattern I write constantly:
+
+```ts
+// Hard to change: the service is welded to one mailer.
+class OrderService {
+  async confirm(order: Order) {
+    await new SendgridClient().send(order.email, 'Confirmed');
+  }
+}
+
+// Easy to change: the service depends on a contract.
+interface Mailer {
+  send(to: string, body: string): Promise<void>;
+}
+
+class OrderService {
+  constructor(private mailer: Mailer) {}
+  async confirm(order: Order) {
+    await this.mailer.send(order.email, 'Confirmed');
+  }
+}
+```
+
+The second version isn't "cleaner" for its own sake. It is cheaper to test (pass a fake mailer) and cheaper to change (swap Sendgrid for SES without touching `OrderService`). That is the whole point.
+
+<Tip>
+Apply Dependency Inversion at the seams where your code meets the outside world - databases, payment gateways, email, third-party APIs. Those are the things most likely to change out from under you.
+</Tip>
+
+## Where I've watched SOLID go wrong
+
+The honest part: SOLID hurts when you apply it to code that isn't going to change.
+
+I have written a `UserRepositoryInterface` with exactly one implementation, behind a factory, behind a config flag, for a feature that shipped once and never moved. That isn't architecture. It is ceremony. Every layer of indirection is a tax the next reader pays to follow a single function call.
+
+Premature abstraction is its own kind of debt, and it is harder to delete than duplication. Two similar functions are easy to merge later. A wrong abstraction welded across ten files is not.
+
+<Warning>
+An interface with one implementation, added "just in case," usually costs more than the duplication it was meant to prevent. Wait for the second real use case before you abstract.
+</Warning>
+
+So my rule now is simple: write the direct version first. When a second reason to change actually shows up, that is the signal to reach for SOLID. I lean on this same instinct when [migrating a legacy app](/blog/migrating-a-legacy-app-without-the-big-bang-rewrite-that-kills-morale) - you introduce seams where change is already happening, not everywhere at once. And the better you get at [reading other people's code](/blog/reading-other-peoples-code-is-a-skill-heres-how-i-actually-practice-it), the easier it is to feel where those seams belong.
+
+## Frequently Asked Questions
+
+### Are SOLID principles outdated in 2026?
+
+No. The vocabulary is from object-oriented design, but the underlying idea - isolate the parts likely to change - applies to functions, modules, and services just as well. The principles aged better than the frameworks that popularized them.
+
+### Do SOLID principles apply outside object-oriented code?
+
+Yes. You won't write a class for every rule, but Single Responsibility and Dependency Inversion map cleanly onto functional code: small pure functions with one job, and dependencies passed in rather than imported directly.
+
+### When should I not apply SOLID?
+
+When the code is unlikely to change or has a single, stable use case. Adding interfaces, layers, and indirection to a throwaway script or a one-off feature usually costs more in readability than it ever saves in flexibility.
+
+SOLID isn't a style guide, and it isn't a badge of seniority. It is a bet about where change will land. Place that bet where you have evidence, skip it where you don't, and your architecture stays both flexible and readable.
+
+If you're building something ambitious and want a partner who sweats these details, [get in touch](/book).
