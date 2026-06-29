@@ -1,0 +1,74 @@
+---
+title: Why senior engineers prefer deleting code
+description: Senior engineers treat every line as a liability. Here is why deleting code is real work, the instinct juniors miss, and how I learned it the hard way.
+date: 2026-06-29
+published: true
+featured: false
+category: Engineering
+tags:
+  - Refactoring
+  - Best Practices
+  - Web Development
+  - Performance
+author: Rohan Gautam
+---
+
+Early in my career I measured a good day by how much code I wrote. Now I measure it by how much I managed to remove. That flip took me a few years and one very ugly production incident to fully trust.
+
+## Every line you write is a line you maintain
+
+Code is not an asset. It is a liability you agree to carry. Each function you add is something that has to be read, tested, secured, and kept working as everything around it changes. A feature you wrote in an afternoon can cost you for years.
+
+I learned this on a client dashboard that had a "flexible" reporting module. Three engineers before me had added options nobody used. The config object had 40 fields; the actual UI exposed about six. When a date-handling bug surfaced, I spent two days just understanding which of those 40 paths could even be reached. Most of them couldn't. We deleted roughly 1,800 lines and the bug disappeared with the code that caused it.
+
+<Note>
+The cheapest code to maintain is the code that no longer exists. You cannot get paged at 3am for a function you deleted.
+</Note>
+
+## Deleting is harder than adding, which is why juniors avoid it
+
+Writing new code is mostly a forward problem. You hold the requirement in your head and produce something that satisfies it. Deleting is a backward problem: you have to prove a thing is *not* needed, and that proof requires understanding the whole system, not just your corner of it.
+
+That is the real reason it looks like senior work. It is not bravado. It is that confidently removing code demands you trace every caller, check the tests, read the git history, and understand why it was added in the first place. If you cannot do that tracing yet, deleting feels reckless, so you wrap the old thing in an `if` and move on. I did exactly that for years.
+
+<Warning>
+Adding a flag instead of removing the dead branch is how a codebase rots. Each "just in case" path doubles the states you have to reason about, and most of them are never exercised again.
+</Warning>
+
+## How I decide what to cut
+
+I do not delete on a hunch. I look for specific signals, and I lean on the tools rather than my memory.
+
+```bash
+# Who actually calls this?
+git grep -n "generateLegacyReport"
+
+# When was it last touched, and why?
+git log --oneline -- src/reports/legacy.ts
+```
+
+If the only references are tests that test the function itself, that is dead weight. If the last meaningful commit is two years old and the feature it served was sunset, it is a candidate. I delete it in its own commit with a clear message, so reverting is one command if I am wrong. Version control is the safety net that makes deletion cheap. The code is never truly gone; it is one `git revert` away.
+
+The same instinct shows up in performance work. I once [cut a page's LCP in half by removing code rather than adding it](/blog/i-cut-our-lcp-in-half-by-deleting-code-not-adding-it), and the lesson generalizes: the fastest, safest, most readable code is the code that was never there to slow you down.
+
+## Less code is a design goal, not a side effect
+
+The point is not to win a contest for the smallest diff. Sometimes the right move is to write more code. But the bias matters. When I am torn between a clever abstraction and just deleting the two callers that needed it, I now lean toward deletion and see who complains. Usually nobody does.
+
+This is also why I read a codebase carefully before I touch it. You cannot safely remove what you do not understand, and [reading other people's code is a skill I practice on purpose](/blog/reading-other-peoples-code-is-a-skill-heres-how-i-actually-practice-it). The two habits feed each other: the better you read, the more confidently you cut.
+
+## Frequently Asked Questions
+
+### Isn't deleting code risky?
+
+It is far less risky than keeping code you do not understand. With version control, a deletion is reversible in one command, while an unused code path is a quiet liability that can hide bugs for years.
+
+### How do I know a piece of code is safe to remove?
+
+Trace every caller with a project-wide search, check whether the only references are its own tests, and read the git history for why it was added. If nothing real depends on it and the feature is gone, delete it in an isolated commit.
+
+### Does writing less code mean being less productive?
+
+No. Productivity is measured by working software and the cost to maintain it, not lines produced. Removing dead code reduces the surface you have to test, secure, and reason about, which usually makes the next feature faster to ship.
+
+Deleting code is not about doing less work. It is about refusing to carry weight that earns nothing. If you are building something ambitious and want a partner who treats simplicity as a feature, [get in touch](/book).
