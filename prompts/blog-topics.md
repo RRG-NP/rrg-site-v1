@@ -27,7 +27,7 @@ text, so edit wording before it's used, not after.
 - [x] Migrating a legacy app without the big-bang rewrite that kills morale
 - [x] Why SOLID principles are still the foundation for modern software architecture
 - [x] Why Senior Engineers Prefer Deleting Code Over Writing More
-- [ ] The Art of Building Software That Survives for 10+ Years
+- [x] The Art of Building Software That Survives for 10+ Years
 - [ ] Clean Architecture Isn't Dead — You're Probably Using It Wrong
 - [ ] The Single Responsibility Principle at Scale: Lessons from Real Systems
 - [ ] How to Refactor Legacy Code Without Freezing Feature Development

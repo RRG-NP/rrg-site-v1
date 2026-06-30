@@ -1,0 +1,73 @@
+---
+title: Why some software lasts 10 years and most doesn't
+description: After maintaining a decade-old codebase, I learned that software survives by being easy to change, not by being clever or perfectly designed.
+date: 2026-06-30
+published: true
+featured: false
+category: Engineering
+tags:
+  - Web Development
+  - Performance
+  - Next.js
+author: Rohan Gautam
+---
+
+Last year I inherited a system that had been running in production since 2014. A booking platform for a travel company here in Kathmandu, PHP and jQuery, written by people who had long since moved on. Everyone warned me it was a mess. It was. But it was a mess that had survived eleven years, paid salaries, and processed real money the whole time. That is rarer than any clean architecture I've seen.
+
+That job changed how I think about what makes software last. It is almost never the thing we obsess over in code review.
+
+## Surviving software is boring on purpose
+
+The parts of that codebase that lasted were the boring parts. Plain functions. Obvious names. A folder structure you could guess without a map. The parts that rotted were the clever ones: a custom ORM somebody built to "save time," a templating layer that wrapped another templating layer, a config system that could load settings from four places in an order nobody remembered.
+
+The clever code didn't fail because it was wrong. It failed because the one person who understood it left, and nobody else could touch it without breaking something. Boring code survives because the next person can read it at 3am and not be scared.
+
+<Tip>
+Before you reach for an abstraction, ask who maintains it after you. If the honest answer is "someone who has never met me," write the boring version.
+</Tip>
+
+## Code that's easy to delete outlives code that's easy to extend
+
+We're taught to build for extension. Open for extension, closed for modification, the whole SOLID catechism. But a decade in, the codebases I've seen age best are the ones where any single piece can be ripped out without the rest noticing.
+
+That travel platform had a payment module wired into everything: the booking flow imported it, the email sender imported it, even the admin dashboard reached into it. When the payment provider shut down, swapping it took three weeks. Meanwhile a separate SMS feature, written as one self-contained file with a single entry point, took an afternoon to replace.
+
+The difference wasn't quality. The SMS code was uglier. It was just isolated. I've come to believe that loose coupling matters more than clean code, and I wrote more about that instinct in [why senior engineers prefer deleting code over writing more](/blog/why-senior-engineers-prefer-deleting-code-over-writing-more).
+
+## The dependencies you add are the bets you place
+
+Every library you pull in is a bet that it will still exist, still get security patches, and still match your needs in five years. Most of those bets lose.
+
+The 2014 codebase had a date-picker library that hadn't been updated since 2016, a charting tool whose CDN had gone dark, and an "easy" payment SDK that was abandoned two years after it shipped. Each one became a small archaeology project. Meanwhile the code that used the language's own standard library and a thin layer of plain functions just kept working.
+
+<Warning>
+A dependency you add today is maintenance you owe forever. The framework will move on, the maintainer will burn out, and the breaking change will land on a Friday. Add it only when writing it yourself is genuinely worse.
+</Warning>
+
+This is why I'm cautious even with the tools I love. Next.js is excellent, but I still keep my business logic in plain functions that don't know what framework they live in. If the framework changes - and frameworks always change - the part that actually matters survives the move.
+
+## You can't design for ten years up front
+
+Here's the uncomfortable part. None of this comes from a grand plan. The systems that last weren't designed to last. They were built simply, then changed carefully, hundreds of times, by people who respected what was already there.
+
+The real skill isn't architecture. It's restraint while changing things you didn't write. Make the smallest change that solves the problem. Leave the code a little clearer than you found it. Resist the urge to rewrite the whole thing because you don't like the previous author's style. I learned that the hard way, which is partly why I now believe in [migrating legacy systems without the big-bang rewrite](/blog/migrating-a-legacy-app-without-the-big-bang-rewrite-that-kills-morale).
+
+<Note>
+Longevity is a property of how a codebase is maintained over years, not of any decision made on day one. The original author sets the starting conditions; everyone after decides whether it lives.
+</Note>
+
+## Frequently Asked Questions
+
+### Doesn't this contradict good architecture practices like SOLID?
+
+Not really - it reframes them. Principles like SOLID are tools for keeping change cheap, not goals in themselves. When they make code easier to delete and replace, use them; when they add ceremony nobody needs, skip them. I dig into this in [why SOLID principles still matter](/blog/why-solid-principles-are-still-the-foundation-for-modern-software-architecture).
+
+### Should I avoid all third-party libraries to make software last?
+
+No. Libraries save real time and some are well worth the bet. The point is to choose deliberately: prefer the standard library, prefer widely-used and actively-maintained tools, and isolate every dependency behind a thin layer so swapping it later is a small job, not a rewrite.
+
+### How do I know if my current codebase will age well?
+
+Ask one question: how hard is it to delete a feature? If removing something means touching ten unrelated files, the code is too tangled to age gracefully. If a feature lives in one place with a clear boundary, you're in good shape.
+
+Building software that lasts isn't about getting it perfect on the first try. It's about keeping it simple enough that the next person - maybe you, two years from now - can keep changing it without fear. If you're building something meant to outlast its first version and want a partner who thinks this way, [get in touch](/book).
