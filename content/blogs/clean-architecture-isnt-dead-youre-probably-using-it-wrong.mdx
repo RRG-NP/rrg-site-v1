@@ -1,0 +1,92 @@
+---
+title: Clean architecture isn't dead - you're using it wrong
+description: Clean architecture fails when you copy the diagram instead of the idea. Here is where the layers actually earn their keep, and where they just slow you down.
+date: 2026-07-01
+published: true
+featured: false
+category: Engineering
+tags:
+  - Web Development
+  - React
+  - Next.js
+author: Rohan Gautam
+---
+
+Every few months someone declares clean architecture dead, usually right after they inherited a codebase with seven folders to open before finding the one line that talks to the database. I get the frustration. But the layers weren't the problem - copying the diagram without the idea behind it was.
+
+## The rule is one sentence, not four folders
+
+People think clean architecture means `entities/`, `usecases/`, `adapters/`, `frameworks/`. It doesn't. The whole thing is one rule: **dependencies point inward, toward your business logic, never outward toward a framework.** Your core logic should not know Next.js, Prisma, or Stripe exist.
+
+That's it. The folders are one way to enforce that rule, not the rule itself. I've seen teams create every layer from the book and still call the ORM directly inside their business logic - passing the diagram, failing the point.
+
+<Note>
+A layer you can't explain in one sentence is a layer you copied, not chose. If "why is this here" takes a paragraph, delete it.
+</Note>
+
+## Where the boundary actually pays off
+
+The dependency rule earns its keep exactly where something outside your control might change. That's the test I use before adding an interface: is there a real second implementation coming, or a real chance the vendor changes under me?
+
+Payments are the classic yes. We wrapped a payment provider behind a small interface on one project, and eight months later when the client switched gateways, the business logic didn't move a line.
+
+```ts
+// The core depends on THIS, not on Stripe.
+interface PaymentGateway {
+  charge(amountPaisa: number, token: string): Promise<Receipt>;
+}
+
+async function completeOrder(order: Order, gateway: PaymentGateway) {
+  const receipt = await gateway.charge(order.totalPaisa, order.token);
+  return { ...order, status: 'paid', receipt };
+}
+```
+
+`completeOrder` has no idea Stripe exists. Swapping to Khalti or eSewa is a new class implementing one interface, tested in isolation. That is the payoff clean architecture promises, and here it delivers.
+
+## Where it's just cosplay
+
+Now the other 80% of your code. A form that reads three fields and writes one row does not need a repository interface, a use-case class, and a DTO mapper. Wrapping a single-implementation database call behind an abstraction "in case we switch databases" is a bet you will almost never cash - and until you do, every reader pays interest on it.
+
+<Warning>
+An interface with exactly one implementation and no second one in sight is not decoupling. It's a redirect that costs a file open and gives nothing back.
+</Warning>
+
+Here's the contrast I wish more people drew. Same feature, two levels of ceremony:
+
+```ts
+// Cosplay: three files to fetch a user by id.
+class UserRepository implements IUserRepository {
+  constructor(private db: Db) {}
+  findById(id: string) { return this.db.users.findUnique({ where: { id } }); }
+}
+
+// Honest: it's a query. Call it a query.
+function getUser(id: string) {
+  return db.users.findUnique({ where: { id } });
+}
+```
+
+The second one is easier to read, easier to delete, and just as testable when you actually need it. Structure should follow volatility - abstract the parts that change, inline the parts that don't. Most CRUD doesn't change, which ties into [why senior engineers prefer deleting code over writing more](/blog/why-senior-engineers-prefer-deleting-code-over-writing-more).
+
+## Judgment is the skill, not the diagram
+
+Clean architecture and [SOLID](/blog/why-solid-principles-are-still-the-foundation-for-modern-software-architecture) are the same lesson wearing different clothes: isolate what changes for different reasons. The failure mode is always the same too - treating a heuristic as a mandate and applying it everywhere at full strength.
+
+The good version of this thinking is quiet. It shows up as code that [survives for years](/blog/the-art-of-building-software-that-survives-for-10-years) because the volatile edges were isolated and the stable core was left alone. You don't notice it, which is exactly why people think the discipline is dead. It was working the whole time.
+
+## Frequently Asked Questions
+
+### Is clean architecture overkill for small projects?
+
+Often, yes - if you apply all the layers everywhere. Keep the one rule (dependencies point inward) and add boundaries only around genuinely volatile parts like payments or third-party APIs. A small project might need exactly one such boundary.
+
+### How do I know when to add an interface?
+
+Ask if a real second implementation exists or is genuinely likely, or if the thing behind it is a vendor that could change. If the honest answer is no, skip the interface and call the code directly - you can extract one later when the need is real.
+
+### Does clean architecture slow down development?
+
+Misapplied, badly - every extra layer is a file to open and a mapping to maintain. Applied at the right boundaries, it speeds you up later by making the volatile parts swappable without touching your core logic.
+
+Clean architecture isn't a folder structure you install; it's a judgment call you make per boundary. Learn the one rule, apply it where change actually lives, and skip the ceremony everywhere else. If you're building something ambitious and want a partner who sweats these details, [get in touch](/book).
