@@ -29,7 +29,7 @@ text, so edit wording before it's used, not after.
 - [x] Why Senior Engineers Prefer Deleting Code Over Writing More
 - [x] The Art of Building Software That Survives for 10+ Years
 - [x] Clean Architecture Isn't Dead — You're Probably Using It Wrong
-- [ ] The Single Responsibility Principle at Scale: Lessons from Real Systems
+- [x] The Single Responsibility Principle at Scale: Lessons from Real Systems
 - [ ] How to Refactor Legacy Code Without Freezing Feature Development
 - [ ] The Most Expensive Technical Debt Is the Debt You Don't See
 - [ ] Stop Chasing Design Patterns—Understand Design Principles Instead

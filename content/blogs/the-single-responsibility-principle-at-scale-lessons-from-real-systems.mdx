@@ -1,0 +1,78 @@
+---
+title: The Single Responsibility Principle breaks down at scale
+description: The classroom test for single responsibility falls apart once real teams, deploy schedules, and on-call rotations enter the picture. Here's what replaces it.
+date: 2026-07-02
+published: true
+featured: false
+category: Engineering
+tags:
+  - Architecture
+  - Best Practices
+  - Refactoring
+author: Rohan Gautam
+---
+
+"A class should have one reason to change" works fine when you're the only one reading the class. Put fifteen engineers and four teams around the same service, and the same textbook-clean code starts causing outages nobody can explain.
+
+## The classroom test only works for one person
+
+When I was the only one touching a codebase, "one reason to change" was easy to judge. I knew every reason the code might change, because I was the one changing it.
+
+That test quietly assumes a single brain holding the whole picture. At scale, that assumption breaks first, long before the code does. A class can genuinely do one job on paper and still get edited by five different teams for five unrelated reasons, because "do one job" and "change for one reason" stop being the same statement once more than one team owns the reasons.
+
+## A payment service that was textbook-clean
+
+I worked on a `PaymentService` that, by every classroom definition, followed SRP. It processed payments. That's it. One responsibility, one class, no argument.
+
+In practice, four teams touched it every week: billing changed how invoices got generated, fraud added new risk checks, refunds tweaked the reversal flow, and reporting pulled fields out of the same transaction object for a dashboard. All four were legitimately "processing a payment." None of them were the same job.
+
+The result was predictable: a fraud rule shipped on a Tuesday broke a refund release on Friday, and whoever was on call had to untangle a diff they didn't write to fix a bug in a domain they didn't own. The class had one job. The system had four owners fighting over one file.
+
+## The test that actually holds up: who gets paged
+
+The heuristic that replaced "one reason to change" for me is blunter: if this breaks at 2am, is there exactly one team whose expertise fixes it, and can they ship that fix without anyone else's code in the diff?
+
+| Test | Answers well at | Breaks down at |
+| --- | --- | --- |
+| "One reason to change" | A single file, a single developer | Multiple teams sharing one module |
+| "One team can fix and deploy it alone" | A whole service, a whole org | Nothing - it scales with headcount |
+
+Once we split the payment service along those lines instead of technical ones, billing, fraud, and refunds each got their own deployable with their own release cadence. The unrelated-team incidents didn't disappear, but they dropped enough that on-call stopped dreading Friday deploys from teams they'd never worked with.
+
+<Tip>
+Before splitting a service, ask who currently has to coordinate a deploy with someone else to ship a change. That coordination point is the real seam, not whatever noun the code happens to be named after.
+</Tip>
+
+## Splitting by class name creates its own mess
+
+The overcorrection is just as common: teams read SRP, decide every noun deserves its own microservice, and end up with a `UserService`, an `EmailService`, and a `NotificationService` that all have to deploy together anyway because one business change (say, "let users opt out of emails") touches all three.
+
+That's a distributed monolith. You've traded one file with four owners for five services with one true owner, connected by network calls instead of function calls. The coordination cost didn't go away, it just got a slower, harder-to-debug transport layer.
+
+<Warning>
+Splitting a service by technical category instead of by who owns the change usually adds deploy coordination and network latency without removing the coupling that caused the pain in the first place.
+</Warning>
+
+## What actually worked for us
+
+Draw the boundary where two teams currently disagree about priorities or release cadence, not at every place the code could theoretically be split. If one team owns several files inside one deployable, leave it alone. If two teams need to ship on different schedules and keep tripping over each other's changes, that's the seam to cut along.
+
+I use the same instinct when [migrating a legacy app without a big-bang rewrite](/blog/migrating-a-legacy-app-without-the-big-bang-rewrite-that-kills-morale) - you introduce a new boundary where change is already happening, not everywhere the architecture diagram suggests one could go. It's the same idea I wrote about with [SOLID more broadly](/blog/why-solid-principles-are-still-the-foundation-for-modern-software-architecture): the principle is a bet about where change will land, and at scale, "change" means a team's calendar, not just a diff.
+
+## Frequently Asked Questions
+
+### Does the Single Responsibility Principle still apply to microservices?
+
+Yes, but the unit changes. Instead of asking whether a class does one thing, ask whether a service can be understood, changed, and deployed by one team without waiting on another team's release.
+
+### How do I know a service needs to split by team instead of by class boundaries?
+
+Look at your last few incidents and deploy delays. If they keep involving two teams coordinating changes to the same file or service, that's the real boundary, not whatever technical layer the code diagram shows.
+
+### Isn't splitting by team ownership just Conway's Law?
+
+Close to it. Conway's Law says your system will end up mirroring your org chart whether you plan for it or not, so you might as well draw the lines on purpose instead of discovering them through an incident review.
+
+At the class level, SRP is about code you can hold in your head. At the level of real systems, it's about coordination you can hold in a calendar. Both versions are the same bet on where change will land, just measured in different units.
+
+If you're building something ambitious and want a partner who sweats these details, [get in touch](/book).
