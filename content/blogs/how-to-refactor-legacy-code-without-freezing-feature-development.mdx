@@ -1,0 +1,76 @@
+---
+title: How to refactor legacy code without freezing feature work
+description: Skip the refactor sprint that never gets approved. Attach cleanup to every feature ticket and the legacy code fixes itself over time.
+date: 2026-07-05
+published: true
+featured: false
+category: Engineering
+tags:
+  - Refactoring
+  - Architecture
+  - Best Practices
+  - Web Development
+author: Rohan Gautam
+---
+
+Every engineer I've worked with has asked a product manager for a "refactor sprint" at least once. I've never seen one actually get approved, and on the one occasion it did, it got cancelled in week two because a client escalation needed the whole team.
+
+## The refactor freeze almost never survives contact with the roadmap
+
+The pitch sounds reasonable: stop shipping features for three weeks, clean up the mess, then go faster forever. But from the business side, it reads as "pay us to not deliver anything you can see." Even a sympathetic PM has to defend that to their boss, and most can't.
+
+I stopped asking for permission to refactor. Instead I built refactoring into how I estimate and ship features, so it never shows up as a separate line item someone has to approve.
+
+## The rule: only refactor code you're already touching
+
+I don't go looking for messy files to clean up. I wait until a feature ticket forces me into a file, and then I leave that file better than I found it before I add the new logic.
+
+This sounds small, but it compounds. On a Laravel project I worked on last year, the invoice module had a 400-line controller method nobody wanted to touch. Over four unrelated tickets (a discount feature, a tax change, a PDF export tweak, and a refund flow), I pulled pieces of that method into named, tested functions each time I was in there anyway. Nobody asked me to. Nobody noticed the ticket took an extra hour. By the fifth ticket, the file was small enough that a junior dev picked it up without asking me anything.
+
+<Tip>
+If a ticket needs you to read a scary function before you can safely edit it, that reading time is refactoring time. Spend it extracting one clearly named piece instead of just holding the logic in your head.
+</Tip>
+
+## Wrap before you replace
+
+The mistake I made early in my career was rewriting the scary function in place, in one commit, hoping it behaved the same. It usually didn't, and finding the regression three weeks later with no idea which of forty changed lines caused it was miserable.
+
+Now I wrap first. If I need to replace a payment gateway call, I put the old implementation and the new one behind the same interface, route a small percentage of traffic to the new path, and only delete the old one once the new one has survived a real billing cycle. This is the same idea as the strangler fig pattern from the [legacy migration post](/blog/migrating-a-legacy-app-without-the-big-bang-rewrite-that-kills-morale) I wrote a while back: you grow the new system around the edges of the old one instead of stopping the world to swap them.
+
+```ts
+// old and new live side by side until the new one earns trust
+async function chargeCard(order: Order) {
+  if (isRolledOutFor(order.merchantId)) {
+    return chargeCardV2(order);
+  }
+  return chargeCardLegacy(order);
+}
+```
+
+## Tests are the entry fee, not the reward
+
+Nobody gets excited about writing tests for code they're about to delete anyway. But a test around the current, ugly behavior is what lets you refactor with your hands instead of your memory. I write the test to lock in what the code actually does today, not what I think it should do, then refactor underneath it, then update the test if the new behavior is intentionally different.
+
+Skipping this step is how "just a small cleanup" turns into a three-day debugging session. I'd rather spend twenty minutes on a characterization test than a day figuring out why refunds silently stopped emailing customers.
+
+## Name the ticket for what it protects, not what it cleans
+
+"Refactor the invoice controller" gets deprioritized every sprint planning meeting, forever, because it sounds optional. "Make the invoice controller safe to add tax rules to" gets prioritized, because it's attached to a business outcome someone in the room cares about. Same work, different framing, completely different fate in a backlog.
+
+This is really the same lesson as [why senior engineers delete more than they write](/blog/why-senior-engineers-prefer-deleting-code-over-writing-more): the value isn't in the act of refactoring, it's in what the refactor unblocks. Sell the unblock.
+
+## Frequently Asked Questions
+
+### How do I convince my manager to prioritize refactoring?
+
+Don't pitch it as a separate project. Fold the cleanup into the estimate for the feature ticket that already touches that code, and frame it around the specific risk or slowdown it removes, not "cleanup" in the abstract.
+
+### What if the legacy code has no tests at all?
+
+Write a characterization test first: call the function with realistic inputs, capture what it currently outputs, and assert on that. It's not a test of correctness, it's a safety net so your refactor doesn't silently change behavior.
+
+### Isn't a full rewrite sometimes actually faster?
+
+Rarely, and almost never for anything a real business depends on. A rewrite throws away years of edge-case handling you don't remember exists until a customer hits it in production. Incremental refactoring keeps the system running while you improve it.
+
+If you're building something ambitious and want a partner who sweats these details, [get in touch](/book).
