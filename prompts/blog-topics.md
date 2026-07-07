@@ -31,7 +31,7 @@ text, so edit wording before it's used, not after.
 - [x] Clean Architecture Isn't Dead — You're Probably Using It Wrong
 - [x] The Single Responsibility Principle at Scale: Lessons from Real Systems
 - [x] How to Refactor Legacy Code Without Freezing Feature Development
-- [ ] The Most Expensive Technical Debt Is the Debt You Don't See
+- [x] The Most Expensive Technical Debt Is the Debt You Don't See
 - [ ] Stop Chasing Design Patterns—Understand Design Principles Instead
 - [ ] Why Most Software Engineers Over-Engineer Their Systems
 - [ ] Building Software That Future You Won't Hate
