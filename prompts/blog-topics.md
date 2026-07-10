@@ -32,7 +32,7 @@ text, so edit wording before it's used, not after.
 - [x] The Single Responsibility Principle at Scale: Lessons from Real Systems
 - [x] How to Refactor Legacy Code Without Freezing Feature Development
 - [x] The Most Expensive Technical Debt Is the Debt You Don't See
-- [ ] Stop Chasing Design Patterns—Understand Design Principles Instead
+- [x] Stop Chasing Design Patterns—Understand Design Principles Instead
 - [ ] Why Most Software Engineers Over-Engineer Their Systems
 - [ ] Building Software That Future You Won't Hate
 - [ ] Why Most Microservices Migrations Fail

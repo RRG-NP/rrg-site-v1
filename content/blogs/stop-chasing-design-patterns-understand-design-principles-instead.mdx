@@ -1,0 +1,107 @@
+---
+title: Stop chasing design patterns - learn the principles instead
+description: Memorizing all 23 GoF patterns won't make you a better engineer. Patterns are outputs of good principles, and chasing them backwards leads to bloat.
+date: 2026-07-10
+published: true
+featured: false
+category: Engineering
+tags:
+  - Architecture
+  - Best Practices
+  - Refactoring
+  - Web Development
+author: Rohan Gautam
+---
+
+Before my first round of job interviews in Kathmandu, I spent a month memorizing all 23 Gang of Four patterns from a borrowed Java book. Flashcards, UML diagrams, the lot. Six years and a lot of production code later, I can give you the honest score: that month made me a worse engineer before it made me a better one.
+
+## Patterns are answers I collected before having questions
+
+The Gang of Four book documented solutions its authors kept *finding* in real systems. The patterns were discovered, not invented. That framing matters, because the way most of us learn them flips it: we treat the catalog as a checklist and go looking for places to apply the entries.
+
+I did exactly this. In my second year, I shipped a Node.js service with an `AbstractNotificationFactory` behind an interface, wired up for exactly two notification types: email and SMS. Four files, two layers of indirection, one config object. In the two years I stayed on that project, a third notification type never arrived. Every new teammate paid the cost of tracing that ceremony, and nobody ever collected the benefit.
+
+The pattern wasn't wrong. My direction was. I started from "where can I use Factory?" instead of "what is this code's actual problem?"
+
+## Most patterns are missing language features
+
+Here's the number that finally reframed patterns for me. Back in 1996, Peter Norvig showed that [16 of the 23 GoF patterns become invisible or simpler](https://norvig.com/design-patterns/design-patterns.pdf) in dynamic languages, because features like first-class functions do the job directly. That's 70 percent of the catalog compensating for what C++ and older Java couldn't express.
+
+You can watch this in any modern codebase. Iterator is a `for...of` loop now. Observer ships as an event emitter. And Strategy, the one every tutorial demonstrates with a class hierarchy, is a function argument:
+
+```ts
+// the tutorial version: three declarations before any behavior
+interface DiscountStrategy {
+  apply(total: number): number;
+}
+
+class FestivalDiscount implements DiscountStrategy {
+  apply(total: number) {
+    return total * 0.9;
+  }
+}
+
+class Checkout {
+  constructor(private strategy: DiscountStrategy) {}
+  total(amount: number) {
+    return this.strategy.apply(amount);
+  }
+}
+```
+
+```ts
+// the same design decision in TypeScript
+type Discount = (total: number) => number;
+
+const festivalDiscount: Discount = (total) => total * 0.9;
+
+function checkout(total: number, discount: Discount = (t) => t) {
+  return discount(total);
+}
+```
+
+Both versions isolate the part that varies. The second one is still the Strategy pattern - it just doesn't need the costume.
+
+<Note>
+If a pattern disappears when you switch languages, it was never a design truth. It was a workaround. The thing that survives the switch is the principle underneath: separate what changes from what stays.
+</Note>
+
+## Principles are what generate the patterns
+
+Strip the catalog away and a handful of ideas keep reappearing: keep coupling low, keep related things together, point dependencies toward the stable parts, isolate what varies. Learn those and you'll re-derive patterns on demand, sized to the actual problem. Sometimes the result matches a GoF diagram. More often it's three lines, like the checkout function above.
+
+This is why I keep arguing that [SOLID principles are still the foundation](/blog/why-solid-principles-are-still-the-foundation-for-modern-software-architecture) while individual pattern tutorials age badly. Principles tell you *why* a structure helps, so you can judge when it doesn't. A pattern applied without its principle is how you end up with the over-abstracted codebases I described in [clean architecture isn't dead - you're probably using it wrong](/blog/clean-architecture-isnt-dead-youre-probably-using-it-wrong).
+
+My working rule now: write the simple version first, and only refactor toward a pattern when the code itself shows the pressure - a third variant, a second caller, a real axis of change. The pattern earns its way in as a refactoring target, never as a starting point.
+
+## Where pattern knowledge still pays
+
+I'm not telling you to skip the catalog. Pattern names are vocabulary, and vocabulary is cheap to carry. Saying "this is a circuit breaker" in a code review transfers a whole design in four words. Reading framework source is much easier when you recognize Observer or Decorator on sight.
+
+The tradeoff is directional. Knowing pattern names costs you a weekend and pays off in every design conversation. Steering your design *by* pattern names costs you indirection on code that needed none.
+
+<Tip>
+Learn patterns the way you learn a second language's idioms: to understand and be understood, not to force them into every sentence.
+</Tip>
+
+## Frequently Asked Questions
+
+### Should I still learn the Gang of Four patterns?
+
+Yes, but as vocabulary rather than as a design method. Knowing the names makes code reviews and framework internals much easier to follow, even though you'll rarely implement the textbook versions by hand.
+
+### Are design patterns useless in JavaScript and Python?
+
+Not useless, just mostly absorbed. Peter Norvig found 16 of the 23 classic patterns become invisible or simpler in dynamic languages, so you often get the pattern's benefit from a plain function or a built-in feature.
+
+### Which principles should I learn instead?
+
+Start with coupling and cohesion, then dependency direction: point your dependencies at the parts of the system least likely to change. Most named patterns, and most of SOLID, are specific applications of those three ideas.
+
+### How do I know if I'm over-engineering with a pattern?
+
+Count the variants. If you're building the structure for a second implementation that doesn't exist yet, you're speculating. Wait until the code shows real pressure to change, then refactor toward the pattern.
+
+I still have those flashcards somewhere in my parents' flat. I don't regret learning the names. I regret the two years I spent treating a vocabulary list as a design method, and I see newer engineers making the same trade every hiring season.
+
+If you're building something ambitious and want a partner who sweats these details, [get in touch](/book).
