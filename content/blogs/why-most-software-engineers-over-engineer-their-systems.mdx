@@ -1,0 +1,90 @@
+---
+title: Why most software engineers over-engineer their systems
+description: >-
+  Over-engineering is a fear response, and the numbers on unused features back it up. Here is
+  how I learned to build for the problem in front of me.
+date: 2026-07-20
+published: true
+featured: false
+category: Engineering
+tags:
+  - Architecture
+  - Best Practices
+  - Web Development
+author: Rohan Gautam
+---
+
+In my third year as an engineer I set up a three-node Kafka cluster for a food delivery client in Kathmandu. Their peak load was about 40 orders an hour. A Postgres table and a cron job would have handled that with room to spare, and I knew it while I was writing the config. I built the cluster anyway. It took me years to understand why.
+
+The usual explanation for over-engineering is ignorance: engineers who never heard of YAGNI, the old rule that says you aren't gonna need it. That explanation is wrong. Every engineer I've watched gold-plate a system could recite YAGNI on demand. **We over-engineer because complexity feels safe and simplicity feels exposed.**
+
+## The future we build for rarely shows up
+
+Pendo, a product analytics company, measured real usage across its customers' products and published the result in its [2019 feature adoption report](https://www.pendo.io/resources/the-2019-feature-adoption-report/): 80 percent of features are rarely or never used, and about 12 percent of features carry 80 percent of daily activity. By their estimate, publicly traded cloud companies had sunk up to 29.5 billion dollars into features customers barely touch.
+
+Now apply that to architecture. Each of those unused features sat on scaffolding built to support it: the plugin system nobody extended, the event bus with a single consumer, the config option with one value in production. The features at least had someone arguing for them. The flexibility underneath was speculation, and it costs attention every day it exists.
+
+## Nobody gets blamed for complexity
+
+Here is the asymmetry that actually drives the behavior. Ship a simple system and hit its limit two years later, and someone will ask why you didn't plan ahead. Ship a complex system that arrives late and confuses every new hire, and it mostly reads as serious engineering. One failure mode has your name on it. The other looks like ambition.
+
+The incentives outside the codebase point the same way. Interviews reward system-design vocabulary. A CV that says Kafka gets more callbacks in Kathmandu than one that says "cron job that never failed in three years". When I'm honest about that cluster, capacity planning was the cover story. I was hedging against the embarrassment of looking unprepared, and the hedge was billed to the client.
+
+## What hedging looks like in code
+
+You don't need Kafka to over-engineer. The everyday version is the layer that wraps a layer:
+
+```ts
+// what I wrote: an interface, a class and a DI binding before the first query
+interface OrderRepository {
+  findPending(): Promise<Order[]>;
+}
+
+class PostgresOrderRepository implements OrderRepository {
+  constructor(private db: Db) {}
+  findPending() {
+    return this.db.select().from(orders).where(eq(orders.status, 'pending'));
+  }
+}
+```
+
+```ts
+// what the project needed
+function findPendingOrders(db: Db) {
+  return db.select().from(orders).where(eq(orders.status, 'pending'));
+}
+```
+
+The interface hedges against a second database that, across my projects so far, has arrived roughly once in twenty. Meanwhile every new teammate traces the indirection on day one, on every project. I described the same trap with design patterns in [stop chasing design patterns](/blog/stop-chasing-design-patterns-understand-design-principles-instead): structure added ahead of evidence is a cost, whatever the diagram looks like.
+
+<Tip>
+Before adding a layer, I ask two questions. What breaks this quarter if it doesn't exist? What does it cost every day it does? If the first answer is "nothing", the second answer decides, and it almost always says no.
+</Tip>
+
+## Some futures are worth building for
+
+YAGNI has edges, and pretending otherwise would be its own kind of dishonesty. Money paths need idempotency from day one, because you can't retrofit it during an incident; I learned that [the 3am way](/blog/idempotency-is-the-system-design-skill-nobody-teaches-until-its-3am). Data models deserve real design time, since a bad table survives every refactor built around it. And trust boundaries are never the place to save effort: skipping input validation is negligence with a YAGNI sticker on it.
+
+The difference is evidence. Preparation points at something you can show a colleague: a signed contract, a measured growth curve, a regulation with a date. Over-engineering points at a feeling. If the only justification for a component is "we might need it", Pendo's numbers say you probably won't, and carrying it will cost more than adding it late. That is one reason [senior engineers prefer deleting code](/blog/why-senior-engineers-prefer-deleting-code-over-writing-more): every line you don't ship is a line nobody maintains.
+
+## Frequently Asked Questions
+
+### Isn't it cheaper to build for scale from the start?
+
+Usually no. Scaling a simple system when real load arrives is a well-scoped job backed by production data, while speculative infrastructure costs money and attention for years before you find out whether it was needed.
+
+### How do I tell preparation apart from over-engineering?
+
+Look for evidence. Preparation can point at something concrete, like a signed contract or a measured growth trend, while over-engineering can only point at "we might need it someday".
+
+### What should I do when my team insists on infrastructure we don't need?
+
+Ask what breaks this quarter without it, and ask for the answer in writing. Tying the claim to a date turns architecture taste into something testable, and it keeps the discussion about the system instead of about egos.
+
+### Does this mean a monolith is always the right call?
+
+No, a monolith is simply the cheapest architecture to be wrong in. Start there by default and split when a measured bottleneck, an organizational boundary or a compliance wall gives you evidence.
+
+The client's Kafka cluster came down two years later. Its replacement, one Postgres table and a worker process, took an afternoon to build, and nobody outside the team noticed the switch. I still catch myself reaching for the impressive version first. The difference six years of production work makes is that now I ask what the fear is, fix that instead, and let the system stay small.
+
+If you're building something ambitious and want a partner who sweats these details, [get in touch](/book).

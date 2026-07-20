@@ -33,7 +33,7 @@ text, so edit wording before it's used, not after.
 - [x] How to Refactor Legacy Code Without Freezing Feature Development
 - [x] The Most Expensive Technical Debt Is the Debt You Don't See
 - [x] Stop Chasing Design Patterns—Understand Design Principles Instead
-- [ ] Why Most Software Engineers Over-Engineer Their Systems
+- [x] Why Most Software Engineers Over-Engineer Their Systems
 - [ ] Building Software That Future You Won't Hate
 - [ ] Why Most Microservices Migrations Fail
 - [ ] The Monolith Comeback: Why Big Tech Is Moving Back
