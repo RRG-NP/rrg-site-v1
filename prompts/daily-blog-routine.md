@@ -35,8 +35,11 @@ post).
    - Refine the scaffolded `title` into a clean, ≤60-char headline (sentence case).
    - Replace the TODO `description` (120–160 chars) and `tags` (3–6 from the vocabulary);
      pick the right `category`.
-   - First-person engineer persona, 500–1000 words, one core idea, no AI-slop phrases.
-   - **Plain ASCII punctuation - no em or en dashes (`—`/`–`); use a hyphen `-`.**
+   - First-person engineer persona, 500–1000 words, one core idea.
+   - **Read `docs/blog-writing-guide.md` §4 in full and follow it.** It is the complete
+     anti-AI-writing rule set (adapted from Wikipedia's "Signs of AI writing") and it is
+     enforced as build errors in step 5. The rules are not repeated here on purpose - one
+     copy, in §4, backed by `scripts/lib/ai-writing-rules.mjs`.
    - Use allowed MDX components only; FAQ section; 1–3 real internal links to existing posts;
      one closing `/book` CTA.
    - **Review pass:** every section adds something, every claim has a number/example, the hook
@@ -47,8 +50,11 @@ post).
    ```bash
    npm run validate-blog -- $SLUG
    ```
-   Fix any **errors** and re-run until it passes with 0 errors. Clear the AI-slop/length
-   **warnings** too. Do not continue while errors remain.
+   Must exit 0. Every §4 AI-writing rule is an **error**, so this genuinely blocks: em dashes,
+   negative parallelism ("not just X, it's Y"), AI vocabulary, Title Case headings, bold
+   overuse and bullet-heavy sections will all fail the post. Findings name the rule id and
+   line number - fix the sentence, don't reword around the regex. Clear the remaining
+   length/SEO warnings too. **Do not commit while any error remains.**
 
 6. **Retire the topic.**
    ```bash

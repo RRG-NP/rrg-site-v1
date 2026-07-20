@@ -69,7 +69,10 @@ function fail(msg) {
 // ── Parse args ───────────────────────────────────────────────────────────────
 const rawArgs = process.argv.slice(2);
 const publish = rawArgs.includes('--publish');
-const topic = rawArgs.filter((a) => !a.startsWith('--')).join(' ').trim();
+const topic = rawArgs
+  .filter((a) => !a.startsWith('--'))
+  .join(' ')
+  .trim();
 if (!topic) {
   fail('Usage: npm run generate-blog -- [--publish] "<topic or title>"');
 }
@@ -91,7 +94,7 @@ if (fs.existsSync(filePath)) {
 // ── Build the draft ──────────────────────────────────────────────────────────
 const frontmatter = `---
 title: ${title}
-description: TODO - one benefit-led sentence, 120–160 characters, used as the meta description.
+description: TODO - one benefit-led sentence, 120-160 characters, used as the meta description.
 date: ${today()}
 published: ${publish ? 'true' : 'false'}
 featured: false
@@ -110,10 +113,13 @@ const body = `
   docs/blog-writing-guide.md, then run:  npm run validate-blog -- ${slug}
 
   Reminders:
-  - Body starts at "##" (the title above is the H1). Use only "##" and "###".
+  - Body starts at "##" (the title above is the H1). Use only "##" and "###", sentence case.
   - Voice: first-person singular - a 27-year-old Nepali software engineer with 6+ years'
-    experience sharing lessons from real work. Practical, honest, friendly, no AI slop.
-  - Length: ~500–1000 words (a 2–5 minute read), one core idea, no filler.
+    experience sharing lessons from real work. Practical, honest, friendly.
+  - READ docs/blog-writing-guide.md §4 BEFORE WRITING. It is the anti-AI-writing rule set
+    (no em dashes, no "not just X, it's Y", no AI vocabulary, sparing bold) and every rule
+    is a build error, not a warning. Source of truth: scripts/lib/ai-writing-rules.mjs.
+  - Length: ~500-1000 words (a 2-5 minute read), one core idea, no filler.
   - Allowed components: <Note> <Info> <Tip> <Warning> <BlogImage src alt>.
   - Links and code blocks are plain markdown; tag every code fence with a language.
   - Replace the TODO description/tags/category in the frontmatter above.
@@ -134,11 +140,11 @@ Replace with real content.
 
 ### A real question readers would ask?
 
-A self-contained answer in 1–3 sentences.
+A self-contained answer in 1-3 sentences.
 
 ### Another question?
 
-A self-contained answer in 1–3 sentences.
+A self-contained answer in 1-3 sentences.
 
 Closing wrap-up paragraph.
 

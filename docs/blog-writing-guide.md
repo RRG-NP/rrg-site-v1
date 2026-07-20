@@ -29,7 +29,7 @@ tags:                                                 # 3–6 tags from the shar
   - Next.js
   - React
   - Performance
-author: RRG Tech                                      # defaults to "RRG Tech"
+author: Rohan Gautam                                  # what every post uses; schema default is "RRG Tech"
 # Optional SEO overrides - usually omit; the defaults are good:
 # seoTitle: ...
 # seoDescription: ...
@@ -116,7 +116,23 @@ a person's name; it doesn't change the writing voice.)
 
 ---
 
-## 4. Tone, authenticity & avoiding AI slop
+## 4. Tone, authenticity & avoiding AI writing
+
+**These rules are not style preferences. They are never broken.**
+
+They are adapted from Wikipedia's
+[Signs of AI writing](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing), the most
+carefully maintained catalogue of what gives machine-written prose away. Each rule below
+cites the sign it comes from (`WP:AI #n`).
+
+Most of them are **enforced as errors** by `npm run validate-blog`. A rule with a bracketed
+id like `[neg-parallelism]` is machine-checked - the post cannot be committed until it is
+clean. The rules without an id are the ones no regex can catch; they matter just as much and
+are on you.
+
+The machine-readable rules live in one place: **`scripts/lib/ai-writing-rules.mjs`**. That
+file is the source of truth for the exact word lists and budgets. Change the rules there, not
+here, and not in the prompts.
 
 ### Tone
 
@@ -125,36 +141,109 @@ sharing what they've learned. Confident, not boastful. Light, dry asides are fin
 corporate/marketing language, buzzwords, overly formal prose, clickbait, and exclamation
 marks.
 
-### Anti-AI-slop rules
+### 4.1 Vocabulary — `[ai-vocab]` `[additionally]` `[soft-vocab]` (WP:AI #1, #4, #8)
 
-Do **not** use tell-tale AI filler. Banned phrases (non-exhaustive):
+Banned outright. One occurrence fails the build:
 
-> in today's fast-paced world · it is important to note · it's worth mentioning · leveraging ·
-> delve into · game changer · revolutionize · unlock the power of · seamlessly · robust ·
-> comprehensive guide · cutting-edge · transformative · ever-evolving landscape
+> in today's fast-paced world · it is important to note · it's worth mentioning / noting ·
+> leverage · delve · seamless(ly) · robust · game changer · revolutionize · unlock the power
+> of · comprehensive guide · cutting-edge · transformative · ever-evolving landscape ·
+> tapestry · testament to · intricate / intricacies · interplay · garner · bolster · pivotal ·
+> meticulous · vibrant · myriad · boasts · nestled · in the heart of · groundbreaking ·
+> renowned · diverse array · commitment to · exemplifies · showcases / showcasing · profound ·
+> indelible mark · deeply rooted · navigate the complexities · at the end of the day ·
+> let's dive in · in summary · valuable insights · when it comes to · furthermore · moreover ·
+> in conclusion · sentence-initial "Additionally"
 
-Also avoid:
+Also banned: `underscores/underscoring the importance of` and its relatives. If a fact matters,
+the reader can see that it matters.
 
-- Template scaffolding repeated every article ("First… Second… Third… Finally…").
-- Generic transitions (`Furthermore`, `Moreover`, `Additionally`, `In conclusion`) unless
-  they genuinely fit.
-- Anything that reads like it was filled into a template.
+**Budgeted, not banned** - these are real words that become a tell in bulk. Three combined
+uses per post, then it fails: `crucial · pivotal · vital · essential · significant · enhance ·
+ensure · landscape · aligns with`.
 
-`npm run validate-blog` flags these phrases as warnings - clear them before publishing.
+Deliberately *not* banned, because they are load-bearing in engineering prose: `key` (cache
+key, API key), and any of the above inside a code block. Code is never scanned.
 
-### Punctuation & characters (write like a human, not a model)
+### 4.2 Sentence constructions (WP:AI #3, #9–#13)
 
-Models reach for typography people rarely type by hand. Keep the prose plain ASCII:
+- **`[neg-parallelism]` No negative parallelism.** This is the highest-signal tell after em
+  dashes, and it comes in four disguises - all banned:
+  - "It's not just a X, it's a Y"
+  - "Not only X, but also Y"
+  - "It's not X, it's Y"
+  - "X is not Y. Rather, it's Z" / "less about X, more about Y"
 
-- **No em or en dashes (`—`, `–`). Use a plain hyphen `-`** - with a space on each side when
-  you want an aside ("the fix - finally - stuck"). This is the single biggest "an AI wrote
-  this" tell, so it's the one to get right.
-- Don't just swap the character and keep the rhythm. If every other sentence still has a
-  dash-clause interruption, vary the sentence shape instead.
-- Prefer straight quotes (`'`, `"`) and write an ellipsis as three plain dots (`...`).
+  Say what the thing *is*. Deleting the half that says what it isn't almost always improves
+  the sentence.
 
-`npm run validate-blog` flags em/en dashes (in the body, title, and description) as a
-warning - clear them before publishing.
+- **`[participial-closer]` No participial closers.** Sentences ending `, ensuring seamless
+  integration` or `, highlighting its importance` restate the fact you just gave instead of
+  adding one. Budget: two per post.
+
+- **`[copulative-avoidance]` "Is" is a fine word.** Don't dress it up as `serves as`,
+  `stands as`, `functions as`, `represents a`, `marks a`. Budget: one per post.
+
+- **`[rather-than]`** "X rather than Y" is a machine's way of sounding balanced. Budget: two.
+
+- **`[rule-of-three]`** Watch the tricolon habit - "faster, cleaner, and simpler". Genuine
+  three-item lists are fine ("download, parse, and execute"); three adjectives for rhythm are
+  not. Warned, not blocked, above three per post.
+
+- **No template scaffolding.** "First… Second… Third… Finally…" repeated every article.
+
+### 4.3 Structure & formatting (WP:AI #6, #15, #16, #17)
+
+- **`[canned-heading]` `[challenges-formula]`** No `Conclusion`, `Key Takeaways`,
+  `Final Thoughts`, `Challenges and ...`, `Future Outlook` headings, and never the
+  "Despite these challenges, ..." wrap-up. Name what the section actually says, and end the
+  post on something concrete.
+- **`[title-case-heading]`** Headings are sentence case. "Why this matters", not "Why This
+  Matters So Much". (`## Frequently Asked Questions` is the one exception - contentlayer
+  requires it verbatim for the FAQ JSON-LD.)
+- **`[bold-density]`** Bold is for the single insight that matters, not a highlighter pass.
+  Budget: two, plus one per 250 words. An 800-word post gets three.
+- **`[inline-header-list]`** No `- **Header**: description` lists. That is a slide, not a
+  paragraph. Write it as prose.
+- **`[list-density]`** Under 30% of body lines may be bullets. This is an article, not an
+  outline.
+
+### 4.4 Typography — write plain ASCII (WP:AI #18, #19, #21, #23)
+
+Models reach for characters people rarely type by hand.
+
+- **`[typography-dash]` No em or en dashes (`—`, `–`). Use a plain hyphen `-`** - with a space
+  on each side when you want an aside ("the fix - finally - stuck"). This is the single
+  biggest "an AI wrote this" tell.
+- **`[dash-rhythm]` Don't just swap the character and keep the rhythm.** If every other
+  sentence still has a dash-clause interruption, vary the sentence shape instead. This is the
+  rule people miss after they fix the first one.
+- **`[typography-smart-quotes]` `[typography-ellipsis]`** Straight quotes (`'`, `"`), and an
+  ellipsis is three plain dots (`...`).
+- **`[emoji]`** No emoji.
+- **`[thematic-break]`** No `---` immediately before a heading. The heading is the separator.
+
+### 4.5 Substance (WP:AI #1, #3, #5)
+
+- **`[vague-attribution]`** Never write "experts argue", "studies show", "industry reports",
+  "some critics". Name the source and link it, or cut the claim. You are allowed to say
+  "I think" - you're the one who did the work.
+- **`[burstiness]`** Uniform sentence length reads as machine-generated. Mix short punchy
+  sentences with longer ones. Warned when the variation drops too low.
+- **No undue significance.** Skip "this represents a shift in the landscape" and
+  "setting the stage for". Say what changed and who it affects.
+- **No superficial analysis.** If a sentence restates the previous one in fancier words, cut
+  it. This is the failure mode behind half the rules above.
+- **No forced synonym-swapping.** If you mean "the cache", write "the cache" every time.
+  Reaching for "the store", "the layer", "the mechanism" to avoid repetition is a model habit,
+  and it makes technical prose harder to follow.
+- **Keep one voice.** A section that suddenly turns formal or promotional reads as pasted in.
+
+### 4.6 Never let the assistant voice through — `[llm-meta]` (WP:AI #24, #26)
+
+No "as of my last update", "I'd be happy to", "feel free to reach out", "in this article,
+we'll explore", "by the end of this post you'll". No leftover `TODO` or `[citation needed]`.
+The post is an article, not a chat reply.
 
 ### Authenticity
 

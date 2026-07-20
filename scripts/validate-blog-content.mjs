@@ -2,8 +2,9 @@
 /**
  * Validate RRG Tech blog content (MDX) against the repo's conventions.
  *
- *   npm run validate-blog            # validate every post in content/blogs
- *   npm run validate-blog -- <slug>  # validate a single post
+ *   npm run validate-blog                 # validate every post in content/blogs
+ *   npm run validate-blog -- <slug>       # validate a single post
+ *   npm run validate-blog -- --no-legacy  # audit mode: hold old posts to today's rules
  *
  * Dependency-free (Node built-ins only). Mirrors the rules in
  * docs/blog-writing-guide.md and the schema in contentlayer.config.ts.
@@ -15,51 +16,45 @@
  *   - unbalanced code fences
  *   - an unknown capitalized MDX component
  *   - a broken internal /blog/<slug> link
+ *   - any AI-writing tell from scripts/lib/ai-writing-rules.mjs (guide §4)
  *
  * WARNINGS (non-fatal) are quality/SEO nudges:
  *   - title/description length, tag count, missing category
  *   - missing FAQ section, missing /book CTA
  *   - H4+ headings or skipped heading levels (not in the TOC)
  *   - low word count, unresolved TODO scaffolding
+ *
+ * Posts listed in scripts/blog-legacy-baseline.json predate the §4 rules; their
+ * AI-writing findings are downgraded to warnings so the gate only binds new work.
+ * Remove a slug from that file once the post has been rewritten.
  */
 
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { checkAiWriting } from './lib/ai-writing-rules.mjs';
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.join(__dirname, '..');
 const BLOG_DIR = path.join(REPO_ROOT, 'content', 'blogs');
+const LEGACY_BASELINE = path.join(__dirname, 'blog-legacy-baseline.json');
 
 const REQUIRED_FIELDS = ['title', 'description', 'date'];
 const ALLOWED_COMPONENTS = new Set(['Callout', 'Note', 'Info', 'Tip', 'Warning', 'BlogImage']);
 const ALLOWED_CATEGORIES = new Set(['Engineering', 'Design', 'Announcements']);
 const KNOWN_BOOLEANS = ['published', 'featured'];
 
-// Tell-tale AI filler - see docs/blog-writing-guide.md §4. Flagged as warnings.
-const AI_SLOP_PHRASES = [
-  "in today's fast-paced world",
-  'it is important to note',
-  "it's worth mentioning",
-  'leveraging',
-  'delve into',
-  'game changer',
-  'revolutionize',
-  'unlock the power of',
-  'seamlessly',
-  'comprehensive guide',
-  'cutting-edge',
-  'transformative',
-  'ever-evolving landscape',
-  'robust',
-  'furthermore',
-  'moreover',
-  'additionally',
-  'in conclusion',
-];
+// Every prose/style rule lives in scripts/lib/ai-writing-rules.mjs - the single
+// source of truth. Do not add phrase lists here.
 
-function escapeRe(s) {
-  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+function loadLegacyBaseline() {
+  try {
+    const parsed = JSON.parse(fs.readFileSync(LEGACY_BASELINE, 'utf8'));
+    return new Set(parsed.slugs || []);
+  } catch {
+    return new Set();
+  }
 }
 
 // ── Tiny frontmatter parser (handles inline scalars, lists, and >|- block scalars) ──
@@ -105,7 +100,12 @@ function parseFrontmatter(raw) {
       const list = [];
       let j = i + 1;
       while (j < lines.length && /^\s*-\s+/.test(lines[j])) {
-        list.push(lines[j].replace(/^\s*-\s+/, '').trim().replace(/^['"]|['"]$/g, ''));
+        list.push(
+          lines[j]
+            .replace(/^\s*-\s+/, '')
+            .trim()
+            .replace(/^['"]|['"]$/g, ''),
+        );
         j++;
       }
       if (list.length) {
@@ -156,7 +156,7 @@ function wordCount(body) {
 }
 
 // ── Validate one file. Returns { errors: [], warnings: [] } ───────────────────
-function validateFile(filePath, knownSlugs) {
+function validateFile(filePath, knownSlugs, legacySlugs = new Set()) {
   const errors = [];
   const warnings = [];
   const slug = path.basename(filePath, '.mdx');
@@ -285,8 +285,7 @@ function validateFile(filePath, knownSlugs) {
 
   // 6. Reading quality (warnings)
   const words = wordCount(body);
-  const isDraftScaffold =
-    typeof data.description === 'string' && data.description.startsWith('TODO');
+  const isDraftScaffold = typeof data.description === 'string' && data.description.startsWith('TODO');
   if (!isDraftScaffold && words < 400) {
     warnings.push(`body is ~${words} words; aim for 500–1000 (a 2–5 minute read).`);
   } else if (words > 1300) {
@@ -296,30 +295,19 @@ function validateFile(filePath, knownSlugs) {
     warnings.push('no closing /book CTA found (house style links to /book).');
   }
 
-  // AI-slop phrases (case-insensitive, word-boundary; code stripped out).
-  const prose = stripCode(body).toLowerCase();
-  for (const phrase of AI_SLOP_PHRASES) {
-    if (new RegExp(`\\b${escapeRe(phrase)}\\b`, 'i').test(prose)) {
-      warnings.push(`AI-slop phrase "${phrase}" - rewrite in a more human voice (guide §4).`);
-    }
+  // 6b. AI-writing rules (guide §4). Errors unless the post predates the rules.
+  const ai = checkAiWriting({
+    body,
+    title: typeof data.title === 'string' ? data.title : '',
+    description: typeof data.description === 'string' ? data.description : '',
+    words,
+  });
+  if (legacySlugs.has(slug)) {
+    for (const e of ai.errors) warnings.push(`${e} [legacy post - not blocking]`);
+  } else {
+    errors.push(...ai.errors);
   }
-
-  // AI typography: em/en dashes read as machine-written. House style is a plain hyphen "-".
-  const proseChars = stripCode(body);
-  const emDashes = (proseChars.match(/—/g) || []).length;
-  const enDashes = (proseChars.match(/–/g) || []).length;
-  if (emDashes + enDashes > 0) {
-    const parts = [];
-    if (emDashes) parts.push(`${emDashes} em dash${emDashes > 1 ? 'es' : ''} (—)`);
-    if (enDashes) parts.push(`${enDashes} en dash${enDashes > 1 ? 'es' : ''} (–)`);
-    warnings.push(`${parts.join(' and ')} in the body - replace with a plain hyphen "-" (guide §4).`);
-  }
-  // Same check on reader-facing frontmatter.
-  for (const field of ['title', 'description']) {
-    if (typeof data[field] === 'string' && /[—–]/.test(data[field])) {
-      warnings.push(`${field} contains an em/en dash - replace with a plain hyphen "-" (guide §4).`);
-    }
-  }
+  warnings.push(...ai.warnings);
 
   // 7. FAQ
   const faqIdx = body.search(/^##\s+Frequently Asked Questions\s*$/m);
@@ -346,7 +334,11 @@ function main() {
   const allFiles = fs.readdirSync(BLOG_DIR).filter((f) => f.endsWith('.mdx'));
   const knownSlugs = new Set(allFiles.map((f) => path.basename(f, '.mdx')));
 
-  const arg = process.argv[2];
+  const argv = process.argv.slice(2);
+  const noLegacy = argv.includes('--no-legacy');
+  const legacySlugs = noLegacy ? new Set() : loadLegacyBaseline();
+
+  const arg = argv.find((a) => !a.startsWith('--'));
   let targets = allFiles;
   if (arg) {
     const wanted = arg.replace(/\.mdx$/, '');
@@ -366,7 +358,7 @@ function main() {
   let totalWarnings = 0;
 
   for (const file of targets) {
-    const { slug, errors, warnings } = validateFile(path.join(BLOG_DIR, file), knownSlugs);
+    const { slug, errors, warnings } = validateFile(path.join(BLOG_DIR, file), knownSlugs, legacySlugs);
     totalErrors += errors.length;
     totalWarnings += warnings.length;
 

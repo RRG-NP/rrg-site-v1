@@ -1,0 +1,32 @@
+{
+  "_comment": "Posts written before the guide §4 AI-writing rules existed. Their findings from scripts/lib/ai-writing-rules.mjs are downgraded to warnings so the gate only binds new posts. Delete a slug from this list once the post has been rewritten to comply. Never add to this list.",
+  "generated": "2026-07-20",
+  "slugs": [
+    "building-with-the-nextjs-app-router",
+    "caching-is-easy-until-it-isnt-the-production-cache-bug-that-humbled-me",
+    "clean-architecture-isnt-dead-youre-probably-using-it-wrong",
+    "designing-accessible-interfaces",
+    "how-to-actually-build-your-first-ai-agent-using-claude",
+    "how-to-refactor-legacy-code-without-freezing-feature-development",
+    "i-cut-our-lcp-in-half-by-deleting-code-not-adding-it",
+    "i-let-ai-write-80-of-a-feature-heres-the-20-i-had-to-throw-away",
+    "idempotency-is-the-system-design-skill-nobody-teaches-until-its-3am",
+    "migrating-a-legacy-app-without-the-big-bang-rewrite-that-kills-morale",
+    "rate-limiting-explained-without-the-scary-math-and-without-taking-you-down",
+    "reading-other-peoples-code-is-a-skill-heres-how-i-actually-practice-it",
+    "stop-chasing-design-patterns-understand-design-principles-instead",
+    "stop-pasting-your-whole-codebase-into-the-chat-box-do-this-instead",
+    "the-ai-coding-workflow-that-finally-made-me-faster-not-just-busier",
+    "the-art-of-building-software-that-survives-for-10-years",
+    "the-end-of-crud-apps-what-developers-should-build-instead",
+    "the-most-expensive-technical-debt-is-the-debt-you-dont-see",
+    "the-new-architecture-in-react-native-was-the-rewrite-worth-it-for-us",
+    "the-single-responsibility-principle-at-scale-lessons-from-real-systems",
+    "the-underrated-power-of-a-good-loading-state-and-how-it-tricks-the-brain",
+    "welcome-to-the-rrg-tech-blog",
+    "what-i-wish-i-knew-before-freelancing-as-a-developer-from-nepal",
+    "why-i-stopped-reaching-for-useeffect-in-react",
+    "why-senior-engineers-prefer-deleting-code-over-writing-more",
+    "why-solid-principles-are-still-the-foundation-for-modern-software-architecture"
+  ]
+}

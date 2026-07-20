@@ -29,8 +29,9 @@ This is the high-level shape; the detailed Steps 0-8 below are how each one is e
    CTA.
 4. **Write.** Draft the full post in the persona below. **500-1000 words** (the repo
    standard - *not* 2000-3000), short paragraphs (2-4 sentences), one core idea. Lead with
-   substance, bold the single key insight in a section where it helps, prefer specific
-   numbers over vague claims, zero filler. Plain ASCII punctuation - no em dashes.
+   substance, prefer specific numbers over vague claims, zero filler. Bold is rationed - two
+   spans plus one per 250 words, for the insight that matters, not for scanning. Plain ASCII
+   punctuation - no em dashes.
 5. **Review.** Before saving, check the draft honestly: does every section add something new?
    Is every claim backed by a number or concrete example? Would a busy reader bail anywhere -
    if so, fix that part. Is the opening hook genuinely worth the click? Then run the validator
@@ -95,20 +96,26 @@ tradeoffs (when a tool works, when it doesn't, common mistakes - no blind praise
 **unique angle** (a lesson, a mistake, an unpopular opinion, a comparison) so it's worth
 reading even for someone who knows the topic.
 
-### Do NOT write AI slop
+### Do NOT write like an AI
 
-Banned phrases (and anything like them): *in today's fast-paced world, it is important to
-note, it's worth mentioning, leveraging, delve into, game changer, revolutionize, unlock the
-power of, seamlessly, robust, comprehensive guide, cutting-edge, transformative,
-ever-evolving landscape.* Don't reuse "First… Second… Finally…" scaffolding or lean on
-"Furthermore / Moreover / Additionally / In conclusion" unless they truly fit. Nothing should
-read like it came from a template. (`npm run validate-blog` flags these.)
+**Read `docs/blog-writing-guide.md` §4 in full before writing a single sentence.** It is the
+complete rule set, adapted from Wikipedia's "Signs of AI writing", and it is not optional.
+The rules are deliberately not restated here - there is one copy, and §4 is it.
 
-**Write like a human, not a model - characters matter.** Do **not** use em or en dashes
-(`—`, `–`); use a plain hyphen `-` (with a space each side for an aside: "the fix - finally -
-stuck"). The em dash is the biggest "an AI wrote this" tell. Use straight quotes (`'`, `"`)
-and write an ellipsis as three plain dots (`...`). The validator flags em/en dashes in the
-body, title, and description as warnings - clear them.
+The four that break the most drafts, as a reminder of what you are reading for:
+
+1. **No em or en dashes** (`—`, `–`) - use a plain hyphen `-`. And don't just swap the
+   character while keeping the dash-clause rhythm.
+2. **No negative parallelism** - "it's not just X, it's Y", "not only X but also Y". State
+   what the thing is.
+3. **No AI vocabulary** - delve, leverage, seamless, robust, showcase, testament to, pivotal,
+   crucial, "underscores the importance of", sentence-initial "Additionally". §4.1 has the
+   full list.
+4. **Sentence-case headings, sparing bold, prose not bullets.** No "Conclusion" or
+   "Key Takeaways" heading, no `- **Header**: text` lists.
+
+`npm run validate-blog` enforces these as **errors**. A post that trips one of them cannot be
+committed, so write to the rules rather than cleaning up afterwards.
 
 ## Step 4 - Generate metadata (frontmatter)
 
@@ -133,9 +140,12 @@ Use root-relative markdown links. One closing `/book` CTA in the house style. 1�
 
 ## Step 8 - Validate
 
-After writing, the file must pass `npm run validate-blog -- <slug>` with no errors, and you
-should clear the slop/length warnings it reports. Then run the **final quality check** - if
-any answer is "no", revise before saving:
+After writing, the file must pass `npm run validate-blog -- <slug>` with **0 errors**. Every
+§4 AI-writing rule is an error, so this is a real gate, not a nudge. Findings name the rule id
+and line number (`[neg-parallelism] ... L42`); fix the sentence rather than reaching for a
+synonym that dodges the regex. Clear the remaining length/SEO warnings too.
+
+Then run the **final quality check** - if any answer is "no", revise before saving:
 
 - Does this sound like a real engineer wrote it (first-person, lived experience), not a template?
 - Is it free of the banned AI phrases? Is every section useful, around one core idea?
@@ -196,7 +206,7 @@ tags:
   - <Tag1>
   - <Tag2>
   - <Tag3>
-author: RRG Tech
+author: Rohan Gautam
 ---
 ```
 
