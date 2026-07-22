@@ -34,7 +34,7 @@ text, so edit wording before it's used, not after.
 - [x] The Most Expensive Technical Debt Is the Debt You Don't See
 - [x] Stop Chasing Design Patterns—Understand Design Principles Instead
 - [x] Why Most Software Engineers Over-Engineer Their Systems
-- [ ] Building Software That Future You Won't Hate
+- [x] Building Software That Future You Won't Hate
 - [ ] Why Most Microservices Migrations Fail
 - [ ] The Monolith Comeback: Why Big Tech Is Moving Back
 - [ ] Designing APIs That Won't Need Version 2

@@ -1,0 +1,87 @@
+---
+title: Building Software That Future You Won't Hate
+description: Six months from now, you won't remember why you wrote this. Here's how I write code that my future self can still understand and trust.
+date: 2026-07-22
+published: true
+featured: false
+category: Engineering
+tags:
+  - Best Practices
+  - Technical Debt
+  - Refactoring
+  - Web Development
+author: Rohan Gautam
+---
+
+Eight months ago I wrote a discount calculator for a client's checkout flow. Last month I opened that file to add a new promo type and didn't recognize my own code.
+
+## The bug that was actually just past me
+
+The client wanted a new "buy two, get one free" promo added to an existing pricing function. I opened `pricing.ts` and found `calc(items, flag2, ctx)`. Inside were three nested `if` statements, a variable named `adj`, and exactly one comment: `// special case`.
+
+It took me close to an hour, plus a git blame and a Slack search, to work out that `flag2` meant "is this a returning customer from the Dashain campaign" and `adj` was a rounding fix for how we display NPR prices. None of that context lived in the code. It lived in my head back in March, and by October my head had moved on to three other projects.
+
+That's the real failure behind most "write clean code" advice. Everyone agrees you should write for a stranger, then forgets that a few months of shipped features turns you into that stranger.
+
+## Names carry the load comments can't
+
+Here's roughly what I found, and what I rewrote it into:
+
+```ts
+// before
+function calc(items, flag2, ctx) {
+  let adj = 0;
+  if (flag2 && ctx.tier === 2) adj = 5;
+  return items.reduce((t, i) => t + i.price, 0) - adj;
+}
+```
+
+```ts
+// after
+function calculateOrderTotal(items, isDashainReturningCustomer, customer) {
+  const roundingAdjustmentNpr = 5;
+  const qualifiesForDashainDiscount = isDashainReturningCustomer && customer.tier === 2;
+  const discount = qualifiesForDashainDiscount ? roundingAdjustmentNpr : 0;
+  return items.reduce((total, item) => total + item.price, 0) - discount;
+}
+```
+
+`qualifiesForDashainDiscount` tells the next reader what has to be true without making them trace three branches to find out. I now try to write names long enough to double as an assertion. If a name needs a comment to explain what it does, that's a sign to rename it, not to comment it.
+
+## Comments should say why, never what
+
+A comment describing what a line does is dead weight, the code already says that. But the reason the discount existed at all (a specific customer complained to support about a promo that had technically expired, and someone agreed to honor it) is invisible forever unless it's written down somewhere the next reader will actually see.
+
+So the rule I follow now: if a line exists because of a decision and not because of logic, I write one comment naming that decision.
+
+<Note>
+"// NPR prices round to the nearest rupee, so we shave 5 off the total to match the receipt" survives a rewrite. "// calculate total" gets deleted the first time someone touches the function, and it should.
+</Note>
+
+## Tests are the notes that can't go stale
+
+Comments rot. A wiki page rots faster. What actually held up untouched for eight months was the one test I'd written: `test('Dashain returning customers on tier 2 get NPR 5 off')`. Opening that file today, the test told me the business rule before I'd read a single line of the implementation, and it would have failed loudly the moment someone broke that rule by accident.
+
+I've written before about [technical debt you can't see](/blog/the-most-expensive-technical-debt-is-the-debt-you-dont-see): a missing test for a business rule is exactly that kind of debt. It costs nothing today and everything the day the rule breaks and nobody remembers it was ever a rule.
+
+## Reading your own code is a skill too
+
+Eight months is enough distance that you end up reading your own function the way you'd read a stranger's. So I use the same habits either way: don't trust a variable name until you've traced where it's set, check the commit message before you go asking around, and treat a missing "why" as a bug in the code rather than a gap in your memory. I go deeper into that process in [reading other people's code](/blog/reading-other-peoples-code-is-a-skill-heres-how-i-actually-practice-it).
+
+The discount calculator cost me an hour to relearn because past me wrote it for someone who already had the context in his head. Future you never does. Write for the person who's going to forget everything except how to read.
+
+## Frequently Asked Questions
+
+### How do I know if a comment is worth writing?
+
+If deleting it would leave the code unclear about why a line exists, keep it. If it just restates what the line already says, cut it.
+
+### Doesn't good naming make comments unnecessary?
+
+For logic, mostly yes. But a name can't carry a business decision or a historical reason, and that's exactly what a short "why" comment is for.
+
+### What's the fastest way to start doing this on an old codebase?
+
+Pick the function you dread opening most. Next time you have to touch it, rename its variables and add one "why" comment before you add the feature you actually came for.
+
+If you're building something ambitious and want a partner who sweats these details, [get in touch](/book).
