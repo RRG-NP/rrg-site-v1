@@ -1,0 +1,124 @@
+---
+title: Half my engineering notes expired. These didn't
+description: I kept a file of engineering rules for six years. The dead ones all named a technology, and that turned out to be the test for which advice lasts.
+date: 2026-08-20
+published: true
+featured: false
+category: Engineering
+tags:
+  - Best Practices
+  - Architecture
+  - Career
+  - Web Development
+author: Rohan Gautam
+---
+
+Since 2019 I have kept a plain text file of engineering rules I picked up from senior
+engineers and code reviews. Last month I read the whole thing top to bottom for the first
+time in years. More than half of the entries were dead, and the dead ones had one thing in
+common: every one of them named a specific technology.
+
+## Advice with a tool in it has an expiry date
+
+Three entries from the dead half.
+
+"Never store JSON in a relational column." I wrote that down in 2019. Postgres had already
+shipped JSONB with real indexing five years before. The rule was written for a world where a
+JSON column was an unqueryable text blob, and I went on applying it for years after that
+world ended.
+
+"The server is for APIs. Render on the client." That one aged out in public. React Server
+Components and the frameworks around them pulled rendering back to the server, and my 2020
+note now reads like an argument against the thing I reach for first.
+
+"Split the system into services before it gets big." In 2023 Amazon's Prime Video team
+published a post about collapsing their audio and video monitoring service from a distributed
+pipeline back into a single process, cutting running costs by about 90%. When the company
+that sends you the serverless bill can run cheaper in one process, that entry was never a
+rule.
+
+All three were honest advice about a real constraint at a particular moment. I filed them as
+principles because the people who told me sounded certain.
+
+## The test is to take the noun out
+
+The [Lindy effect](https://en.wikipedia.org/wiki/Lindy_effect) is the observation that for
+ideas, the longer something has already survived, the longer it is likely to keep surviving.
+Advice behaves the same way, and there is a fast way to guess how old a piece of advice can
+get. Remove the technology from the sentence and look at what is left.
+
+"Split into services before it gets big" without services is nothing at all. It was a tactic
+wearing a principle's clothes.
+
+Kent Beck's "first make the change easy, then make the easy change" has no noun to remove.
+It described a Smalltalk codebase in the 1990s and it describes the Next.js app I opened this
+morning. There is nothing in it that can date, because it only tells you the order to do two
+things in.
+
+<Tip>
+Before you write a rule down, strip every product name out of it. If the sentence stops
+saying anything, date it and note the version it was true for.
+</Tip>
+
+## Three that outlived every tool I have used
+
+### Measure before you optimize
+
+Earlier this year I was sure a slow marketing page was the charting library's fault. The
+profiler said a render-blocking third-party script and an oversized hero image, and
+[deleting them cut our LCP in half](/blog/i-cut-our-lcp-in-half-by-deleting-code-not-adding-it).
+In six years I have never once guessed a bottleneck correctly on the first try. The profilers
+changed names, the guessing stayed wrong.
+
+### Make being wrong cheap
+
+Every migration I have shipped went well in proportion to how easily I could undo it. One
+route at a time behind a flag, with the old path still serving traffic, beats
+[the big-bang rewrite](/blog/migrating-a-legacy-app-without-the-big-bang-rewrite-that-kills-morale)
+every time, and the reason has nothing to do with which framework you are moving to. It is
+that you get to be wrong on a Tuesday afternoon instead of at 2am on launch night.
+
+### Code gets read far more often than it gets written
+
+I spend most of my week reading code, and so does everybody I work with. That was true when I
+wrote jQuery and it is true now that a model writes the first draft. It is why I still
+[practice reading unfamiliar code](/blog/reading-other-peoples-code-is-a-skill-heres-how-i-actually-practice-it)
+on purpose, and why a clever one-liner loses to eight boring lines in review.
+
+## What the notes file looks like now
+
+It has two sections. Principles, which contain no product names and carry no date. Tactics,
+which get a date and the version they applied to: "Postgres 14, 2022, check before you
+repeat this." The file is about a third of its old size.
+
+The split earns its keep most when an assistant hands me a pattern I do not recognise. Before
+I ask whether the code works, I ask which section it belongs in. A principle I can carry to
+the next job. A tactic averaged out of somebody's 2021 blog post needs checking against the
+version I am actually running.
+
+## Frequently Asked Questions
+
+### Are SOLID and DRY safe forever, then?
+
+The names survive, but the interpretations rot. DRY pushed hard enough will couple two
+features that only looked similar, which is a bug I have personally caused. Use them as
+prompts for thinking, not boxes to tick.
+
+### How do I tell a principle from a strongly held tactic?
+
+Remove every product name from the sentence. If it still gives you usable advice, it is a
+principle worth keeping. If nothing readable is left, write down the date and the version it
+was true for.
+
+### Do AI coding assistants change which principles matter?
+
+They raise the price of the ones about readability, because generating more code than anyone
+on the team has read is now trivially easy. The reading habit matters more than it did five
+years ago.
+
+I am not throwing the tactics away, because a dated tactic is still useful once you can see
+its date. What changed is that I stopped confusing the two, and I stopped repeating a rule
+just because the person who taught it to me said it with a straight face.
+
+If you are building something ambitious and want a partner who sweats these details,
+[get in touch](/book).

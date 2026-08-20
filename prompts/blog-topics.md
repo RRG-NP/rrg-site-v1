@@ -35,6 +35,7 @@ text, so edit wording before it's used, not after.
 - [x] Stop Chasing Design Patterns—Understand Design Principles Instead
 - [x] Why Most Software Engineers Over-Engineer Their Systems
 - [x] Building Software That Future You Won't Hate
+- [x] Engineering Principles That Never Go Out of Style
 - [ ] Why Most Microservices Migrations Fail
 - [ ] The Monolith Comeback: Why Big Tech Is Moving Back
 - [ ] Designing APIs That Won't Need Version 2
@@ -73,5 +74,4 @@ text, so edit wording before it's used, not after.
 - [ ] LLM Context Windows Explained for System Designers
 - [ ] The Hidden Engineering Challenges of Shipping AI Products
 - [ ] Why Senior Engineers Spend More Time Reading Than Coding
-- [ ] Engineering Principles That Never Go Out of Style
 - [ ] What Separates a Senior Engineer from a Staff Engineer?
